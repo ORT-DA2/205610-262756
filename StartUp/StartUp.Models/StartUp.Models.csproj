@@ -5,8 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Models.In\" />
-    <Folder Include="Models.Out\" />
+    <ProjectReference Include="..\Domain\StartUp.Domain.csproj" />
   </ItemGroup>
 
 </Project>

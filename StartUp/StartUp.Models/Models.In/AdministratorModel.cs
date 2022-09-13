@@ -8,7 +8,7 @@ namespace StartUp.Models.Models.In
     public class AdministratorModel
     {
         public string Email { get; set; }
-        private string Password { get; set; }
+        public string Password { get; set; }
         public string Address { get; set; }
 
         public Administrator ToEntity()

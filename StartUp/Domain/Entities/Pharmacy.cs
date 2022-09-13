@@ -6,9 +6,9 @@ namespace StartUp.Domain
 {
     public class Pharmacy
     {
-        private string Name { get; set; }
-        private string Address { get; set; }
-        private List<Medicine> Stock { get; set; }
-        private List<Request> Requests { get; set; }
+        public string Name { get; set; }
+        public string Address { get; set; }
+        public List<Medicine> Stock { get; set; }
+        public List<Request> Requests { get; set; }
     }
 }

@@ -6,7 +6,7 @@ namespace StartUp.Domain
 {
     public class Petition
     {
-        private string MedicineCode { get; set; }
-        private int Amount { get; set; }
+        public string MedicineCode { get; set; }
+        public int Amount { get; set; }
     }
 }

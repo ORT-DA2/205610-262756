@@ -6,7 +6,7 @@ namespace StartUp.Domain
 {
     public class Request
     {
-        private List<Petition> Petitions { get; set; }
-        private bool State { get; set; }
+        public List<Petition> Petitions { get; set; }
+        public bool State { get; set; }
     }
 }
