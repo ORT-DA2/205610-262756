@@ -14,12 +14,32 @@ namespace StartUp.BusinessLogic
             throw new NotImplementedException();
         }
 
+        public Invitation CreateInvitation(Invitation invitation)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Invitation DeleteInvitation(string name)
+        {
+            throw new NotImplementedException();
+        }
+
         public List<Invitation> GetAllInvitation(InvitationSearchCriteria searchCriteria)
         {
             throw new NotImplementedException();
         }
 
         public Invitation GetSpecificInvitation()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Invitation GetSpecificInvitation(string username)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Invitation UpdateInvitation(string name, Invitation invitation)
         {
             throw new NotImplementedException();
         }

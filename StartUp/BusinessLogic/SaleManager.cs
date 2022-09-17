@@ -14,12 +14,32 @@ namespace StartUp.BusinessLogic
             throw new NotImplementedException();
         }
 
+        public Sale CreateSale(Sale sale)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Sale DeleteSale(Sale sale)
+        {
+            throw new NotImplementedException();
+        }
+
         public List<Sale> GetAllSale(SaleSearchCriteria searchCriteria)
         {
             throw new NotImplementedException();
         }
 
         public Sale GetSpecificSale()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Sale GetSpecificSale(Sale sale)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Sale UpdateSale(List<Petition> listPetitionUpdate)
         {
             throw new NotImplementedException();
         }

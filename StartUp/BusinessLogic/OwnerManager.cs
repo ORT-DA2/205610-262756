@@ -14,12 +14,27 @@ namespace StartUp.BusinessLogic
             throw new NotImplementedException();
         }
 
+        public Owner DeleteOwner(string email)
+        {
+            throw new NotImplementedException();
+        }
+
         public List<Owner> GetAllOwner(OwnerSearchCriteria searchCriteria)
         {
             throw new NotImplementedException();
         }
 
         public Owner GetSpecificOwner(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Owner GetSpecificOwner(string email)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Owner UpdateOwner(Owner ownerUpdate)
         {
             throw new NotImplementedException();
         }

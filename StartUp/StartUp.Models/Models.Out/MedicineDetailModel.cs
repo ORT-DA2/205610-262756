@@ -7,7 +7,9 @@ namespace StartUp.Models.Models.Out
 {
     public class MedicineDetailModel
     {
+        public string Code { get; set; }
         public string Name { get; set; }
+        public List<string> Symptoms { get; set; }
         public string Presentation { get; set; }
         public int Amount { get; set; }
         public string Measure { get; set; }
@@ -24,6 +26,7 @@ namespace StartUp.Models.Models.Out
             this.Prescription = medicine.Prescription;
             this.Name = medicine.Name;
             this.Measure = medicine.Measure;
+            this.Symptoms = medicine.Symptoms;
         }
     }
 }

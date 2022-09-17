@@ -7,6 +7,6 @@ namespace StartUp.Domain
 {
     public class Employee : User
     {
-        private Pharmacy Pharmacy { get; set; }
+        public Pharmacy Pharmacy { get; set; }
     }
 }

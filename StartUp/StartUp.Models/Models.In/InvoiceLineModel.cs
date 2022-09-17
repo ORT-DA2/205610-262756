@@ -7,7 +7,7 @@ namespace StartUp.Models.Models.In
 {
     public class InvoiceLineModel
     {
-        public Medicine? Medicine { get; set; }
+        public Medicine Medicine { get; set; }
         public int Amount { get; set; }
 
         public InvoiceLine ToEntity()

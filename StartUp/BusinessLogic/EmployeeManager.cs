@@ -61,5 +61,20 @@ namespace StartUp.BusinessLogic
 
             //_movies.Remove(movieSaved);
         }
+
+        public Employee GetSpecificEmployee(string email)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Employee UpdateEmployee(string email, Employee employee)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Employee DeleteEmployee(string email)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

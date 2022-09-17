@@ -8,6 +8,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StartUp.WebApi", "WebApi\StartUp.WebApi.csproj", "{9379FE76-1C1E-4245-A43E-E898B5E6CA45}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StartUp.Domain", "Domain\StartUp.Domain.csproj", "{6D28064A-4F2A-4C5E-BFCD-D5C8F81C43B6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3AB0E110-6F2B-4874-8A4E-4F473D8B605C} = {3AB0E110-6F2B-4874-8A4E-4F473D8B605C}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StartUp.Models", "StartUp.Models\StartUp.Models.csproj", "{8AF90ECB-DB14-46E1-9A4D-ED095C955342}"
 EndProject
@@ -17,7 +20,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StartUp.BusinessLogic", "Bu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StartUp.Exceptions", "StartUp.Exceptions\StartUp.Exceptions.csproj", "{3AB0E110-6F2B-4874-8A4E-4F473D8B605C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StartUp.Factory", "StartUp.Factory\StartUp.Factory.csproj", "{916B05C5-894E-49A9-A6C6-078BF2AB0404}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StartUp.Factory", "StartUp.Factory\StartUp.Factory.csproj", "{916B05C5-894E-49A9-A6C6-078BF2AB0404}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StartUp.DomainTest", "StartUp.DomainTest\StartUp.DomainTest.csproj", "{746F9D4F-E484-4C02-BDE0-C5727581257B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StartUp.BusinessLogicTest", "StartUp.BusinessLogicTest\StartUp.BusinessLogicTest.csproj", "{DC4AAEAB-9EC7-434B-A76A-A9B66DD04600}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,6 +64,14 @@ Global
 		{916B05C5-894E-49A9-A6C6-078BF2AB0404}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{916B05C5-894E-49A9-A6C6-078BF2AB0404}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{916B05C5-894E-49A9-A6C6-078BF2AB0404}.Release|Any CPU.Build.0 = Release|Any CPU
+		{746F9D4F-E484-4C02-BDE0-C5727581257B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{746F9D4F-E484-4C02-BDE0-C5727581257B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{746F9D4F-E484-4C02-BDE0-C5727581257B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{746F9D4F-E484-4C02-BDE0-C5727581257B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC4AAEAB-9EC7-434B-A76A-A9B66DD04600}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC4AAEAB-9EC7-434B-A76A-A9B66DD04600}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC4AAEAB-9EC7-434B-A76A-A9B66DD04600}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC4AAEAB-9EC7-434B-A76A-A9B66DD04600}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

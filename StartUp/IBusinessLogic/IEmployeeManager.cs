@@ -6,10 +6,12 @@ using System.Text;
 
 namespace StartUp.IBusinessLogic
 {
-        public interface IEmployeeManager
-        {
-            List<Employee> GetAllEmployee(EmployeeSearchCriteria searchCriteria);
-            Employee GetSpecificEmployee(int id);
-            Employee CreateEmployee(Employee employee);
+    public interface IEmployeeManager
+    {
+        List<Employee> GetAllEmployee(EmployeeSearchCriteria searchCriteria);
+        Employee GetSpecificEmployee(string email);
+        Employee CreateEmployee(Employee employee);
+        Employee UpdateEmployee(string email, Employee employee);
+        Employee DeleteEmployee(string email);
     }
 }

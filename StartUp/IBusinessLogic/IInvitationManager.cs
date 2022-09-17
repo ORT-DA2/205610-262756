@@ -9,8 +9,10 @@ namespace StartUp.IBusinessLogic
     public interface IInvitationManager
     {
         List<Invitation> GetAllInvitation(InvitationSearchCriteria searchCriteria);
-        Invitation GetSpecificInvitation();
-        Invitation CreateInvitation();
+        Invitation GetSpecificInvitation(string username);
+        Invitation CreateInvitation(Invitation invitation);
+        Invitation UpdateInvitation(string name, Invitation invitation);
+        Invitation DeleteInvitation(string name);
 
     }
 }

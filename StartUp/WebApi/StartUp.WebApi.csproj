@@ -7,6 +7,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\IBusinessLogic\StartUp.IBusinessLogic.csproj" />
+    <ProjectReference Include="..\StartUp.Exceptions\StartUp.Exceptions.csproj" />
+    <ProjectReference Include="..\StartUp.Factory\StartUp.Factory.csproj" />
+    <ProjectReference Include="..\StartUp.Models\StartUp.Models.csproj" />
   </ItemGroup>
 
 

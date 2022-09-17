@@ -7,8 +7,8 @@ namespace StartUp.Models.Models.In
 {
     public class PetitionSearchCriteriaModel
     {
-        public string MedicineCode { get; set; }
-        public int Amount { get; set; }
+        public string? MedicineCode { get; set; }
+        public int? Amount { get; set; }
 
         public PetitionSearchCriteria ToEntity()
         {

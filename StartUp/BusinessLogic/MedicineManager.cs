@@ -14,12 +14,32 @@ namespace StartUp.BusinessLogic
             throw new NotImplementedException();
         }
 
+        public Medicine CreateMedicine(Medicine medicine)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Medicine DeleteMedicine(Medicine medicine)
+        {
+            throw new NotImplementedException();
+        }
+
         public List<Medicine> GetAllMedicine(MedicineSearchCriteria searchCriteria)
         {
             throw new NotImplementedException();
         }
 
         public Medicine GetSpecificMedicine()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Medicine GetSpecificMedicine(string code)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Medicine UpdateMedicine(Medicine medicineUpdate)
         {
             throw new NotImplementedException();
         }

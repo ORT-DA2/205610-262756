@@ -15,6 +15,7 @@ namespace StartUp.Models.Models.In
         public int? Price { get; set; }
         public int? Stock { get; set; }
         public bool? Prescription { get; set; }
+        public List<string>? Symptoms { get; set; }
 
         public MedicineSearchCriteria ToEntity()
         {
@@ -27,7 +28,9 @@ namespace StartUp.Models.Models.In
                 Measure = this.Measure,
                 Price = this.Price,
                 Stock = this.Stock,
-                Prescription = this.Prescription
+                Prescription = this.Prescription,
+                Symptoms = this.Symptoms
+
             };
         }
     }
