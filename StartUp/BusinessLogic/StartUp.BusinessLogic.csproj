@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Domain\StartUp.Domain.csproj" />
+    <ProjectReference Include="..\IBusinessLogic\StartUp.IBusinessLogic.csproj" />
+    <ProjectReference Include="..\StartUp.Exceptions\StartUp.Exceptions.csproj" />
+  </ItemGroup>
+
+</Project>
