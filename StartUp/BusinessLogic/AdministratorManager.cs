@@ -4,6 +4,7 @@ using StartUp.Exceptions;
 using StartUp.Domain.SearchCriterias;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace BusinessLogic
 {
@@ -11,8 +12,8 @@ namespace BusinessLogic
     {
         private static List<Administrator> _admins = new List<Administrator>()
     {
-        new Administrator() { Email = "admin1@gmail.com"},
-        new Administrator() { Email = "admin2@gmail.com"}
+        new Administrator() { Email = "admin1@gmail.com", Password = "contraseña1", Address = "direccion1", RegisterDate = DateTime.Now, Invitation = null},
+        new Administrator() { Email = "admin2@gmail.com", Password = "contraseña2", Address = "direccion2", RegisterDate = DateTime.Now, Invitation = null}
     };
 
         public List<Administrator> GetAllAdministrator(AdministratorSearchCriteria searchCriteria)
@@ -22,19 +23,19 @@ namespace BusinessLogic
 
         public Administrator GetSpecificAdministrator(string email)
         {
-            var administratorSaved = _admins.FirstOrDefault(m => m.Email == email);
+            Administrator administratorSaved = _admins.FirstOrDefault(m => m.Email == email);
 
             if (administratorSaved == null)
-                throw new ResourceNotFoundException($"Could not find specified admin {email}");
-
+            {
+                throw new ResourceNotFoundException($"The admin {email} not exist");
+            }
             return administratorSaved;
         }
 
         public Administrator CreateAdministrator(Administrator admin)
         {
-            //movie.ValidOrFail();
-            //movie.Id = _movies.Count() + 1;
-            //_movies.Add(movie);
+            admin.ValidOrFail();
+            _admins.Add(admin);
             return admin;
         }
 
@@ -70,5 +71,14 @@ namespace BusinessLogic
             //_movies.Remove(movieSaved);
         }
 
+        public Administrator UpdateAdministrator(string email, Administrator admin)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Administrator DeleteAdministrator(string email)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

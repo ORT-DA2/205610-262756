@@ -9,7 +9,9 @@ namespace StartUp.IBusinessLogic
     public interface IMedicineManager
     {
         List<Medicine> GetAllMedicine(MedicineSearchCriteria searchCriteria);
-        Medicine GetSpecificMedicine();
-        Medicine CreateMedicine();
+        Medicine GetSpecificMedicine(string code);
+        Medicine CreateMedicine(Medicine medicine);
+        Medicine UpdateMedicine(Medicine medicineUpdate);
+        Medicine DeleteMedicine(Medicine medicine);
     }
 }

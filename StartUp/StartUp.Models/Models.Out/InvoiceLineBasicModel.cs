@@ -8,6 +8,7 @@ namespace StartUp.Models.Models.Out
     public class InvoiceLineBasicModel
     {
         public int Amount { get; set; }
+
         public InvoiceLineBasicModel(InvoiceLine line)
         {
             this.Amount = line.Amount;

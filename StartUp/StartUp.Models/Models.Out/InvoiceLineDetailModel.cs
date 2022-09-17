@@ -9,6 +9,7 @@ namespace StartUp.Models.Models.Out
     {
         public MedicineBasicModel Medicine { get; set; }
         public int Amount { get; set; }
+
         public InvoiceLineDetailModel(InvoiceLine line)
         {
             Medicine = new MedicineBasicModel(line.Medicine);

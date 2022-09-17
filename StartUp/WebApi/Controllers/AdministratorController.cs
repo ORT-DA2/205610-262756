@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 using IBusinessLogic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using StartUp.Exceptions;
+using StartUp.Models.Models.In;
+using StartUp.Models.Models.Out;
 
 namespace WebApi.Controllers
 {
@@ -20,29 +23,30 @@ namespace WebApi.Controllers
             _adminManager = manager;
         }
 
-        // Index - Get all movies (/api/movies)
+        // Index - Get all administrator (/api/administrator)
         [HttpGet]
         public IActionResult GetAdministrator([FromQuery] AdministratorSearchCriteriaModel searchCriteria)
         {
-            var retrievedMovies = _movieManager.GetAllMovies(searchCriteria.ToEntity());
-            return Ok(retrievedMovies.Select(m => new MovieBasicModel(m)));
+            //var retrievedAdmins = _adminManager.GetAllAdministrator(searchCriteria.ToEntity());
+            //return Ok(retrievedAdmins.Select(m => new AdministratorBasicModel(m)));
+            return(Ok());
         }
-
+        
         // Show - Get specific movie (/api/movies/{id})
-        [HttpGet("{movieId}", Name = "GetMovie")]
-        public IActionResult GetMovie(int movieId)
+        [HttpGet("{adminEmail}", Name = "GetAdmin")]
+        public IActionResult GetAdministrator(string email)
         {
             try
             {
-                var retrievedMovie = _movieManager.GetSpecificMovie(movieId);
-                return Ok(new MovieDetailModel(retrievedMovie));
+                var retrievedAdmin = _adminManager.GetSpecificAdministrator(email);
+                return Ok(new AdministratorDetailModel(retrievedAdmin));
             }
             catch (ResourceNotFoundException e)
             {
                 return NotFound(e.Message);
             }
         }
-
+        /*
         // Create - Create new movie (/api/movies)
         [HttpPost]
         public IActionResult CreateMovie([FromBody] MovieModel newMovie)
@@ -91,5 +95,6 @@ namespace WebApi.Controllers
             {
                 return NotFound(e.Message);
             }
-        }
+        }*/
+    }
     }

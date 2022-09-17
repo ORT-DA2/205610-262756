@@ -9,6 +9,7 @@ namespace StartUp.Models.Models.Out
     {
         public string MedicineCode { get; set; }
         public int Amount { get; set; }
+
         public PetitionDetailModel(Petition petition)
         {
             this.MedicineCode = petition.MedicineCode;

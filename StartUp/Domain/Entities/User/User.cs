@@ -5,11 +5,12 @@ namespace Domain
 {
     public class User
     {
+        public int Id { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
-        private DateTime RegisterDate { get; set; }
         public string Address { get; set; }
-        private Invitation Invitation { get; set; }
+        public DateTime RegisterDate { get; set; }
+        public Invitation Invitation { get; set; }
     }
 }
 

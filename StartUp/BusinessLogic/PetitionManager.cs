@@ -14,12 +14,32 @@ namespace StartUp.BusinessLogic
             throw new NotImplementedException();
         }
 
+        public Petition CreatePetition(Petition petition)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Petition DeletePetition(Petition petition)
+        {
+            throw new NotImplementedException();
+        }
+
         public List<Petition> GetAllPetition(PetitionSearchCriteria searchCriteria)
         {
             throw new NotImplementedException();
         }
 
         public Petition GetSpecificPetition()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Petition GetSpecificPetition(string medicineCode)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Petition UpdatePetition(Petition petitionUpdate)
         {
             throw new NotImplementedException();
         }

@@ -10,5 +10,7 @@ namespace IBusinessLogic
         List<Administrator> GetAllAdministrator(AdministratorSearchCriteria searchCriteria);
         Administrator GetSpecificAdministrator(string email);
         Administrator CreateAdministrator(Administrator admin);
+        Administrator UpdateAdministrator(string email, Administrator admin);
+        Administrator DeleteAdministrator(string email);
     }
 }
