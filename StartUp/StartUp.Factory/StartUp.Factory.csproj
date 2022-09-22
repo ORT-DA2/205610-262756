@@ -1,16 +1,23 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>netcoreapp3.1</TargetFramework>
+		<TargetFramework>net6.0</TargetFramework>
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.0" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.0" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.0">
+	    <PrivateAssets>all</PrivateAssets>
+	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
+	  <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0-preview.7.22375.6" />
 	</ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\BusinessLogic\StartUp.BusinessLogic.csproj" />
     <ProjectReference Include="..\IBusinessLogic\StartUp.IBusinessLogic.csproj" />
+    <ProjectReference Include="..\StartUp.DataAccess\StartUp.DataAccess.csproj" />
+    <ProjectReference Include="..\StartUp.IDataAccess\StartUp.IDataAccess.csproj" />
   </ItemGroup>
 
 </Project>

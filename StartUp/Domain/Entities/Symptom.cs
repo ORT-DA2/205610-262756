@@ -1,7 +1,7 @@
 namespace StartUp.Domain;
 
-public class Symptoms
+public class Symptom
 {
-    public int id { get; set; }
-    public string symptom { get; set; }
+    public int Id { get; set; }
+    public string SymptomDescription { get; set; }
 }

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using StartUp.Domain;
 
-namespace StartUp.DataAccess.Contexts
+namespace StartUp.DataAccess
 {
     public class StartUpContext : DbContext
     {
@@ -20,19 +20,20 @@ namespace StartUp.DataAccess.Contexts
         
         public StartUpContext(DbContextOptions options) : base(options) { }
 
-        public StartUpContext() : base(){}
+        public StartUpContext() : base() {}
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (optionsBuilder.IsConfigured)
+            if (!optionsBuilder.IsConfigured)
             {
-                var directory = Directory.GetCurrentDirectory();
+                string directory = Directory.GetCurrentDirectory();
                 var configuration = new ConfigurationBuilder()
                     .SetBasePath(directory)
                     .AddJsonFile("appsettings.json")
                     .Build();
 
-                var conectionString = configuration.GetConnectionString("StartUpDb");
+                var connectionString = configuration.GetConnectionString("StartUpDb");
+                optionsBuilder.UseSqlServer(connectionString);
             } 
         }
     }

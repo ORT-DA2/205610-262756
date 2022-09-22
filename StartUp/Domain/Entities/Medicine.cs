@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace StartUp.Domain
@@ -9,7 +10,7 @@ namespace StartUp.Domain
         public int Id { get; set; }
         public string Code { get; set; }
         public string Name { get; set; }
-        public List<string> Symptoms { get; set; }
+        public List<Symptom> Symptoms { get; set; }
         public string Presentation { get; set; }
         public int Amount { get; set; }
         public string Measure { get; set; }

@@ -1,11 +1,12 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿/*using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using StartUp.DataAccess.Contexts;
 using StartUp.Factory;
 
-namespace WebApi
+namespace StartUp.WebApi
 {
     public class Startup
     {
@@ -22,6 +23,7 @@ namespace WebApi
             var factory = new ServiceFactory();
             factory.RegisterServices(services);
             services.AddControllers();
+            services.AddDbContext<StartUpContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,5 +46,5 @@ namespace WebApi
             });
         }
     }
-}
+}8*/
 

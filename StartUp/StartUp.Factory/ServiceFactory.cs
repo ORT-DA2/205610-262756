@@ -1,14 +1,21 @@
 ﻿using BusinessLogic;
 using IBusinessLogic;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using StartUp.BusinessLogic;
+using StartUp.DataAccess;
 using StartUp.IBusinessLogic;
+
 
 namespace StartUp.Factory
 {
-    public class ServiceFactory
+    public static class ServiceFactory
     {
-        public void RegisterServices(IServiceCollection serviceCollection)
+        public static void RegisterDataAccessServices(this IServiceCollection serviceCollection)
+        {
+            serviceCollection.AddDbContext<DbContext, StartUpContext>();
+        }
+        public static void RegisterServices(this IServiceCollection serviceCollection)
         {
             serviceCollection.AddTransient<IAdministratorManager, AdministratorManager>();
             serviceCollection.AddTransient<IEmployeeManager, EmployeeManager>();
