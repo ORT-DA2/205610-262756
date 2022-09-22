@@ -9,7 +9,7 @@ namespace StartUp.Models.Models.Out
     {
         public string Code { get; set; }
         public string Name { get; set; }
-        public List<string> Symptoms { get; set; }
+        public List<Symptom> Symptoms { get; set; }
         public string Presentation { get; set; }
         public int Amount { get; set; }
         public string Measure { get; set; }
