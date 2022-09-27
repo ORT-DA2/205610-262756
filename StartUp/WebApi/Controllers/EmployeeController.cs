@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using StartUp.Exceptions;
 using StartUp.IBusinessLogic;
 using StartUp.Models.Models.In;
+using StartUp.Models.Models.Out;
+using System.Linq;
 
 namespace StartUp.WebApi.Controllers
 {
@@ -20,21 +23,35 @@ namespace StartUp.WebApi.Controllers
         [HttpGet]
         public IActionResult GetEmployee([FromQuery] EmployeeSearchCriteriaModel searchCriteria)
         {
-            //var retrievedAdmins = _adminManager.GetAllAdministrator(searchCriteria.ToEntity());
-            //return Ok(retrievedAdmins.Select(m => new AdministratorBasicModel(m)));
-            return (Ok());
+            var retrievedEmployees = _employeeManager.GetAllEmployee(searchCriteria.ToEntity());
+            return Ok(retrievedEmployees.Select(e => new EmployeeBasicModel(e)));
         }
 
-        /*
-        // Create - Create new movie (/api/movies)
-        [HttpPost]
-        public IActionResult CreateMovie([FromBody] MovieModel newMovie)
+        // Show - Get specific employee (/api/employee/{email})
+        [HttpGet("{employeeEmail}", Name = "GetEmployee")]
+        public IActionResult GetEmployee(string employeeEmail)
         {
             try
             {
-                var createdMovie = _movieManager.CreateMovie(newMovie.ToEntity());
-                var movieModel = new MovieDetailModel(createdMovie);
-                return CreatedAtRoute("GetMovie", new { movieId = movieModel.Id }, movieModel);
+                var retrievedEmployee = _employeeManager.GetSpecificEmployee(employeeEmail);
+                return Ok(new EmployeeDetailModel(retrievedEmployee));
+            }
+            catch (ResourceNotFoundException e)
+            {
+                return NotFound(e.Message);
+            }
+        }
+
+
+        // Create - Create new employee (/api/employee)
+        [HttpPost]
+        public IActionResult CreateEmployee([FromBody] EmployeeModel newEmployee)
+        {
+            try
+            {
+                var createdEmployee = _employeeManager.CreateEmployee(newEmployee.ToEntity());
+                var employeeModel = new EmployeeDetailModel(createdEmployee);
+                return CreatedAtRoute("GetEmployee", new { employeeId = employeeModel.Email }, employeeModel);
             }
             catch (InvalidResourceException e)
             {
@@ -42,14 +59,14 @@ namespace StartUp.WebApi.Controllers
             }
         }
 
-        // Update - Update specific movie (/api/movies/{id})
-        [HttpPut("{movieId}")]
-        public IActionResult Update(int movieId, [FromBody] MovieModel updatedMovie)
+        // Update - Update specific employee (/api/employee/{email})
+        [HttpPut("{employeeEmail}")]
+        public IActionResult Update(string employeeEmail, [FromBody] EmployeeModel updatedEmployee)
         {
             try
             {
-                var retrievedMovie = _movieManager.UpdateMovie(movieId, updatedMovie.ToEntity());
-                return Ok(new MovieDetailModel(retrievedMovie));
+                var retrievedEmployee = _employeeManager.UpdateEmployee(employeeEmail, updatedEmployee.ToEntity());
+                return Ok(new EmployeeDetailModel(retrievedEmployee));
             }
             catch (InvalidResourceException e)
             {
@@ -61,19 +78,19 @@ namespace StartUp.WebApi.Controllers
             }
         }
 
-        // Delete - Delete specific movie (/api/movies/{id})
-        [HttpDelete("{movieId}")]
-        public IActionResult Delete(int movieId)
+        // Delete - Delete specific employee (/api/employee/{email})
+        [HttpDelete("{employeeEmail}")]
+        public IActionResult DeleteEmployee(string employeeEmail)
         {
             try
             {
-                _movieManager.DeleteMovie(movieId);
+                _employeeManager.DeleteEmployee(employeeEmail);
                 return Ok();
             }
             catch (ResourceNotFoundException e)
             {
                 return NotFound(e.Message);
             }
-        }*/
+        }
     }
 }

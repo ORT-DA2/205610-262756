@@ -9,11 +9,15 @@ namespace StartUp.Domain
 {
     public class Administrator : User
     {
-        public bool ValidOrFail()
+        public bool isValidAdministrator()
         {
-            if (string.IsNullOrEmpty(Email) || string.IsNullOrEmpty(Password) || string.IsNullOrEmpty(Address))
+            if (string.IsNullOrEmpty(this.Email)
+                || string.IsNullOrEmpty(this.Address)
+                || this.Invitation == null
+                || string.IsNullOrEmpty(this.Password)
+                || RegisterDate == null)
             {
-                throw new InvalidResourceException("Email or password or address empty");
+                throw new InvalidResourceException("Empty fields");
             }
             return true;
         }

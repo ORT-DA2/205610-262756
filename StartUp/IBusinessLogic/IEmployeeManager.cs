@@ -12,6 +12,6 @@ namespace StartUp.IBusinessLogic
         Employee GetSpecificEmployee(string email);
         Employee CreateEmployee(Employee employee);
         Employee UpdateEmployee(string email, Employee employee);
-        Employee DeleteEmployee(string email);
+        void DeleteEmployee(string email);
     }
 }
