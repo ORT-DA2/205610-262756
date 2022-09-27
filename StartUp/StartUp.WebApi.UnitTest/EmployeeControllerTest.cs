@@ -33,10 +33,10 @@ namespace StartUp.WebApi.UnitTest
         {
             var employee = CreateEmployee();
             var expectedEmployee = new EmployeeDetailModel(employee);
-            _managerMock.Setup(manager => manager.GetSpecificEmployee(It.IsAny<string>())).Returns(employee);
+            _managerMock.Setup(manager => manager.GetSpecificEmployee(It.IsAny<int>())).Returns(employee);
             var controller = new EmployeeController(_managerMock.Object);
 
-            var response = controller.GetEmployee(employee.Email);
+            var response = controller.GetEmployee(employee.Id);
             var okResponseObject = response as Microsoft.AspNetCore.Mvc.OkObjectResult;
 
             Assert.AreEqual(expectedEmployee, okResponseObject.Value);

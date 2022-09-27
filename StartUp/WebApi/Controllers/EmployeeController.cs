@@ -27,13 +27,13 @@ namespace StartUp.WebApi.Controllers
             return Ok(retrievedEmployees.Select(e => new EmployeeBasicModel(e)));
         }
 
-        // Show - Get specific employee (/api/employee/{email})
-        [HttpGet("{employeeEmail}", Name = "GetEmployee")]
-        public IActionResult GetEmployee(string employeeEmail)
+        // Show - Get specific employee (/api/employee/{id})
+        [HttpGet("{id}", Name = "GetEmployee")]
+        public IActionResult GetEmployee(int id)
         {
             try
             {
-                var retrievedEmployee = _employeeManager.GetSpecificEmployee(employeeEmail);
+                var retrievedEmployee = _employeeManager.GetSpecificEmployee(id);
                 return Ok(new EmployeeDetailModel(retrievedEmployee));
             }
             catch (ResourceNotFoundException e)
@@ -51,7 +51,7 @@ namespace StartUp.WebApi.Controllers
             {
                 var createdEmployee = _employeeManager.CreateEmployee(newEmployee.ToEntity());
                 var employeeModel = new EmployeeDetailModel(createdEmployee);
-                return CreatedAtRoute("GetEmployee", new { employeeId = employeeModel.Email }, employeeModel);
+                return CreatedAtRoute("GetEmployee", new { id = employeeModel.Id }, employeeModel);
             }
             catch (InvalidResourceException e)
             {
@@ -59,13 +59,13 @@ namespace StartUp.WebApi.Controllers
             }
         }
 
-        // Update - Update specific employee (/api/employee/{email})
-        [HttpPut("{employeeEmail}")]
-        public IActionResult Update(string employeeEmail, [FromBody] EmployeeModel updatedEmployee)
+        // Update - Update specific employee (/api/employee/{id})
+        [HttpPut("{id}")]
+        public IActionResult Update(int id, [FromBody] EmployeeModel updatedEmployee)
         {
             try
             {
-                var retrievedEmployee = _employeeManager.UpdateEmployee(employeeEmail, updatedEmployee.ToEntity());
+                var retrievedEmployee = _employeeManager.UpdateEmployee(id, updatedEmployee.ToEntity());
                 return Ok(new EmployeeDetailModel(retrievedEmployee));
             }
             catch (InvalidResourceException e)
@@ -78,13 +78,13 @@ namespace StartUp.WebApi.Controllers
             }
         }
 
-        // Delete - Delete specific employee (/api/employee/{email})
-        [HttpDelete("{employeeEmail}")]
-        public IActionResult DeleteEmployee(string employeeEmail)
+        // Delete - Delete specific employee (/api/employee/{id})
+        [HttpDelete("{id}")]
+        public IActionResult DeleteEmployee(int id)
         {
             try
             {
-                _employeeManager.DeleteEmployee(employeeEmail);
+                _employeeManager.DeleteEmployee(id);
                 return Ok();
             }
             catch (ResourceNotFoundException e)

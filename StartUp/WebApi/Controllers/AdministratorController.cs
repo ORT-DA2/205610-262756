@@ -31,13 +31,13 @@ namespace StartUp.WebApi.Controllers
             return Ok(retrievedAdmins.Select(a => new AdministratorBasicModel(a)));
         }
         
-        // Show - Get specific movie (/api/movies/{id})
-        [HttpGet("{adminEmail}", Name = "GetAdmin")]
-        public IActionResult GetAdministrator(string email)
+        // Show - Get specific administrator (/api/administrator/{id})
+        [HttpGet("{id}", Name = "GetAdmin")]
+        public IActionResult GetAdministrator(int id)
         {
             try
             {
-                var retrievedAdmin = _adminManager.GetSpecificAdministrator(email);
+                var retrievedAdmin = _adminManager.GetSpecificAdministrator(id);
                 return Ok(new AdministratorDetailModel(retrievedAdmin));
             }
             catch (ResourceNotFoundException e)
@@ -45,16 +45,16 @@ namespace StartUp.WebApi.Controllers
                 return NotFound(e.Message);
             }
         }
-        /*
-        // Create - Create new movie (/api/movies)
+        
+        // Create - Create new administrator (/api/administrator)
         [HttpPost]
-        public IActionResult CreateMovie([FromBody] MovieModel newMovie)
+        public IActionResult CreateAdministrator([FromBody] AdministratorModel newAdministrator)
         {
             try
             {
-                var createdMovie = _movieManager.CreateMovie(newMovie.ToEntity());
-                var movieModel = new MovieDetailModel(createdMovie);
-                return CreatedAtRoute("GetMovie", new { movieId = movieModel.Id }, movieModel);
+                var createdAdministrator = _adminManager.CreateAdministrator(newAdministrator.ToEntity());
+                var adminModel = new AdministratorDetailModel(createdAdministrator);
+                return CreatedAtRoute("GetAdmin", new { id = adminModel.Id }, adminModel);
             }
             catch (InvalidResourceException e)
             {
@@ -62,14 +62,14 @@ namespace StartUp.WebApi.Controllers
             }
         }
 
-        // Update - Update specific movie (/api/movies/{id})
-        [HttpPut("{movieId}")]
-        public IActionResult Update(int movieId, [FromBody] MovieModel updatedMovie)
+        // Update - Update specific administrator (/api/administrator/{id})
+        [HttpPut("{id}")]
+        public IActionResult Update(int id, [FromBody] AdministratorModel updatedAdmin)
         {
             try
             {
-                var retrievedMovie = _movieManager.UpdateMovie(movieId, updatedMovie.ToEntity());
-                return Ok(new MovieDetailModel(retrievedMovie));
+                var retrievedAdmin = _adminManager.UpdateAdministrator(id, updatedAdmin.ToEntity());
+                return Ok(new AdministratorDetailModel(retrievedAdmin));
             }
             catch (InvalidResourceException e)
             {
@@ -81,19 +81,19 @@ namespace StartUp.WebApi.Controllers
             }
         }
 
-        // Delete - Delete specific movie (/api/movies/{id})
-        [HttpDelete("{movieId}")]
-        public IActionResult Delete(int movieId)
+        // Delete - Delete specific administrator (/api/administrator/{id})
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
         {
             try
             {
-                _movieManager.DeleteMovie(movieId);
+                _adminManager.DeleteAdministrator(id);
                 return Ok();
             }
             catch (ResourceNotFoundException e)
             {
                 return NotFound(e.Message);
             }
-        }*/
+        }
     }
     }

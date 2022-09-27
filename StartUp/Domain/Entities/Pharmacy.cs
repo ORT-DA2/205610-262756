@@ -40,7 +40,7 @@ namespace StartUp.Domain
         {
             if (string.IsNullOrEmpty(Name) || string.IsNullOrEmpty(Address) ||
                     Stock==null || Requests==null)
-                throw new InputException("Name or address or medicines or requests empty");
+                throw new InputException("Name or address or stock empty");
         }
     }
 

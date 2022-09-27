@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StartUp.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
@@ -18,5 +19,11 @@ namespace StartUp.Domain
         public int Stock { get; set; }
         public bool Prescription { get; set; }
 
+        public void isValidMedicine()
+        {
+            if (string.IsNullOrEmpty(Code) || string.IsNullOrEmpty(Name) || string.IsNullOrEmpty(Presentation)
+                || string.IsNullOrEmpty(Measure) || Symptoms == null)
+                throw new InputException("Enter a Medicine");
+        }
     }
 }

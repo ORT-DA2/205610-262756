@@ -17,7 +17,7 @@ namespace StartUp.Domain
                 || this.Invitation == null 
                 || string.IsNullOrEmpty(this.Password)
                 || RegisterDate == null )
-                throw new InputException("Enter a pharmacy");
+                throw new InputException("empty");
         }
     }
 }

@@ -30,10 +30,10 @@ namespace StartUp.WebApi.UnitTest
         {
             var admin = CreateAdministrator();
             var expectedAdmin = new AdministratorDetailModel(admin);
-            _managerMock.Setup(manager => manager.GetSpecificAdministrator(It.IsAny<string>())).Returns(admin);
+            _managerMock.Setup(manager => manager.GetSpecificAdministrator(It.IsAny<int>())).Returns(admin);
             var controller = new AdministratorController(_managerMock.Object);
 
-            var response = controller.GetAdministrator(admin.Email);
+            var response = controller.GetAdministrator(admin.Id);
             var okResponseObject = response as Microsoft.AspNetCore.Mvc.OkObjectResult;
 
             Assert.AreEqual(expectedAdmin, okResponseObject.Value);

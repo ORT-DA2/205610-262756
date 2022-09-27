@@ -64,16 +64,10 @@
     </option>
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock:///Users/belenfurtado/Desktop/205610-262756/StartUp/Domain/Entities/Medicine.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/StartUp.DataAccess/Contexts/StartUpContext.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock:///Users/belenfurtado/Desktop/205610-262756/StartUp/StartUp.DataAccess/Contexts/StartUpContext.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/StartUp.Factory/ServiceFactory.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/StartUp.IDataAccess/IRepository.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock:///Users/belenfurtado/Desktop/205610-262756/StartUp/StartUp.Models/Models.In/MedicineModel.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Users/belenfurtado/Desktop/205610-262756/StartUp/StartUp.Models/Models.Out/MedicineDetailModel.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/StartUp.WebApi.UnitTest/AdministratorControllerTest.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock:///Users/belenfurtado/Desktop/205610-262756/StartUp/WebApi/Program.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Users/belenfurtado/Desktop/205610-262756/StartUp/WebApi/Startup.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/WebApi/appsettings.json" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
@@ -88,17 +82,17 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "terminal",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;terminal&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RiderProblemsViewState">
     <option name="proportion" value="0.21281296" />
   </component>
@@ -244,6 +238,7 @@
       <option name="presentableId" value="Default" />
       <updated>1663453544886</updated>
       <workItem from="1663453547295" duration="46118000" />
+      <workItem from="1664297839838" duration="135000" />
     </task>
     <servers />
   </component>
@@ -264,6 +259,7 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
+    <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
     <MESSAGE value="Adding Migrations" />
     <option name="LAST_COMMIT_MESSAGE" value="Adding Migrations" />
   </component>

@@ -9,9 +9,9 @@ namespace StartUp.IBusinessLogic
     public interface IRequestManager
     {
         List<Request> GetAllRequest(RequestSearchCriteria searchCriteria);
-        Request GetSpecificRequest(bool state);
+        Request GetSpecificRequest(int requestId);
         Request CreateRequest(Request request);
-        Request UpdateRequest(Request requestUpdate);
-        Request DeleteRequest(Request request);
+        Request UpdateRequest(int requestId,Request requestUpdate);
+        void DeleteRequest(int requestId);
     }
 }

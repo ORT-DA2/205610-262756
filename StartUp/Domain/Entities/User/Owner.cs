@@ -8,7 +8,7 @@ namespace StartUp.Domain
 {
     public class Owner : User
     {
-        private Pharmacy Pharmacy { get; set; }
+        public Pharmacy Pharmacy { get; set; }
 
         public void isValidOwner()
         {

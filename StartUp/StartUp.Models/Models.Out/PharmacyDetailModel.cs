@@ -28,5 +28,19 @@ namespace StartUp.Models.Models.Out
                 Requests.Add(new RequestBasicModel(item));
             }
         }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is PharmacyDetailModel)
+            {
+                var otherPharmacy = obj as PharmacyDetailModel;
+
+                return Id == otherPharmacy.Id;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }

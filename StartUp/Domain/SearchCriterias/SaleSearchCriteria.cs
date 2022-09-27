@@ -6,6 +6,6 @@ namespace StartUp.Domain.SearchCriterias
 {
     public class SaleSearchCriteria
     {
-        public List<InvoiceLine>? Medicines { get; set; }
+        public List<InvoiceLine>? InvoiceLines { get; set; }
     }
 }

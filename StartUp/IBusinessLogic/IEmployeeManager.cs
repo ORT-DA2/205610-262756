@@ -9,9 +9,9 @@ namespace StartUp.IBusinessLogic
     public interface IEmployeeManager
     {
         List<Employee> GetAllEmployee(EmployeeSearchCriteria searchCriteria);
-        Employee GetSpecificEmployee(string email);
+        Employee GetSpecificEmployee(int employeeId);
         Employee CreateEmployee(Employee employee);
-        Employee UpdateEmployee(string email, Employee employee);
-        void DeleteEmployee(string email);
+        Employee UpdateEmployee(int employeeId, Employee employee);
+        void DeleteEmployee(int employeeId);
     }
 }

@@ -9,9 +9,9 @@ namespace StartUp.IBusinessLogic
     public interface IPetitionManager
     {
         List<Petition> GetAllPetition(PetitionSearchCriteria searchCriteria);
-        Petition GetSpecificPetition(string medicineCode);
+        Petition GetSpecificPetition(int petitionId);
         Petition CreatePetition(Petition petition);
-        Petition UpdatePetition(Petition petitionUpdate);
-        Petition DeletePetition(Petition petition);
+        Petition UpdatePetition(int petitionId, Petition petitionUpdate);
+        void DeletePetition(int petitionId);
     }
 }

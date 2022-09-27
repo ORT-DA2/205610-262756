@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using StartUp.Exceptions;
 using StartUp.IBusinessLogic;
 using StartUp.Models.Models.In;
+using StartUp.Models.Models.Out;
+using System.Linq;
 
 namespace StartUp.WebApi.Controllers
 {
@@ -20,37 +23,34 @@ namespace StartUp.WebApi.Controllers
             [HttpGet]
             public IActionResult GetInvitation([FromQuery] InvitationSearchCriteriaModel searchCriteria)
             {
-                //var retrievedAdmins = _adminManager.GetAllAdministrator(searchCriteria.ToEntity());
-                //return Ok(retrievedAdmins.Select(m => new AdministratorBasicModel(m)));
-                return (Ok());
+                var retrievedInvitations = _invitationManager.GetAllInvitation(searchCriteria.ToEntity());
+                return Ok(retrievedInvitations.Select(i => new InvitationBasicModel(i)));
             }
 
-            // Show - Get specific movie (/api/movies/{id})
-            [HttpGet(Name = "GetInvitation")]
-            public IActionResult GetInvitation(string email)
-            {/*
+            // Show - Get specific invitation (/api/invitation/{id})
+            [HttpGet("{id}", Name = "GetInvitation")]
+            public IActionResult GetInvitation(int id)
+            {
                 try
                 {
-                    var retrievedAdmin = _adminManager.GetSpecificAdministrator(email);
-                    return Ok(new AdministratorDetailModel(retrievedAdmin));
+                    var retrievedInvitation = _invitationManager.GetSpecificInvitation(id);
+                    return Ok(new InvitationDetailModel(retrievedInvitation));
                 }
                 catch (ResourceNotFoundException e)
                 {
                     return NotFound(e.Message);
-                }*/
-                return NotFound();
+                }
             }
 
-            /*
-            // Create - Create new movie (/api/movies)
+            // Create - Create new invitation (/api/invitation)
             [HttpPost]
-            public IActionResult CreateMovie([FromBody] MovieModel newMovie)
+            public IActionResult CreateInvitation([FromBody] InvitationModel newInvitation)
             {
                 try
                 {
-                    var createdMovie = _movieManager.CreateMovie(newMovie.ToEntity());
-                    var movieModel = new MovieDetailModel(createdMovie);
-                    return CreatedAtRoute("GetMovie", new { movieId = movieModel.Id }, movieModel);
+                    var createdInvitation = _invitationManager.CreateInvitation(newInvitation.ToEntity());
+                    var invitationModel = new InvitationDetailModel(createdInvitation);
+                    return CreatedAtRoute("GetInvitation", new { id = invitationModel.Id }, invitationModel);
                 }
                 catch (InvalidResourceException e)
                 {
@@ -58,14 +58,14 @@ namespace StartUp.WebApi.Controllers
                 }
             }
 
-            // Update - Update specific movie (/api/movies/{id})
-            [HttpPut("{movieId}")]
-            public IActionResult Update(int movieId, [FromBody] MovieModel updatedMovie)
+            // Update - Update specific invitation (/api/invitation/{id})
+            [HttpPut("{id}")]
+            public IActionResult Update(int id, [FromBody] InvitationModel updatedInvitation)
             {
                 try
                 {
-                    var retrievedMovie = _movieManager.UpdateMovie(movieId, updatedMovie.ToEntity());
-                    return Ok(new MovieDetailModel(retrievedMovie));
+                    var retrievedInvitation = _invitationManager.UpdateInvitation(id, updatedInvitation.ToEntity());
+                    return Ok(new InvitationDetailModel(retrievedInvitation));
                 }
                 catch (InvalidResourceException e)
                 {
@@ -77,19 +77,19 @@ namespace StartUp.WebApi.Controllers
                 }
             }
 
-            // Delete - Delete specific movie (/api/movies/{id})
-            [HttpDelete("{movieId}")]
-            public IActionResult Delete(int movieId)
+            // Delete - Delete specific invitation (/api/invitation/{id})
+            [HttpDelete("{id}")]
+            public IActionResult Delete(int id)
             {
                 try
                 {
-                    _movieManager.DeleteMovie(movieId);
+                    _invitationManager.DeleteInvitation(id);
                     return Ok();
                 }
                 catch (ResourceNotFoundException e)
                 {
                     return NotFound(e.Message);
                 }
-            }*/
+            }
         }
 }

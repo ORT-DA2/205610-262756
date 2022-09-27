@@ -39,13 +39,13 @@ namespace StartUp.BusinessLogic
             return _employeeRepository.GetAllExpression(employeeFilter).ToList();
         }
 
-        public Employee GetSpecificEmployee(string employeeEmail)
+        public Employee GetSpecificEmployee(int employeeId)
         {
-            var employeeSaved = _employeeRepository.GetOneByExpression(e => e.Email == employeeEmail);
+            var employeeSaved = _employeeRepository.GetOneByExpression(e => e.Id == employeeId);
 
             if (employeeSaved is null)
             {
-                throw new ResourceNotFoundException($"Could not find specified employee {employeeEmail}");
+                throw new ResourceNotFoundException($"Could not find specified employee {employeeId}");
             }
 
             return employeeSaved;
@@ -61,22 +61,29 @@ namespace StartUp.BusinessLogic
             return employee;
         }
 
-        public Employee UpdateEmployee(string employeeEmail, Employee updatedEmployee)
+        public Employee UpdateEmployee(int employeeId, Employee updatedEmployee)
         {
             updatedEmployee.isValidEmployee();
 
-            var employeeStored = GetSpecificEmployee(employeeEmail);
+            var employeeStored = GetSpecificEmployee(employeeId);
 
             employeeStored.Pharmacy = updatedEmployee.Pharmacy;
+            employeeStored.Email = updatedEmployee.Email;
+            employeeStored.Password = updatedEmployee.Password;
+            employeeStored.Address = updatedEmployee.Address;
+            employeeStored.RegisterDate = updatedEmployee.RegisterDate;
+            employeeStored.Password = updatedEmployee.Password;
+            employeeStored.Invitation = updatedEmployee.Invitation;
+
             _employeeRepository.UpdateOne(employeeStored);
             _employeeRepository.Save();
 
             return employeeStored;
         }
 
-        public void DeleteEmployee(string employeeEmail)
+        public void DeleteEmployee(int employeeId)
         {
-            var employeeStored = GetSpecificEmployee(employeeEmail);
+            var employeeStored = GetSpecificEmployee(employeeId);
 
             _employeeRepository.DeleteOne(employeeStored);
             _employeeRepository.Save();

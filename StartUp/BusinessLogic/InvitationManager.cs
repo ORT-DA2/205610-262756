@@ -1,47 +1,85 @@
 ﻿using StartUp.Domain;
 using StartUp.Domain.SearchCriterias;
+using StartUp.Exceptions;
 using StartUp.IBusinessLogic;
+using StartUp.IDataAccess;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace StartUp.BusinessLogic
 {
     public class InvitationManager : IInvitationManager
     {
-        public Invitation CreateInvitation()
-        {
-            throw new NotImplementedException();
-        }
 
-        public Invitation CreateInvitation(Invitation invitation)
-        {
-            throw new NotImplementedException();
-        }
+        private readonly IRepository<Invitation> _invitationRepository;
 
-        public Invitation DeleteInvitation(string name)
+        public InvitationManager(IRepository<Invitation> invitationRepository)
         {
-            throw new NotImplementedException();
+            _invitationRepository = invitationRepository;
         }
 
         public List<Invitation> GetAllInvitation(InvitationSearchCriteria searchCriteria)
         {
-            throw new NotImplementedException();
+            var rolCriteria = searchCriteria.Rol?.ToLower() ?? string.Empty;
+            var userNameCriteria = searchCriteria.UserName?.ToLower() ?? string.Empty;
+            var codeCriteria = searchCriteria.Code.ToString()?.ToLower() ?? string.Empty;
+
+            Expression<Func<Invitation, bool>> invitationFilter = invitation =>
+                invitation.Rol.ToLower().Contains(rolCriteria) &&
+                invitation.UserName.ToLower().Contains(userNameCriteria) &&
+                invitation.Code.ToString().Contains(codeCriteria);
+
+            return _invitationRepository.GetAllExpression(invitationFilter).ToList();
         }
 
-        public Invitation GetSpecificInvitation()
+        public Invitation GetSpecificInvitation(int invitationId)
         {
-            throw new NotImplementedException();
+            var invitationSaved = _invitationRepository.GetOneByExpression(i => i.Id == invitationId);
+
+            if (invitationSaved is null)
+            {
+                throw new ResourceNotFoundException($"Could not find specified invitation {invitationId}");
+            }
+
+            return invitationSaved;
         }
 
-        public Invitation GetSpecificInvitation(string username)
+        public Invitation CreateInvitation(Invitation invitation)
         {
-            throw new NotImplementedException();
+            invitation.isValidInvitation();
+
+            _invitationRepository.InsertOne(invitation);
+            _invitationRepository.Save();
+
+            return invitation;
         }
 
-        public Invitation UpdateInvitation(string name, Invitation invitation)
+        public Invitation UpdateInvitation(int invitationId, Invitation updatedInvitation)
         {
-            throw new NotImplementedException();
+            updatedInvitation.isValidInvitation();
+
+            var invitationStored = GetSpecificInvitation(invitationId);
+
+            invitationStored.Rol = updatedInvitation.Rol;
+            invitationStored.UserName = updatedInvitation.UserName;
+            invitationStored.Code = updatedInvitation.Code;
+
+            _invitationRepository.UpdateOne(invitationStored);
+            _invitationRepository.Save();
+
+            return invitationStored;
         }
+
+        public void DeleteInvitation(int invitationId)
+        {
+            var invitationStored = GetSpecificInvitation(invitationId);
+
+            _invitationRepository.DeleteOne(invitationStored);
+            _invitationRepository.Save();
+        }
+
     }
 }
