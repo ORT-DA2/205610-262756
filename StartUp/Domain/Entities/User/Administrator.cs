@@ -14,8 +14,7 @@ namespace StartUp.Domain
             if (string.IsNullOrEmpty(this.Email)
                 || string.IsNullOrEmpty(this.Address)
                 || this.Invitation == null
-                || string.IsNullOrEmpty(this.Password)
-                || RegisterDate == null)
+                || string.IsNullOrEmpty(this.Password))
             {
                 throw new InvalidResourceException("Empty fields");
             }

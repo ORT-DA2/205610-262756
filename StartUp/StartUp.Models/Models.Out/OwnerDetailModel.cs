@@ -19,7 +19,7 @@ namespace StartUp.Models.Models.Out
             this.Address = owner.Address;
             this.RegisterDate = owner.RegisterDate;
             this.Invitation = owner.Invitation;
-
+        }
 
 
             public override bool Equals(object? obj)

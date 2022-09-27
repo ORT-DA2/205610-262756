@@ -31,16 +31,15 @@ namespace StartUp.WebApi.Controllers
         [HttpGet]
         public IActionResult GetMedicine(int id)
         {
-                try
-                {
-                    var retrievedMedicine = _medicineManager.GetSpecificMedicine(id);
-                    return Ok(new MedicineDetailModel(retrievedMedicine));
-                }
-                catch (ResourceNotFoundException e)
-                {
-                    return NotFound(e.Message);
-                }
-            return NotFound();
+            try
+            {
+                var retrievedMedicine = _medicineManager.GetSpecificMedicine(id);
+                return Ok(new MedicineDetailModel(retrievedMedicine));
+            }
+            catch (ResourceNotFoundException e)
+            {
+                return NotFound(e.Message);
+            }
         }
 
         // Create - Create new medicine (/api/medicine)

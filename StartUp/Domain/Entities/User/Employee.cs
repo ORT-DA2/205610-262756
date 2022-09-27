@@ -15,8 +15,7 @@ namespace StartUp.Domain
             if (Pharmacy == null || string.IsNullOrEmpty(this.Email) 
                 || string.IsNullOrEmpty(this.Address) 
                 || this.Invitation == null 
-                || string.IsNullOrEmpty(this.Password)
-                || RegisterDate == null )
+                || string.IsNullOrEmpty(this.Password))
                 throw new InputException("empty");
         }
     }
