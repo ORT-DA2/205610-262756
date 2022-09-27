@@ -25,7 +25,7 @@ namespace StartUp.WebApi.Controllers
             }
 
             // Show - Get specific movie (/api/movies/{id})
-            [HttpGet("{adminEmail}", Name = "GetAdmin")]
+            [HttpGet]
             public IActionResult GetOwner(string email)
             {/*
                 try

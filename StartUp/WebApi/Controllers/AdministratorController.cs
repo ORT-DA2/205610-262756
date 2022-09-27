@@ -9,7 +9,7 @@ using StartUp.Exceptions;
 using StartUp.Models.Models.In;
 using StartUp.Models.Models.Out;
 
-namespace WebApi.Controllers
+namespace StartUp.WebApi.Controllers
 {
 
     [Route("api/administrator")]
@@ -27,9 +27,8 @@ namespace WebApi.Controllers
         [HttpGet]
         public IActionResult GetAdministrator([FromQuery] AdministratorSearchCriteriaModel searchCriteria)
         {
-            //var retrievedAdmins = _adminManager.GetAllAdministrator(searchCriteria.ToEntity());
-            //return Ok(retrievedAdmins.Select(m => new AdministratorBasicModel(m)));
-            return(Ok());
+            var retrievedAdmins = _adminManager.GetAllAdministrator(searchCriteria.ToEntity());
+            return Ok(retrievedAdmins.Select(a => new AdministratorBasicModel(a)));
         }
         
         // Show - Get specific movie (/api/movies/{id})

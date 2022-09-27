@@ -5,37 +5,53 @@ using StartUp.Domain.SearchCriterias;
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using StartUp.IDataAccess;
+using System.Linq.Expressions;
 
 namespace BusinessLogic
 {
     public class AdministratorManager : IAdministratorManager
     {
-        private static List<Administrator> _admins = new List<Administrator>()
-    {
-        new Administrator() { Email = "admin1@gmail.com", Password = "contraseña1", Address = "direccion1", RegisterDate = DateTime.Now, Invitation = null},
-        new Administrator() { Email = "admin2@gmail.com", Password = "contraseña2", Address = "direccion2", RegisterDate = DateTime.Now, Invitation = null}
-    };
+        private readonly IRepository<Administrator> _adminRepository;
+
+        public AdministratorManager(IRepository<Administrator> adminRepository)
+        {
+            _adminRepository = adminRepository;
+        }
 
         public List<Administrator> GetAllAdministrator(AdministratorSearchCriteria searchCriteria)
         {
-            return _admins;
+            var emailCriteria = searchCriteria.Email?.ToLower() ?? string.Empty;
+            var passwordCriteria = searchCriteria.Password?.ToLower() ?? string.Empty;
+            var addressCriteria = searchCriteria.Address?.ToLower() ?? string.Empty;
+            var userNameCriteria = searchCriteria.Invitation.UserName?.ToLower() ?? string.Empty;
+            var registerDateCriteria = searchCriteria.RegisterDate?.ToString() ?? string.Empty;
+
+            Expression<Func<Administrator, bool>> adminFilter = admin =>
+                admin.Email.ToLower().Contains(emailCriteria) &&
+                admin.Password.ToLower().Contains(passwordCriteria) &&
+                admin.Address.ToLower().Contains(addressCriteria) &&
+                admin.Invitation.UserName.Contains(userNameCriteria) &&
+                admin.RegisterDate.ToString().Contains(registerDateCriteria);
+
+            return _adminRepository.GetAllExpression(adminFilter).ToList();
         }
 
         public Administrator GetSpecificAdministrator(string email)
         {
-            Administrator administratorSaved = _admins.FirstOrDefault(m => m.Email == email);
-
+            //Administrator administratorSaved = _admins.FirstOrDefault(m => m.Email == email);
+            /*
             if (administratorSaved == null)
             {
                 throw new ResourceNotFoundException($"The admin {email} not exist");
-            }
-            return administratorSaved;
+            }*/
+            return null;
         }
 
         public Administrator CreateAdministrator(Administrator admin)
         {
             admin.ValidOrFail();
-            _admins.Add(admin);
+            //_admins.Add(admin);
             return admin;
         }
 

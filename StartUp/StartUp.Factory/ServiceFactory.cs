@@ -4,8 +4,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using StartUp.BusinessLogic;
 using StartUp.DataAccess;
+using StartUp.DataAccess.Repositories;
+using StartUp.Domain;
 using StartUp.IBusinessLogic;
-
+using StartUp.IDataAccess;
 
 namespace StartUp.Factory
 {
@@ -14,6 +16,7 @@ namespace StartUp.Factory
         public static void RegisterDataAccessServices(this IServiceCollection serviceCollection)
         {
             serviceCollection.AddDbContext<DbContext, StartUpContext>();
+            serviceCollection.AddScoped<IRepository<Administrator>, AdministratorRepository>();
         }
         public static void RegisterServices(this IServiceCollection serviceCollection)
         {

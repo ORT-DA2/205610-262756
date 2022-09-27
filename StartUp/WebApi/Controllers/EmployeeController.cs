@@ -25,22 +25,6 @@ namespace StartUp.WebApi.Controllers
             return (Ok());
         }
 
-        // Show - Get specific movie (/api/movies/{id})
-        [HttpGet("{adminEmail}", Name = "GetAdmin")]
-        public IActionResult GetAdministrator(string email)
-        {/*
-                try
-                {
-                    var retrievedAdmin = _adminManager.GetSpecificAdministrator(email);
-                    return Ok(new AdministratorDetailModel(retrievedAdmin));
-                }
-                catch (ResourceNotFoundException e)
-                {
-                    return NotFound(e.Message);
-                }*/
-            return NotFound();
-        }
-
         /*
         // Create - Create new movie (/api/movies)
         [HttpPost]

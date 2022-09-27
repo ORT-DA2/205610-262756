@@ -9,9 +9,9 @@ namespace StartUp.IBusinessLogic
     public interface IPharmacyManager
     {
         List<Pharmacy> GetAllPharmacy(PharmacySearchCriteria searchCriteria);
-        Pharmacy GetSpecificPharmacy(string name);
+        Pharmacy GetSpecificPharmacy(int pharmacyId);
         Pharmacy CreatePharmacy(Pharmacy pharmacy);
-        Pharmacy UpdatePharmacy(string name, Pharmacy pharmacyUpdate);
-        Pharmacy DeletePharmacy(string name);
+        Pharmacy UpdatePharmacy(int pharmacyId, Pharmacy pharmacyUpdate);
+        void DeletePharmacy(int pharmacyId);
     }
 }

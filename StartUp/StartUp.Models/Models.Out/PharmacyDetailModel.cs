@@ -7,6 +7,7 @@ namespace StartUp.Models.Models.Out
 {
     public class PharmacyDetailModel
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }
         public List<MedicineBasicModel> Stock { get; set; }
