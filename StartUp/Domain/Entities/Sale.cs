@@ -10,10 +10,12 @@ namespace StartUp.Domain
         public int Id { get; set; }
         public List<InvoiceLine> InvoiceLines { get; set; }
 
+
+        public Sale() { }
         public void isValidSale()
         {
             if (InvoiceLines == null)
-                throw new InputException("Medicines empty");
+                throw new InputException("Invoice lines empty");
         }
     }
 }

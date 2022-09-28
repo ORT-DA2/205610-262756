@@ -4,6 +4,6 @@ namespace StartUp.Domain.SearchCriterias
 
     public class SymptomSearchCriteria
     {
-        public string? Symptom { get; set; }
+        public string? SymptomDescription { get; set; }
     }
 }

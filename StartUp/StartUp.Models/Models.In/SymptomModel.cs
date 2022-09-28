@@ -15,7 +15,7 @@ namespace StartUp.Models.Models.In
         {
             return new Symptom()
             {
-                SymptomDescription = SymptomDescription
+                SymptomDescription = this.SymptomDescription
             };
         }
     }

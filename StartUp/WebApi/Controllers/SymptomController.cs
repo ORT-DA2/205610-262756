@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using StartUp.IBusinessLogic;
-using Microsoft.AspNetCore.Mvc;
 using StartUp.Exceptions;
 using StartUp.IBusinessLogic;
 using StartUp.Models.Models.In;
@@ -9,7 +7,7 @@ using System.Linq;
 
 namespace StartUp.WebApi.Controllers
 {
-    [Route("api/employee")]
+    [Route("api/symptom")]
     [ApiController]
     public class SymptomController : ControllerBase
     {

@@ -10,6 +10,7 @@ namespace StartUp.Domain
     {
         public Pharmacy Pharmacy { get; set; }
 
+        public Owner() { }
         public void isValidOwner()
         {
             if (Pharmacy == null || string.IsNullOrEmpty(this.Email)

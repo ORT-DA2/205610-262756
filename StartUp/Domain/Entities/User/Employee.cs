@@ -10,6 +10,7 @@ namespace StartUp.Domain
     {
         public Pharmacy Pharmacy { get; set; }
 
+        public Employee() { }
         public void isValidEmployee()
         {
             if (Pharmacy == null || string.IsNullOrEmpty(this.Email) 
