@@ -35,7 +35,7 @@ namespace StartUp.Domain
         public void SetCodeAndState()
         {
             Code = Int32.Parse(GenerateNewCode());
-            State = "Pendiente";
+            State = "Available";
         }
 
         public string GenerateNewCode()

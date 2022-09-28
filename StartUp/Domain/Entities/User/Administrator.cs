@@ -10,7 +10,7 @@ namespace StartUp.Domain
     public class Administrator : User
     {
         public Administrator() { }
-        public void isValidAdministrator()
+        public void IsValidAdministrator()
         {
             if (string.IsNullOrEmpty(this.Email)
                 || string.IsNullOrEmpty(this.Address)
@@ -39,6 +39,19 @@ namespace StartUp.Domain
             }
         }
 
+        public void VerifyInvitationStateIsAvailable()
+        {
+            if (!Invitation.State.ToLower().Contains("available"))
+            {
+                throw new InputException("The invitation has already been used");
+            }
+        }
+
+        public void ChangeStatusInvitation()
+        {
+            Invitation.State = "Not available";
+        }
+
         public override bool Equals(object? obj)
         {
             if (ReferenceEquals(null, obj)) return false;
@@ -49,7 +62,7 @@ namespace StartUp.Domain
 
         protected bool Equals(Administrator other)
         {
-            return Id == other?.Id;
+            return Email == other?.Email;
         }
     }
 }
