@@ -26,14 +26,14 @@ namespace StartUp.BusinessLogic
             var rolCriteria = searchCriteria.Rol?.ToLower() ?? string.Empty;
             var userNameCriteria = searchCriteria.UserName?.ToLower() ?? string.Empty;
             var codeCriteria = searchCriteria.Code.ToString()?.ToLower() ?? string.Empty;
-            var isActiveCriteria = searchCriteria.IsActive.ToString().ToLower() ?? string.Empty;
+            var isActiveCriteria = searchCriteria.s .ToLower() ?? string.Empty;
             var pharmacyCriteria = searchCriteria.Pharmacy ?? null;
 
             Expression<Func<Invitation, bool>> invitationFilter = invitation =>
                 invitation.Rol.ToLower().Contains(rolCriteria) &&
                 invitation.UserName.ToLower().Contains(userNameCriteria) &&
                 invitation.Code.ToString().Contains(codeCriteria) &&
-                invitation.IsActive.ToString().Contains(isActiveCriteria) &&
+                invitation.State.Contains(isActiveCriteria) &&
                 invitation.Pharmacy == pharmacyCriteria;
 
             return _invitationRepository.GetAllExpression(invitationFilter).ToList();
@@ -53,7 +53,9 @@ namespace StartUp.BusinessLogic
 
         public Invitation CreateInvitation(Invitation invitation)
         {
-            invitation.isValidInvitation();
+            invitation.IsValidInvitation();
+            NotExistInDataBase(invitation);
+            invitation.SetCodeAndState();
 
             _invitationRepository.InsertOne(invitation);
             _invitationRepository.Save();
@@ -63,7 +65,7 @@ namespace StartUp.BusinessLogic
 
         public Invitation UpdateInvitation(int invitationId, Invitation updatedInvitation)
         {
-            updatedInvitation.isValidInvitation();
+            updatedInvitation.IsValidInvitation();
 
             var invitationStored = GetSpecificInvitation(invitationId);
 
@@ -85,5 +87,15 @@ namespace StartUp.BusinessLogic
             _invitationRepository.Save();
         }
 
+        ///////////////////////////
+        public void NotExistInDataBase(Invitation invitation)
+        {
+            var invitationSaved = _invitationRepository.GetOneByExpression(i => i == invitation);
+
+            if (invitationSaved != null)
+            {
+                throw new InputException($"An invitation already exists for that user {invitation.UserName}");
+            }
+        }
     }
 }

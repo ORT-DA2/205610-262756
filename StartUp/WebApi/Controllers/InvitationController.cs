@@ -12,6 +12,7 @@ namespace StartUp.WebApi.Controllers
 
     [Route("api/invitation")]
     [ApiController]
+    //SOLO TIENEN ACCESO LOS ADMINISTRADORES
     public class InvitationController : ControllerBase
     {
         private readonly IInvitationManager _invitationManager;

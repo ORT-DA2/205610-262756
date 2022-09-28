@@ -11,7 +11,7 @@ namespace StartUp.Models.Models.In
         public string? UserName { get; set; }
         public string? Rol { get; set; }
         public int? Code { get; set; }
-        public bool ? IsActive { get; set; }
+        public string? State { get; set; }
         public Pharmacy? Pharmacy { get; set; }
 
         public InvitationSearchCriteria ToEntity()

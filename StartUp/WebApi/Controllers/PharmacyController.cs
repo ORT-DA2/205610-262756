@@ -1,9 +1,8 @@
-﻿using DocumentFormat.OpenXml.Spreadsheet;
-using Microsoft.AspNetCore.Mvc;
-using StartUp.Exceptions;
+﻿using Microsoft.AspNetCore.Mvc;
 using StartUp.IBusinessLogic;
 using StartUp.Models.Models.In;
 using StartUp.Models.Models.Out;
+using StartUp.WebApi.Filters;
 using System.Linq;
 
 namespace StartUp.WebApi.Controllers
@@ -37,7 +36,8 @@ namespace StartUp.WebApi.Controllers
 
         // Create - Create new pharmacy (/api/pharmacy)
         [HttpPost]
-        [Filters(Authotization)]
+        //solo deben de tener acceso los administradores
+        //[Filters(AuthorizationFilter(ISessionLogic))]
         public IActionResult CreatePharmacy([FromBody] PharmacyModel newPharmacy)
         {
             var createdPharmacy = _pharmacyManager.CreatePharmacy(newPharmacy.ToEntity());

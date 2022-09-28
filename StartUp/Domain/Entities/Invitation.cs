@@ -11,21 +11,16 @@ namespace StartUp.Domain
         public string UserName { get; set; }
         public string Rol { get; set; }
         public int Code { get; set; }
-        public bool IsActive { get; set; }
+        public string State { get; set; }
         public Pharmacy Pharmacy { get; set; }
 
         public Invitation() { }
 
-        public void isValidInvitation()
+        public void IsValidInvitation()
         {
-            if (string.IsNullOrEmpty(UserName) || string.IsNullOrEmpty(Rol)
-                || string.IsNullOrEmpty(Code.ToString()))
+            if (string.IsNullOrEmpty(UserName) || string.IsNullOrEmpty(Rol))
             {
                 throw new InputException("Empty fields");
-            }
-            if(IsActive == false)
-            {
-                throw new InvalidResourceException("The invitation has already been used");
             }
             if(Rol.ToLower() != "Administrator" || Rol.ToLower() != "Owner" || Rol.ToLower() != "Employee")
             {
@@ -33,13 +28,17 @@ namespace StartUp.Domain
             }
             if(Pharmacy == null && Rol != "Administrator")
             {
-                throw new InvalidResourceException("Select a partner pharmacy");
+                throw new InvalidResourceException("Select a partner pharmacy for this type of user");
             }
-            this.IsActive = true;
-            this.Code = Int32.Parse(GenerateNewCode());
         }
 
-        private string GenerateNewCode()
+        public void SetCodeAndState()
+        {
+            Code = Int32.Parse(GenerateNewCode());
+            State = "Pendiente";
+        }
+
+        public string GenerateNewCode()
         {
             var chars = "0123456789";
             var generatedCode = new char[6];
@@ -62,7 +61,7 @@ namespace StartUp.Domain
 
         protected bool Equals(Invitation other)
         {
-            return Id == other?.Id;
+            return UserName == other?.UserName;
         }
     }
 }
