@@ -7,7 +7,7 @@ using StartUp.IDataAccess;
 
 namespace StartUp.DataAccess;
 
-public abstract class BaseRepository<T> : IRepository<T> where T : class
+public class BaseRepository<T> : IRepository<T> where T : class
 {
     private readonly StartUpContext _context;
 

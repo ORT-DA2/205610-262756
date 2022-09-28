@@ -10,7 +10,7 @@ namespace StartUp.Domain
     public class Administrator : User
     {
         public Administrator() { }
-        public bool isValidAdministrator()
+        public void isValidAdministrator()
         {
             if (string.IsNullOrEmpty(this.Email)
                 || string.IsNullOrEmpty(this.Address)
@@ -19,11 +19,14 @@ namespace StartUp.Domain
             {
                 throw new InvalidResourceException("Empty fields");
             }
-            return true;
+            if (!EmailIsValid(this.Email))
+            {
+                throw new ResourceNotFoundException("Email incorrect");
+            }
         }
 
         public bool EmailIsValid(string emailAddress)
-        {/*
+        {
             try
             {
                 MailAddress m = new MailAddress(emailAddress);
@@ -33,8 +36,7 @@ namespace StartUp.Domain
             catch (FormatException)
             {
                 return false;
-            }*/
-            return true;
+            }
         }
     }
 }

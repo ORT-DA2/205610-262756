@@ -98,6 +98,12 @@ namespace StartUp.DataAccess.Migrations
                     b.Property<int>("Code")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("PharmacyId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Rol")
                         .HasColumnType("nvarchar(max)");
 
@@ -105,6 +111,8 @@ namespace StartUp.DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PharmacyId");
 
                     b.ToTable("Invitations");
                 });
@@ -330,6 +338,15 @@ namespace StartUp.DataAccess.Migrations
                         .HasForeignKey("PharmacyId");
 
                     b.Navigation("Invitation");
+
+                    b.Navigation("Pharmacy");
+                });
+
+            modelBuilder.Entity("StartUp.Domain.Invitation", b =>
+                {
+                    b.HasOne("StartUp.Domain.Pharmacy", "Pharmacy")
+                        .WithMany()
+                        .HasForeignKey("PharmacyId");
 
                     b.Navigation("Pharmacy");
                 });

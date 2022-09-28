@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace StartUp.WebApi.Controllers
 {
-    [Route("api/petition")]
+    [Route("api/sale")]
     [ApiController]
     public class SaleController : ControllerBase
     {

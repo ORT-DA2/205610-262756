@@ -28,7 +28,7 @@ namespace StartUp.WebApi.Controllers
         }
 
         // Show - Get specific medicine (/api/medicine/{id})
-        [HttpGet]
+        [HttpGet("{id}")]
         public IActionResult GetMedicine(int id)
         {
             try

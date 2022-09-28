@@ -10,12 +10,14 @@ namespace StartUp.Models.Models.Out
         public int Id { get; set; }
         public string UserName { get; set; }
         public string Rol { get; set; }
+        public bool IsActive { get; set; }
 
         public InvitationBasicModel(Invitation invitation)
         {
             this.Id = invitation.Id;
             this.Rol = invitation.Rol;
             this.UserName = invitation.UserName;
+            this.IsActive = invitation.IsActive;
         }
 
         public override bool Equals(object? obj)

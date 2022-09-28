@@ -26,11 +26,15 @@ namespace StartUp.BusinessLogic
             var rolCriteria = searchCriteria.Rol?.ToLower() ?? string.Empty;
             var userNameCriteria = searchCriteria.UserName?.ToLower() ?? string.Empty;
             var codeCriteria = searchCriteria.Code.ToString()?.ToLower() ?? string.Empty;
+            var isActiveCriteria = searchCriteria.IsActive.ToString().ToLower() ?? string.Empty;
+            var pharmacyCriteria = searchCriteria.Pharmacy ?? null;
 
             Expression<Func<Invitation, bool>> invitationFilter = invitation =>
                 invitation.Rol.ToLower().Contains(rolCriteria) &&
                 invitation.UserName.ToLower().Contains(userNameCriteria) &&
-                invitation.Code.ToString().Contains(codeCriteria);
+                invitation.Code.ToString().Contains(codeCriteria) &&
+                invitation.IsActive.ToString().Contains(isActiveCriteria) &&
+                invitation.Pharmacy == pharmacyCriteria;
 
             return _invitationRepository.GetAllExpression(invitationFilter).ToList();
         }
@@ -65,7 +69,7 @@ namespace StartUp.BusinessLogic
 
             invitationStored.Rol = updatedInvitation.Rol;
             invitationStored.UserName = updatedInvitation.UserName;
-            invitationStored.Code = updatedInvitation.Code;
+            invitationStored.Pharmacy = updatedInvitation.Pharmacy;
 
             _invitationRepository.UpdateOne(invitationStored);
             _invitationRepository.Save();
