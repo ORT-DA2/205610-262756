@@ -1,4 +1,5 @@
 ﻿using StartUp.Domain;
+using StartUp.Domain.SearchCriterias;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +12,9 @@ namespace StartUp.Models.Models.In
     {
         public string? SymptomDescription { get; set; }
 
-        public Symptom ToEntity()
+        public SymptomSearchCriteria ToEntity()
         {
-            return new Symptom()
+            return new SymptomSearchCriteria()
             {
                 SymptomDescription = this.SymptomDescription
             };

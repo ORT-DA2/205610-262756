@@ -9,6 +9,7 @@ namespace StartUp.Models.Models.In
     public class SaleSearchCriteriaModel
     {
         public List<InvoiceLine>? InvoiceLines { get; set; }
+
         public SaleSearchCriteria ToEntity()
         {
             return new SaleSearchCriteria()

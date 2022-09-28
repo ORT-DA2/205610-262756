@@ -23,7 +23,7 @@ namespace StartUp.BusinessLogic
 
         public List<Symptom> GetAllSymptom(SymptomSearchCriteria searchCriteria)
         {
-            var symptomCriteria = searchCriteria.Symptom?.ToLower() ?? string.Empty;
+            var symptomCriteria = searchCriteria.SymptomDescription?.ToLower() ?? string.Empty;
 
             Expression<Func<Symptom, bool>> symptomFilter = symptom =>
                 symptom.SymptomDescription.ToLower().Contains(symptomCriteria);
@@ -31,13 +31,13 @@ namespace StartUp.BusinessLogic
             return _symptomRepository.GetAllExpression(symptomFilter).ToList();
         }
 
-        public Symptom GetSpecificSymptom(int id)
+        public Symptom GetSpecificSymptom(int symptomId)
         {
-            Symptom symptomSaved = _symptomRepository.GetOneByExpression(s => s.Id == id);
+            Symptom symptomSaved = _symptomRepository.GetOneByExpression(s => s.Id == symptomId);
 
             if (symptomSaved == null)
             {
-                throw new ResourceNotFoundException($"The symptom {id} not exist");
+                throw new ResourceNotFoundException($"The symptom {symptomId} not exist");
             }
             return symptomSaved;
         }
@@ -52,11 +52,11 @@ namespace StartUp.BusinessLogic
             return symptom;
         }
 
-        public Symptom UpdateSymptom(int id, Symptom updatedSymptom)
+        public Symptom UpdateSymptom(int symptomId, Symptom updatedSymptom)
         {
             updatedSymptom.isValidSymptom();
 
-            var symptomStored = GetSpecificSymptom(id);
+            var symptomStored = GetSpecificSymptom(symptomId);
 
             symptomStored.SymptomDescription = updatedSymptom.SymptomDescription;
 
@@ -66,9 +66,9 @@ namespace StartUp.BusinessLogic
             return symptomStored;
         }
 
-        public void DeleteSymptom(int id)
+        public void DeleteSymptom(int symptomId)
         {
-            var symptomStored = GetSpecificSymptom(id);
+            var symptomStored = GetSpecificSymptom(symptomId);
 
             _symptomRepository.DeleteOne(symptomStored);
             _symptomRepository.Save();

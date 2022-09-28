@@ -19,6 +19,8 @@ namespace StartUp.Domain
         public int Stock { get; set; }
         public bool Prescription { get; set; }
 
+
+        public Medicine() { }
         public void isValidMedicine()
         {
             if (string.IsNullOrEmpty(Code) || string.IsNullOrEmpty(Name) || string.IsNullOrEmpty(Presentation)

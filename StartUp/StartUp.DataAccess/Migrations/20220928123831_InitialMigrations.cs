@@ -30,8 +30,8 @@ namespace StartUp.DataAccess.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -67,28 +67,6 @@ namespace StartUp.DataAccess.Migrations
                     table.PrimaryKey("PK_Administrators", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Administrators_Invitations_InvitationId",
-                        column: x => x.InvitationId,
-                        principalTable: "Invitations",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Owners",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RegisterDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    InvitationId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Owners", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Owners_Invitations_InvitationId",
                         column: x => x.InvitationId,
                         principalTable: "Invitations",
                         principalColumn: "Id");
@@ -143,6 +121,34 @@ namespace StartUp.DataAccess.Migrations
                     table.PrimaryKey("PK_Medicines", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Medicines_Pharmacies_PharmacyId",
+                        column: x => x.PharmacyId,
+                        principalTable: "Pharmacies",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Owners",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PharmacyId = table.Column<int>(type: "int", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RegisterDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    InvitationId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Owners", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Owners_Invitations_InvitationId",
+                        column: x => x.InvitationId,
+                        principalTable: "Invitations",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Owners_Pharmacies_PharmacyId",
                         column: x => x.PharmacyId,
                         principalTable: "Pharmacies",
                         principalColumn: "Id");
@@ -265,6 +271,11 @@ namespace StartUp.DataAccess.Migrations
                 name: "IX_Owners_InvitationId",
                 table: "Owners",
                 column: "InvitationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Owners_PharmacyId",
+                table: "Owners",
+                column: "PharmacyId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Petitions_RequestId",
