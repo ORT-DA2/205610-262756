@@ -11,9 +11,9 @@ using System.Threading.Tasks;
 namespace StartUp.DataAccess.Test
 {
     [TestClass]
-    public class AdministratorRepositoryTest
+    public class OwnerRepositoryTest
     {
-        private BaseRepository<Administrator> _repository;
+        private BaseRepository<Owner> _repository;
         private StartUpContext _context;
 
         [TestInitialize]
@@ -22,7 +22,7 @@ namespace StartUp.DataAccess.Test
             _context = ContextFactory.GetNewContext(ContextType.SQL);
             _context.Database.OpenConnection();
             _context.Database.EnsureCreated();
-            _repository = new BaseRepository<Administrator>(_context);
+            _repository = new BaseRepository<Owner>(_context);
         }
 
         [TestCleanup]
@@ -32,23 +32,23 @@ namespace StartUp.DataAccess.Test
         }
 
         [TestMethod]
-        public void GetAllAdministratorReturnsAsExpected()
+        public void GetAllOwnerReturnsAsExpected()
         {
-            Expression<Func<Administrator, bool>> expression = a => a.Email.ToLower().Contains("paulaolivera1995@gmail.com");
-            var administrators = CreateAdministrators();
-            var eligibleAdministrators = administrators.Where(expression.Compile()).ToList();
-            LoadAdministrators(administrators);
+            Expression<Func<Owner, bool>> expression = o => o.Email.ToLower().Contains("paulaolivera1995@gmail.com");
+            var owners = CreateOwners();
+            var eligibleOwners = owners.Where(expression.Compile()).ToList();
+            LoadOwners(owners);
 
-            var retrievedAdministrators = _repository.GetAllByExpression(expression);
-            CollectionAssert.AreEquivalent(eligibleAdministrators, retrievedAdministrators.ToList());
+            var retrievedOwners = _repository.GetAllByExpression(expression);
+            CollectionAssert.AreEquivalent(eligibleOwners, retrievedOwners.ToList());
         }
 
         [TestMethod]
-        public void InsertNewAdministrator()
+        public void InsertNewOwner()
         {
-            var administrators = CreateAdministrators();
-            LoadAdministrators(administrators);
-            var newAdministrator = new Administrator()
+            var owners = CreateOwners();
+            LoadOwners(owners);
+            var newOwner = new Owner()
             {
                 Email = "paulaolivera1995@gmail.com",
                 Address = "carlos maria ramirez",
@@ -57,24 +57,24 @@ namespace StartUp.DataAccess.Test
                 Password = "123ss",
             };
 
-            _repository.InsertOne(newAdministrator);
+            _repository.InsertOne(newOwner);
             _repository.Save();
 
             // Voy directo al contexto a buscarla
-            var administratorInDb = _context.Administrators.FirstOrDefault(a => a.Email.Equals(newAdministrator.Email));
-            Assert.IsNotNull(administratorInDb);
+            var ownerInDb = _context.Owners.FirstOrDefault(o => o.Email.Equals(newOwner.Email));
+            Assert.IsNotNull(ownerInDb);
         }
 
 
-        private void LoadAdministrators(List<Administrator> administrators)
+        private void LoadOwners(List<Owner> owners)
         {
-            administrators.ForEach(a => _context.Administrators.Add(a));
+            owners.ForEach(o => _context.Owners.Add(o));
             _context.SaveChanges();
         }
 
-        private List<Administrator> CreateAdministrators()
+        private List<Owner> CreateOwners()
         {
-            return new List<Administrator>()
+            return new List<Owner>()
         {
             new()
             {

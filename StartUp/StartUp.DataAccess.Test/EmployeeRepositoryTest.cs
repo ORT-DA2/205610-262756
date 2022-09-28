@@ -11,9 +11,9 @@ using System.Threading.Tasks;
 namespace StartUp.DataAccess.Test
 {
     [TestClass]
-    public class AdministratorRepositoryTest
+    public class EmployeeRepositoryTest
     {
-        private BaseRepository<Administrator> _repository;
+        private BaseRepository<Employee> _repository;
         private StartUpContext _context;
 
         [TestInitialize]
@@ -22,7 +22,7 @@ namespace StartUp.DataAccess.Test
             _context = ContextFactory.GetNewContext(ContextType.SQL);
             _context.Database.OpenConnection();
             _context.Database.EnsureCreated();
-            _repository = new BaseRepository<Administrator>(_context);
+            _repository = new BaseRepository<Employee>(_context);
         }
 
         [TestCleanup]
@@ -32,23 +32,23 @@ namespace StartUp.DataAccess.Test
         }
 
         [TestMethod]
-        public void GetAllAdministratorReturnsAsExpected()
+        public void GetAllEmployeeReturnsAsExpected()
         {
-            Expression<Func<Administrator, bool>> expression = a => a.Email.ToLower().Contains("paulaolivera1995@gmail.com");
-            var administrators = CreateAdministrators();
-            var eligibleAdministrators = administrators.Where(expression.Compile()).ToList();
-            LoadAdministrators(administrators);
+            Expression<Func<Employee, bool>> expression = e => e.Email.ToLower().Contains("paulaolivera1995@gmail.com");
+            var employees = CreateEmployees();
+            var eligibleEmployees = employees.Where(expression.Compile()).ToList();
+            LoadEmployees(employees);
 
-            var retrievedAdministrators = _repository.GetAllByExpression(expression);
-            CollectionAssert.AreEquivalent(eligibleAdministrators, retrievedAdministrators.ToList());
+            var retrievedEmployees = _repository.GetAllByExpression(expression);
+            CollectionAssert.AreEquivalent(eligibleEmployees, retrievedEmployees.ToList());
         }
 
         [TestMethod]
-        public void InsertNewAdministrator()
+        public void InsertNewEmployee()
         {
-            var administrators = CreateAdministrators();
-            LoadAdministrators(administrators);
-            var newAdministrator = new Administrator()
+            var employees = CreateEmployees();
+            LoadEmployees(employees);
+            var newEmployee = new Employee()
             {
                 Email = "paulaolivera1995@gmail.com",
                 Address = "carlos maria ramirez",
@@ -57,24 +57,24 @@ namespace StartUp.DataAccess.Test
                 Password = "123ss",
             };
 
-            _repository.InsertOne(newAdministrator);
+            _repository.InsertOne(newEmployee);
             _repository.Save();
 
             // Voy directo al contexto a buscarla
-            var administratorInDb = _context.Administrators.FirstOrDefault(a => a.Email.Equals(newAdministrator.Email));
-            Assert.IsNotNull(administratorInDb);
+            var employeeInDb = _context.Employees.FirstOrDefault(e => e.Email.Equals(newEmployee.Email));
+            Assert.IsNotNull(employeeInDb);
         }
 
 
-        private void LoadAdministrators(List<Administrator> administrators)
+        private void LoadEmployees(List<Employee> employees)
         {
-            administrators.ForEach(a => _context.Administrators.Add(a));
+            employees.ForEach(e => _context.Employees.Add(e));
             _context.SaveChanges();
         }
 
-        private List<Administrator> CreateAdministrators()
+        private List<Employee> CreateEmployees()
         {
-            return new List<Administrator>()
+            return new List<Employee>()
         {
             new()
             {

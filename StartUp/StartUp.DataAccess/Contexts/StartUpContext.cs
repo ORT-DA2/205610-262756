@@ -17,6 +17,7 @@ namespace StartUp.DataAccess
         public DbSet<Pharmacy> Pharmacies { get; set; }
         public DbSet<Request> Requestes { get; set; }
         public DbSet<Sale> Sales { get; set; }
+        public DbSet<Symptom> Symptoms { get; set; }
         
         public StartUpContext(DbContextOptions options) : base(options) { }
 
