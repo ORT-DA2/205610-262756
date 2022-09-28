@@ -51,5 +51,18 @@ namespace StartUp.Domain
 
             return new String(generatedCode);
         }
+
+        public override bool Equals(object? obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != GetType()) return false;
+            return Equals((Invitation)obj);
+        }
+
+        protected bool Equals(Invitation other)
+        {
+            return Id == other?.Id;
+        }
     }
 }

@@ -30,66 +30,33 @@ namespace StartUp.WebApi.Controllers
         [HttpGet("{id}", Name = "GetRequest")]
         public IActionResult GetRequest(int id)
         {
-            try
-            {
-                var retrievedRequest = _requestManager.GetSpecificRequest(id);
-                return Ok(new RequestDetailModel(retrievedRequest));
-            }
-            catch (ResourceNotFoundException e)
-            {
-                return NotFound(e.Message);
-            }
+            var retrievedRequest = _requestManager.GetSpecificRequest(id);
+            return Ok(new RequestDetailModel(retrievedRequest));
         }
 
         // Create - Create new request (/api/request)
         [HttpPost]
         public IActionResult CreateRequest([FromBody] RequestModel newRequest)
         {
-            try
-            {
-                var createdRequest = _requestManager.CreateRequest(newRequest.ToEntity());
-                var requestModel = new RequestDetailModel(createdRequest);
-                return CreatedAtRoute("GetRequest", new { id = requestModel.Id }, requestModel);
-            }
-            catch (InvalidResourceException e)
-            {
-                return BadRequest(e.Message);
-            }
+            var createdRequest = _requestManager.CreateRequest(newRequest.ToEntity());
+            var requestModel = new RequestDetailModel(createdRequest);
+            return CreatedAtRoute("GetRequest", new { id = requestModel.Id }, requestModel);
         }
 
         // Update - Update specific request (/api/request/{id})
         [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody] RequestModel updatedRequest)
         {
-            try
-            {
-                var retrievedRequest = _requestManager.UpdateRequest(id, updatedRequest.ToEntity());
-                return Ok(new RequestDetailModel(retrievedRequest));
-            }
-            catch (InvalidResourceException e)
-            {
-                return BadRequest(e.Message);
-            }
-            catch (ResourceNotFoundException e)
-            {
-                return NotFound(e.Message);
-            }
+            var retrievedRequest = _requestManager.UpdateRequest(id, updatedRequest.ToEntity());
+            return Ok(new RequestDetailModel(retrievedRequest));
         }
 
         // Delete - Delete specific request (/api/request/{id})
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            try
-            {
-                _requestManager.DeleteRequest(id);
-                return Ok();
-            }
-            catch (ResourceNotFoundException e)
-            {
-                return NotFound(e.Message);
-            }
+            _requestManager.DeleteRequest(id);
+            return Ok();
         }
-
     }
 }

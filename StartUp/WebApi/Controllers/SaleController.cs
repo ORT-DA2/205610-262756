@@ -30,65 +30,33 @@ namespace StartUp.WebApi.Controllers
         [HttpGet("{id}", Name = "GetSale")]
         public IActionResult GetSale(int id)
         {
-            try
-            {
-                var retrievedSale = _saleManager.GetSpecificSale(id);
-                return Ok(new SaleDetailModel(retrievedSale));
-            }
-            catch (ResourceNotFoundException e)
-            {
-                return NotFound(e.Message);
-            }
+            var retrievedSale = _saleManager.GetSpecificSale(id);
+            return Ok(new SaleDetailModel(retrievedSale));
         }
 
         // Create - Create new sale (/api/sale)
         [HttpPost]
         public IActionResult CreateSale([FromBody] SaleModel newSale)
         {
-            try
-            {
-                var createdSale = _saleManager.CreateSale(newSale.ToEntity());
-                var saleModel = new SaleDetailModel(createdSale);
-                return CreatedAtRoute("GetSale", new { id = saleModel.Id }, saleModel);
-            }
-            catch (InvalidResourceException e)
-            {
-                return BadRequest(e.Message);
-            }
+            var createdSale = _saleManager.CreateSale(newSale.ToEntity());
+            var saleModel = new SaleDetailModel(createdSale);
+            return CreatedAtRoute("GetSale", new { id = saleModel.Id }, saleModel);
         }
 
         // Update - Update specific sale (/api/sale/{id})
         [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody] SaleModel updatedSale)
         {
-            try
-            {
-                var retrievedSale = _saleManager.UpdateSale(id, updatedSale.ToEntity());
-                return Ok(new SaleDetailModel(retrievedSale));
-            }
-            catch (InvalidResourceException e)
-            {
-                return BadRequest(e.Message);
-            }
-            catch (ResourceNotFoundException e)
-            {
-                return NotFound(e.Message);
-            }
+            var retrievedSale = _saleManager.UpdateSale(id, updatedSale.ToEntity());
+            return Ok(new SaleDetailModel(retrievedSale));
         }
 
         // Delete - Delete specific sale (/api/sale/{id})
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            try
-            {
-                _saleManager.DeleteSale(id);
-                return Ok();
-            }
-            catch (ResourceNotFoundException e)
-            {
-                return NotFound(e.Message);
-            }
+            _saleManager.DeleteSale(id);
+            return Ok();
         }
     }
 }

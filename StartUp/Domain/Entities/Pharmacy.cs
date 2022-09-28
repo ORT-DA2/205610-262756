@@ -35,6 +35,19 @@ namespace StartUp.Domain
                     Stock==null || Requests==null)
                 throw new InputException("Name or address or stock empty");
         }
+
+        public override bool Equals(object? obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != GetType()) return false;
+            return Equals((Pharmacy)obj);
+        }
+
+        protected bool Equals(Pharmacy other)
+        {
+            return Id == other?.Id;
+        }
     }
 
 }

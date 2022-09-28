@@ -17,5 +17,18 @@ namespace StartUp.Domain
             if (InvoiceLines == null)
                 throw new InputException("Invoice lines empty");
         }
+
+        public override bool Equals(object? obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != GetType()) return false;
+            return Equals((InvoiceLine)obj);
+        }
+
+        protected bool Equals(InvoiceLine other)
+        {
+            return Id == other?.Id;
+        }
     }
 }

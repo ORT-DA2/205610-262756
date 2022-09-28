@@ -30,66 +30,33 @@ namespace StartUp.WebApi.Controllers
         [HttpGet("{pharmacyId}", Name = "GetPharmacy")]
         public IActionResult GetPharmacy(int pharmacyId)
         {
-            try
-            {
-                var retrievedPharmacy = _pharmacyManager.GetSpecificPharmacy(pharmacyId);
-                return Ok(new PharmacyDetailModel(retrievedPharmacy));
-            }
-            catch (ResourceNotFoundException e)
-            {
-                return NotFound(e.Message);
-            }
+            var retrievedPharmacy = _pharmacyManager.GetSpecificPharmacy(pharmacyId);
+            return Ok(new PharmacyDetailModel(retrievedPharmacy));
         }
 
         // Create - Create new pharmacy (/api/pharmacy)
         [HttpPost]
         public IActionResult CreatePharmacy([FromBody] PharmacyModel newPharmacy)
         {
-            try
-            {
-                var createdPharmacy = _pharmacyManager.CreatePharmacy(newPharmacy.ToEntity());
-                var pharmacyModel = new PharmacyDetailModel(createdPharmacy);
-                return CreatedAtRoute("GetPharmacy", new { pharmacyId = pharmacyModel.Id }, pharmacyModel);
-            }
-            catch (InvalidResourceException e)
-            {
-                return BadRequest(e.Message);
-            }
+            var createdPharmacy = _pharmacyManager.CreatePharmacy(newPharmacy.ToEntity());
+            var pharmacyModel = new PharmacyDetailModel(createdPharmacy);
+            return CreatedAtRoute("GetPharmacy", new { pharmacyId = pharmacyModel.Id }, pharmacyModel);
         }
 
         // Update - Update specific pharmacy (/api/pharmacy/{id})
         [HttpPut("{pharmacyId}")]
         public IActionResult UpdatePharmacy(int pharmacyId, [FromBody] PharmacyModel updatedPharmacy)
         {
-            try
-            {
-                var retrievedPharmacy = _pharmacyManager.UpdatePharmacy(pharmacyId, updatedPharmacy.ToEntity());
-                return Ok(new PharmacyDetailModel(retrievedPharmacy));
-            }
-            catch (InvalidResourceException e)
-            {
-                return BadRequest(e.Message);
-            }
-            catch (ResourceNotFoundException e)
-            {
-                return NotFound(e.Message);
-            }
+            var retrievedPharmacy = _pharmacyManager.UpdatePharmacy(pharmacyId, updatedPharmacy.ToEntity());
+            return Ok(new PharmacyDetailModel(retrievedPharmacy));
         }
 
         // Delete - Delete specific pharmacy (/api/pharmacy/{id})
         [HttpDelete("{pharmacyId}")]
         public IActionResult DeletePharmacy(int pharmacyId)
         {
-            try
-            {
-                _pharmacyManager.DeletePharmacy(pharmacyId);
-                return Ok();
-            }
-            catch (ResourceNotFoundException e)
-            {
-                return NotFound(e.Message);
-            }
+            _pharmacyManager.DeletePharmacy(pharmacyId);
+            return Ok();
         }
-
     }
 }

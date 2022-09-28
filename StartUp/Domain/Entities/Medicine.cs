@@ -27,5 +27,18 @@ namespace StartUp.Domain
                 || string.IsNullOrEmpty(Measure) || Symptoms == null)
                 throw new InputException("Enter a Medicine");
         }
+
+        public override bool Equals(object? obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != GetType()) return false;
+            return Equals((Medicine)obj);
+        }
+
+        protected bool Equals(Medicine other)
+        {
+            return Id == other?.Id;
+        }
     }
 }

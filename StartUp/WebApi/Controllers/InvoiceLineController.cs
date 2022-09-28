@@ -31,65 +31,33 @@ namespace StartUp.WebApi.Controllers
         [HttpGet("{id}", Name = "GetInvoiceLine")]
         public IActionResult GetInvoiceLine(int id)
         {
-            try
-            {
-                var retrievedInvoiceLine = _invoiceLineManager.GetSpecificInvoiceLine(id);
-                return Ok(new InvoiceLineDetailModel(retrievedInvoiceLine));
-            }
-            catch (ResourceNotFoundException e)
-            {
-                return NotFound(e.Message);
-            }
+            var retrievedInvoiceLine = _invoiceLineManager.GetSpecificInvoiceLine(id);
+            return Ok(new InvoiceLineDetailModel(retrievedInvoiceLine));
         }
 
         // Create - Create new invoiceLine (/api/invoiceLine)
         [HttpPost]
         public IActionResult CreateInvoiceLine([FromBody] InvoiceLineModel newInvoiceLine)
         {
-            try
-            {
-                var createdInvoiceLine = _invoiceLineManager.CreateInvoiceLine(newInvoiceLine.ToEntity());
-                var invoiceLineModel = new InvoiceLineDetailModel(createdInvoiceLine);
-                return CreatedAtRoute("GetInvoiceLine", new { id = invoiceLineModel.Id }, invoiceLineModel);
-            }
-            catch (InvalidResourceException e)
-            {
-                return BadRequest(e.Message);
-            }
+            var createdInvoiceLine = _invoiceLineManager.CreateInvoiceLine(newInvoiceLine.ToEntity());
+            var invoiceLineModel = new InvoiceLineDetailModel(createdInvoiceLine);
+            return CreatedAtRoute("GetInvoiceLine", new { id = invoiceLineModel.Id }, invoiceLineModel);
         }
 
         // Update - Update specific invoiceLine (/api/invoiceLine/{id})
         [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody] InvoiceLineModel updatedInvoiceLine)
         {
-            try
-            {
-                var retrievedInvoiceLine = _invoiceLineManager.UpdateInvoiceLine(id, updatedInvoiceLine.ToEntity());
-                return Ok(new InvoiceLineDetailModel(retrievedInvoiceLine));
-            }
-            catch (InvalidResourceException e)
-            {
-                return BadRequest(e.Message);
-            }
-            catch (ResourceNotFoundException e)
-            {
-                return NotFound(e.Message);
-            }
+            var retrievedInvoiceLine = _invoiceLineManager.UpdateInvoiceLine(id, updatedInvoiceLine.ToEntity());
+            return Ok(new InvoiceLineDetailModel(retrievedInvoiceLine));
         }
 
         // Delete - Delete specific invoiceLine (/api/invoiceLine/{id})
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            try
-            {
-                _invoiceLineManager.DeleteInvoiceLine(id);
-                return Ok();
-            }
-            catch (ResourceNotFoundException e)
-            {
-                return NotFound(e.Message);
-            }
+            _invoiceLineManager.DeleteInvoiceLine(id);
+            return Ok();
         }
     }
 }

@@ -38,5 +38,18 @@ namespace StartUp.Domain
                 return false;
             }
         }
+
+        public override bool Equals(object? obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != GetType()) return false;
+            return Equals((Administrator)obj);
+        }
+
+        protected bool Equals(Administrator other)
+        {
+            return Id == other?.Id;
+        }
     }
 }

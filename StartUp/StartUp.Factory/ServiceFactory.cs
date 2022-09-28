@@ -40,6 +40,7 @@ namespace StartUp.Factory
             serviceCollection.AddTransient<IPharmacyManager, PharmacyManager>();
             serviceCollection.AddTransient<IRequestManager, RequestManager>();
             serviceCollection.AddTransient<ISaleManager, SaleManager>();
+            serviceCollection.AddTransient<ISessionLogic, SessionLogic>();
         }
     }
 }
