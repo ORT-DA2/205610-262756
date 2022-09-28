@@ -31,9 +31,22 @@ namespace StartUp.Domain
 
         public void isValidPharmacy()
         {
-            if (string.IsNullOrEmpty(Name) || string.IsNullOrEmpty(Address) ||
-                    Stock==null || Requests==null)
-                throw new InputException("Name or address or stock empty");
+            if (string.IsNullOrEmpty(Name) || string.IsNullOrEmpty(Address))
+            {
+                throw new InputException("Name or address empty");
+            }
+            if (Name.Length > 50)
+            {
+                throw new InputException("the name of the pharmacy must not exceed 50 characters");
+            }
+            if (Stock == null)
+            {
+                throw new InputException("The list of medicines must be created");
+            }
+            if(Requests == null)
+            {
+                throw new InputException("The list of request must be created");
+            }
         }
 
         public override bool Equals(object? obj)
@@ -46,7 +59,7 @@ namespace StartUp.Domain
 
         protected bool Equals(Pharmacy other)
         {
-            return Id == other?.Id;
+            return Name == other?.Name;
         }
     }
 

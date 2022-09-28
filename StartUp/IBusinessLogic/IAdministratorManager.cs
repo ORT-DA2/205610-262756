@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using StartUp.Domain.SearchCriterias;
+using StartUp.IBusinessLogic;
 
 namespace IBusinessLogic
 {

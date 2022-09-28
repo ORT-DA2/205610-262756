@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DocumentFormat.OpenXml.Spreadsheet;
+using Microsoft.AspNetCore.Mvc;
 using StartUp.Exceptions;
 using StartUp.IBusinessLogic;
 using StartUp.Models.Models.In;
@@ -36,6 +37,7 @@ namespace StartUp.WebApi.Controllers
 
         // Create - Create new pharmacy (/api/pharmacy)
         [HttpPost]
+        [Filters(Authotization)]
         public IActionResult CreatePharmacy([FromBody] PharmacyModel newPharmacy)
         {
             var createdPharmacy = _pharmacyManager.CreatePharmacy(newPharmacy.ToEntity());
