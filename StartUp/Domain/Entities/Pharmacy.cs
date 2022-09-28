@@ -10,23 +10,16 @@ namespace StartUp.Domain
     {
         public int Id { get; set; }
         
-        [Required]
         public string Name { get; set; }
         
-        [Required]
         public string Address { get; set; }
 
-        [Required]
         public List<Medicine> Stock { get; set; }
        
-        [Required]
         public List<Request> Requests { get; set; }
 
 
-        public Pharmacy()
-        {
-            
-        }
+        public Pharmacy() { }
 
         public Pharmacy(string name, string address, List<Medicine> medicines, List<Request> requests)
         {

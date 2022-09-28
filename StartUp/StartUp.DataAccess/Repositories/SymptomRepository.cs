@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace StartUp.DataAccess.Repositories
 {
-    public class PetitionRepository : BaseRepository<Petition>
+    public class SymptomRepository : BaseRepository<Symptom>
     {
-        public PetitionRepository(StartUpContext context) : base(context)
+        public SymptomRepository(StartUpContext context) : base(context)
         {
         }
     }

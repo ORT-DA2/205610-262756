@@ -16,7 +16,7 @@ namespace StartUp.Models.Models.Out
             InvoiceLines = new List<InvoiceLineBasicModel>();
             foreach (var item in sale.InvoiceLines)
             {
-                Medicines.Add(new InvoiceLineBasicModel(item));
+                InvoiceLines.Add(new InvoiceLineBasicModel(item));
             }
         }
 

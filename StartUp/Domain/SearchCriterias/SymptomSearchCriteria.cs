@@ -1,6 +1,9 @@
-namespace StartUp.Domain.SearchCriterias;
 
-public class SymptomSearchCriteria
+namespace StartUp.Domain.SearchCriterias
 {
-    public string? Symptom { get; set; }
+
+    public class SymptomSearchCriteria
+    {
+        public string? Symptom { get; set; }
+    }
 }
