@@ -6,9 +6,9 @@ namespace StartUp.IBusinessLogic;
 
 public interface ISymptomManager
 {
-    List<Symptom> GetAllSale(SymptomSearchCriteria searchCriteria);
-    Symptom GetSpecificSale(Symptom symptom);
-    Symptom CreateSale(Symptom symptom);
-    Request UpdateRequest(Symptom symptomUpdate);
-    Symptom DeleteSale(Symptom symptom);
+    List<Symptom> GetAllSymptom(SymptomSearchCriteria searchCriteria);
+    Symptom GetSpecificSymptom(int symptomId);
+    Symptom CreateSymptom(Symptom symptom);
+    Symptom UpdateSymptom(int symptomId, Symptom symptomUpdate);
+    void DeleteSymptom(int symptomId);
 }

@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using StartUp.Domain;
 using StartUp.Models.Models.Out;
-using WebApi.Controllers;
+using StartUp.WebApi.Controllers;
 
 namespace StartUp.WebApi.UnitTest
 {
@@ -28,17 +28,14 @@ namespace StartUp.WebApi.UnitTest
         [TestMethod]
         public void GetExistingAdministratorReturnsAsExpected()
         {
-            // 1. Arrange
             var admin = CreateAdministrator();
             var expectedAdmin = new AdministratorDetailModel(admin);
-            _managerMock.Setup(manager => manager.GetSpecificAdministrator(It.IsAny<string>())).Returns(admin);
+            _managerMock.Setup(manager => manager.GetSpecificAdministrator(It.IsAny<int>())).Returns(admin);
             var controller = new AdministratorController(_managerMock.Object);
 
-            // 2. Act
-            var response = controller.GetAdministrator(admin.Email);
+            var response = controller.GetAdministrator(admin.Id);
             var okResponseObject = response as Microsoft.AspNetCore.Mvc.OkObjectResult;
 
-            // 3. Assert
             Assert.AreEqual(expectedAdmin, okResponseObject.Value);
         }
         

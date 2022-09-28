@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using StartUp.Exceptions;
 using StartUp.IBusinessLogic;
 using StartUp.Models.Models.In;
+using StartUp.Models.Models.Out;
+using System.Linq;
 
 namespace StartUp.WebApi.Controllers
 {
@@ -20,37 +23,34 @@ namespace StartUp.WebApi.Controllers
         [HttpGet]
         public IActionResult GetInvoiceLine([FromQuery] InvoiceLineSearchCriteriaModel searchCriteria)
         {
-            //var retrievedAdmins = _adminManager.GetAllAdministrator(searchCriteria.ToEntity());
-            //return Ok(retrievedAdmins.Select(m => new AdministratorBasicModel(m)));
-            return (Ok());
+            var retrievedInvoiceLine = _invoiceLineManager.GetAllInvoiceLine(searchCriteria.ToEntity());
+            return Ok(retrievedInvoiceLine.Select(i => new InvoiceLineBasicModel(i)));
         }
 
-        // Show - Get specific movie (/api/movies/{id})
-        [HttpGet("{adminEmail}", Name = "GetAdmin")]
-        public IActionResult GetInvoiceLine(string email)
-        {/*
-                try
-                {
-                    var retrievedAdmin = _adminManager.GetSpecificAdministrator(email);
-                    return Ok(new AdministratorDetailModel(retrievedAdmin));
-                }
-                catch (ResourceNotFoundException e)
-                {
-                    return NotFound(e.Message);
-                }*/
-            return NotFound();
-        }
-
-        /*
-        // Create - Create new movie (/api/movies)
-        [HttpPost]
-        public IActionResult CreateMovie([FromBody] MovieModel newMovie)
+        // Show - Get specific invoiceLine (/api/invoiceLine/{id})
+        [HttpGet("{id}", Name = "GetInvoiceLine")]
+        public IActionResult GetInvoiceLine(int id)
         {
             try
             {
-                var createdMovie = _movieManager.CreateMovie(newMovie.ToEntity());
-                var movieModel = new MovieDetailModel(createdMovie);
-                return CreatedAtRoute("GetMovie", new { movieId = movieModel.Id }, movieModel);
+                var retrievedInvoiceLine = _invoiceLineManager.GetSpecificInvoiceLine(id);
+                return Ok(new InvoiceLineDetailModel(retrievedInvoiceLine));
+            }
+            catch (ResourceNotFoundException e)
+            {
+                return NotFound(e.Message);
+            }
+        }
+
+        // Create - Create new invoiceLine (/api/invoiceLine)
+        [HttpPost]
+        public IActionResult CreateInvoiceLine([FromBody] InvoiceLineModel newInvoiceLine)
+        {
+            try
+            {
+                var createdInvoiceLine = _invoiceLineManager.CreateInvoiceLine(newInvoiceLine.ToEntity());
+                var invoiceLineModel = new InvoiceLineDetailModel(createdInvoiceLine);
+                return CreatedAtRoute("GetInvoiceLine", new { id = invoiceLineModel.Id }, invoiceLineModel);
             }
             catch (InvalidResourceException e)
             {
@@ -58,14 +58,14 @@ namespace StartUp.WebApi.Controllers
             }
         }
 
-        // Update - Update specific movie (/api/movies/{id})
-        [HttpPut("{movieId}")]
-        public IActionResult Update(int movieId, [FromBody] MovieModel updatedMovie)
+        // Update - Update specific invoiceLine (/api/invoiceLine/{id})
+        [HttpPut("{id}")]
+        public IActionResult Update(int id, [FromBody] InvoiceLineModel updatedInvoiceLine)
         {
             try
             {
-                var retrievedMovie = _movieManager.UpdateMovie(movieId, updatedMovie.ToEntity());
-                return Ok(new MovieDetailModel(retrievedMovie));
+                var retrievedInvoiceLine = _invoiceLineManager.UpdateInvoiceLine(id, updatedInvoiceLine.ToEntity());
+                return Ok(new InvoiceLineDetailModel(retrievedInvoiceLine));
             }
             catch (InvalidResourceException e)
             {
@@ -77,19 +77,19 @@ namespace StartUp.WebApi.Controllers
             }
         }
 
-        // Delete - Delete specific movie (/api/movies/{id})
-        [HttpDelete("{movieId}")]
-        public IActionResult Delete(int movieId)
+        // Delete - Delete specific invoiceLine (/api/invoiceLine/{id})
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
         {
             try
             {
-                _movieManager.DeleteMovie(movieId);
+                _invoiceLineManager.DeleteInvoiceLine(id);
                 return Ok();
             }
             catch (ResourceNotFoundException e)
             {
                 return NotFound(e.Message);
             }
-        }*/
+        }
     }
 }

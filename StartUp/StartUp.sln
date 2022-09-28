@@ -20,19 +20,22 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StartUp.Exceptions", "Start
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StartUp.Factory", "StartUp.Factory\StartUp.Factory.csproj", "{916B05C5-894E-49A9-A6C6-078BF2AB0404}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StartUp.DomainTest", "StartUp.DomainTest\StartUp.DomainTest.csproj", "{746F9D4F-E484-4C02-BDE0-C5727581257B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StartUp.DomainTest", "StartUp.DomainTest\StartUp.DomainTest.csproj", "{746F9D4F-E484-4C02-BDE0-C5727581257B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StartUp.BusinessLogicTest", "StartUp.BusinessLogicTest\StartUp.BusinessLogicTest.csproj", "{DC4AAEAB-9EC7-434B-A76A-A9B66DD04600}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StartUp.BusinessLogicTest", "StartUp.BusinessLogicTest\StartUp.BusinessLogicTest.csproj", "{DC4AAEAB-9EC7-434B-A76A-A9B66DD04600}"
+	ProjectSection(ProjectDependencies) = postProject
+		{30980752-42B5-42F9-A2DE-3F8411C7BEA6} = {30980752-42B5-42F9-A2DE-3F8411C7BEA6}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StartUp.IDataAccess", "StartUp.IDataAccess\StartUp.IDataAccess.csproj", "{30980752-42B5-42F9-A2DE-3F8411C7BEA6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StartUp.IDataAccess", "StartUp.IDataAccess\StartUp.IDataAccess.csproj", "{30980752-42B5-42F9-A2DE-3F8411C7BEA6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StartUp.WebApi.UnitTest", "StartUp.WebApi.UnitTest\StartUp.WebApi.UnitTest.csproj", "{83F7CDC1-F3A4-4352-8E5D-27ADF57131B7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StartUp.WebApi.UnitTest", "StartUp.WebApi.UnitTest\StartUp.WebApi.UnitTest.csproj", "{83F7CDC1-F3A4-4352-8E5D-27ADF57131B7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StartUp.DataAccess", "StartUp.DataAccess\StartUp.DataAccess.csproj", "{22DB4B7B-588B-44EF-8848-BC0967BDBF60}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StartUp.DataAccess", "StartUp.DataAccess\StartUp.DataAccess.csproj", "{22DB4B7B-588B-44EF-8848-BC0967BDBF60}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StartUp.DataAccess.Test", "StartUp.DataAccess.Test\StartUp.DataAccess.Test.csproj", "{8834A7F8-33FA-4EEF-977D-0C45A7F164CE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StartUp.DataAccess.Test", "StartUp.DataAccess.Test\StartUp.DataAccess.Test.csproj", "{8834A7F8-33FA-4EEF-977D-0C45A7F164CE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StartUp.Migrations", "StartUp.Migrations\StartUp.Migrations.csproj", "{F5E2C627-3576-437B-B6F1-E4C9A533D5D2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StartUp.Migrations", "StartUp.Migrations\StartUp.Migrations.csproj", "{F5E2C627-3576-437B-B6F1-E4C9A533D5D2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

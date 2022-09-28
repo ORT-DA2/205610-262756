@@ -4,8 +4,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using StartUp.BusinessLogic;
 using StartUp.DataAccess;
+using StartUp.DataAccess.Repositories;
+using StartUp.Domain;
 using StartUp.IBusinessLogic;
-
+using StartUp.IDataAccess;
 
 namespace StartUp.Factory
 {
@@ -14,6 +16,17 @@ namespace StartUp.Factory
         public static void RegisterDataAccessServices(this IServiceCollection serviceCollection)
         {
             serviceCollection.AddDbContext<DbContext, StartUpContext>();
+            serviceCollection.AddScoped<IRepository<Administrator>, AdministratorRepository>();
+            serviceCollection.AddScoped<IRepository<Employee>, EmployeeRepository>();
+            serviceCollection.AddScoped<IRepository<Owner>, OwnerRepository>();
+            serviceCollection.AddScoped<IRepository<Invitation>, InvitationRepository>();
+            serviceCollection.AddScoped<IRepository<InvoiceLine>, InvoiceLineRepository>();
+            serviceCollection.AddScoped<IRepository<Medicine>, MedicineRepository>();
+            serviceCollection.AddScoped<IRepository<Petition>, PetitionRepository>();
+            serviceCollection.AddScoped<IRepository<Pharmacy>, PharmacyRepository>();
+            serviceCollection.AddScoped<IRepository<Request>, RequestRepository>();
+            serviceCollection.AddScoped<IRepository<Sale>, SaleRepository>();
+            serviceCollection.AddScoped<IRepository<Symptom>, SymptomRepository>();
         }
         public static void RegisterServices(this IServiceCollection serviceCollection)
         {

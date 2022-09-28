@@ -8,9 +8,9 @@ namespace IBusinessLogic
     public interface IAdministratorManager
     {
         List<Administrator> GetAllAdministrator(AdministratorSearchCriteria searchCriteria);
-        Administrator GetSpecificAdministrator(string email);
+        Administrator GetSpecificAdministrator(int adminId);
         Administrator CreateAdministrator(Administrator admin);
-        Administrator UpdateAdministrator(string email, Administrator admin);
-        Administrator DeleteAdministrator(string email);
+        Administrator UpdateAdministrator(int adminId, Administrator admin);
+        void DeleteAdministrator(int adminId);
     }
 }

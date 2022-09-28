@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StartUp.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -9,5 +10,11 @@ namespace StartUp.Domain
         public int Id { get; set; }
         public string MedicineCode { get; set; }
         public int Amount { get; set; }
+
+        public void isValidPetition()
+        {
+            if (string.IsNullOrEmpty(MedicineCode))
+                throw new InputException("Enter a Petition");
+        }
     }
 }

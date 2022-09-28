@@ -7,12 +7,12 @@ namespace StartUp.Models.Models.In
 {
     public class SaleModel
     {
-        public List<InvoiceLine> Medicines { get; set; }
+        public List<InvoiceLine> InvoiceLines { get; set; }
         public Sale ToEntity()
         {
             return new Sale()
             {
-               Medicines = this.Medicines
+                InvoiceLines = this.InvoiceLines
             };
         }
     }

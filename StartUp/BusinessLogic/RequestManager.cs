@@ -1,47 +1,79 @@
 ﻿using StartUp.Domain;
 using StartUp.Domain.SearchCriterias;
+using StartUp.Exceptions;
 using StartUp.IBusinessLogic;
+using StartUp.IDataAccess;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
+using System.Linq.Expressions;
 
 namespace StartUp.BusinessLogic
 {
     public class RequestManager : IRequestManager
     {
-        public Request CreateRequest()
-        {
-            throw new NotImplementedException();
-        }
+        private readonly IRepository<Request> _requestRepository;
 
-        public Request CreateRequest(Request request)
+        public RequestManager(IRepository<Request> requestRepository)
         {
-            throw new NotImplementedException();
-        }
-
-        public Request DeleteRequest(Request request)
-        {
-            throw new NotImplementedException();
+            _requestRepository = requestRepository;
         }
 
         public List<Request> GetAllRequest(RequestSearchCriteria searchCriteria)
         {
-            throw new NotImplementedException();
+            var petitionsCriteria = searchCriteria.Petitions.ToList() ?? null;
+            var stateCriteria = searchCriteria.State?.ToString().ToLower() ?? string.Empty;
+
+            Expression<Func<Request, bool>> requestFilter = request =>
+                request.State.ToString().ToLower().Contains(stateCriteria) &&
+                request.Petitions.ToList() == petitionsCriteria;
+
+            return _requestRepository.GetAllExpression(requestFilter).ToList();
         }
 
-        public Request GetSpecificRequest()
+        public Request GetSpecificRequest(int requestId)
         {
-            throw new NotImplementedException();
+            var requestSaved = _requestRepository.GetOneByExpression(r => r.Id == requestId);
+
+            if (requestSaved is null)
+            {
+                throw new ResourceNotFoundException($"Could not find specified request {requestId}");
+            }
+            return requestSaved;
         }
 
-        public Request GetSpecificRequest(bool state)
+        public Request CreateRequest(Request request)
         {
-            throw new NotImplementedException();
+            request.isValidRequest();
+
+            _requestRepository.InsertOne(request);
+            _requestRepository.Save();
+
+            return request;
         }
 
-        public Request UpdateRequest(Request requestUpdate)
+        public Request UpdateRequest(int requestId, Request updatedRequest)
         {
-            throw new NotImplementedException();
+            updatedRequest.isValidRequest();
+
+            var requestStored = GetSpecificRequest(requestId);
+
+            requestStored.State = updatedRequest.State;
+            requestStored.Petitions = updatedRequest.Petitions;
+
+            _requestRepository.UpdateOne(requestStored);
+            _requestRepository.Save();
+
+            return requestStored;
         }
+
+        public void DeleteRequest(int requestId)
+        {
+            var requestStored = GetSpecificRequest(requestId);
+
+            _requestRepository.DeleteOne(requestStored);
+            _requestRepository.Save();
+        }
+
     }
 }

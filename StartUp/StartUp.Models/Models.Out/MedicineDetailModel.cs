@@ -7,6 +7,7 @@ namespace StartUp.Models.Models.Out
 {
     public class MedicineDetailModel
     {
+        public int Id { get; set; }
         public string Code { get; set; }
         public string Name { get; set; }
         public List<Symptom> Symptoms { get; set; }
@@ -27,6 +28,20 @@ namespace StartUp.Models.Models.Out
             this.Name = medicine.Name;
             this.Measure = medicine.Measure;
             this.Symptoms = medicine.Symptoms;
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is MedicineDetailModel)
+            {
+                var otherMedicine = obj as MedicineDetailModel;
+
+                return Id == otherMedicine.Id;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

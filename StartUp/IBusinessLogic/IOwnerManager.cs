@@ -9,10 +9,10 @@ namespace StartUp.IBusinessLogic
     public interface IOwnerManager
     {
         List<Owner> GetAllOwner(OwnerSearchCriteria searchCriteria);
-        Owner GetSpecificOwner(string email);
+        Owner GetSpecificOwner(int ownerId);
         Owner CreateOwner(Owner owner);
-        Owner UpdateOwner(Owner ownerUpdate);
-        Owner DeleteOwner(string email);
+        Owner UpdateOwner(int ownerId, Owner ownerUpdate);
+        void DeleteOwner(int ownerId);
 
     }
 }

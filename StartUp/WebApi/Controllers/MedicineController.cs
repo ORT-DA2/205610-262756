@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using StartUp.Exceptions;
 using StartUp.IBusinessLogic;
 using StartUp.Models.Models.In;
+using StartUp.Models.Models.Out;
+using System.Linq;
 
 namespace StartUp.WebApi.Controllers
 {
@@ -20,37 +23,34 @@ namespace StartUp.WebApi.Controllers
         [HttpGet]
         public IActionResult GetMedicine([FromQuery] MedicineSearchCriteriaModel searchCriteria)
         {
-            //var retrievedAdmins = _adminManager.GetAllAdministrator(searchCriteria.ToEntity());
-            //return Ok(retrievedAdmins.Select(m => new AdministratorBasicModel(m)));
-            return (Ok());
+            var retrievedMedicines = _medicineManager.GetAllMedicine(searchCriteria.ToEntity());
+            return Ok(retrievedMedicines.Select(m => new MedicineBasicModel(m)));
         }
 
-        // Show - Get specific movie (/api/movies/{id})
-        [HttpGet("{adminEmail}", Name = "GetAdmin")]
-        public IActionResult GetMedicine(string email)
-        {/*
-                try
-                {
-                    var retrievedAdmin = _adminManager.GetSpecificAdministrator(email);
-                    return Ok(new AdministratorDetailModel(retrievedAdmin));
-                }
-                catch (ResourceNotFoundException e)
-                {
-                    return NotFound(e.Message);
-                }*/
-            return NotFound();
-        }
-
-        /*
-        // Create - Create new movie (/api/movies)
-        [HttpPost]
-        public IActionResult CreateMovie([FromBody] MovieModel newMovie)
+        // Show - Get specific medicine (/api/medicine/{id})
+        [HttpGet]
+        public IActionResult GetMedicine(int id)
         {
             try
             {
-                var createdMovie = _movieManager.CreateMovie(newMovie.ToEntity());
-                var movieModel = new MovieDetailModel(createdMovie);
-                return CreatedAtRoute("GetMovie", new { movieId = movieModel.Id }, movieModel);
+                var retrievedMedicine = _medicineManager.GetSpecificMedicine(id);
+                return Ok(new MedicineDetailModel(retrievedMedicine));
+            }
+            catch (ResourceNotFoundException e)
+            {
+                return NotFound(e.Message);
+            }
+        }
+
+        // Create - Create new medicine (/api/medicine)
+        [HttpPost]
+        public IActionResult CreateMedicine([FromBody] MedicineModel newMedicine)
+        {
+            try
+            {
+                var createdMedicine = _medicineManager.CreateMedicine(newMedicine.ToEntity());
+                var medicineModel = new MedicineDetailModel(createdMedicine);
+                return CreatedAtRoute("GetMedicine", new { id = medicineModel.Id }, medicineModel);
             }
             catch (InvalidResourceException e)
             {
@@ -58,14 +58,14 @@ namespace StartUp.WebApi.Controllers
             }
         }
 
-        // Update - Update specific movie (/api/movies/{id})
-        [HttpPut("{movieId}")]
-        public IActionResult Update(int movieId, [FromBody] MovieModel updatedMovie)
+        // Update - Update specific medicine (/api/medicine/{id})
+        [HttpPut("{id}")]
+        public IActionResult Update(int id, [FromBody] MedicineModel updatedMedicine)
         {
             try
             {
-                var retrievedMovie = _movieManager.UpdateMovie(movieId, updatedMovie.ToEntity());
-                return Ok(new MovieDetailModel(retrievedMovie));
+                var retrievedMedicine = _medicineManager.UpdateMedicine(id, updatedMedicine.ToEntity());
+                return Ok(new MedicineDetailModel(retrievedMedicine));
             }
             catch (InvalidResourceException e)
             {
@@ -77,19 +77,19 @@ namespace StartUp.WebApi.Controllers
             }
         }
 
-        // Delete - Delete specific movie (/api/movies/{id})
-        [HttpDelete("{movieId}")]
-        public IActionResult Delete(int movieId)
+        // Delete - Delete specific medicine (/api/medicine/{id})
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
         {
             try
             {
-                _movieManager.DeleteMovie(movieId);
+                _medicineManager.DeleteMedicine(id);
                 return Ok();
             }
             catch (ResourceNotFoundException e)
             {
                 return NotFound(e.Message);
             }
-        }*/
+        }
     }
 }

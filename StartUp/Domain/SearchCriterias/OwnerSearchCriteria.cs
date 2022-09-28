@@ -11,5 +11,6 @@ namespace StartUp.Domain.SearchCriterias
         public string? Address { get; set; }
         public DateTime? RegisterDate { get; set; }
         public Invitation? Invitation { get; set; }
+        public Pharmacy? Pharmacy { get; set; }
     }
 }

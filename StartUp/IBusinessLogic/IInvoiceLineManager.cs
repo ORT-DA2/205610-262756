@@ -9,9 +9,9 @@ namespace StartUp.IBusinessLogic
     public interface IInvoiceLineManager
     {
         List<InvoiceLine> GetAllInvoiceLine(InvoiceLineSearchCriteria searchCriteria);
-        InvoiceLine GetSpecificInvoiceLine(Medicine medicine);
+        InvoiceLine GetSpecificInvoiceLine(int invoiceLineId);
         InvoiceLine CreateInvoiceLine(InvoiceLine invoiceLine);
-        InvoiceLine UpdateInvoiceLine(int amount, InvoiceLine invoiceLine);
-        InvoiceLine DeleteInvoiceLine(InvoiceLine invoiceLine);
+        InvoiceLine UpdateInvoiceLine(int invoiceLineId, InvoiceLine invoiceLine);
+        void DeleteInvoiceLine(int invoiceLineId);
     }
 }

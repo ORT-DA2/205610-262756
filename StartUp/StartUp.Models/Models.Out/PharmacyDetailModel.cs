@@ -7,6 +7,7 @@ namespace StartUp.Models.Models.Out
 {
     public class PharmacyDetailModel
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }
         public List<MedicineBasicModel> Stock { get; set; }
@@ -25,6 +26,20 @@ namespace StartUp.Models.Models.Out
             foreach (var item in pharmacy.Requests)
             {
                 Requests.Add(new RequestBasicModel(item));
+            }
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is PharmacyDetailModel)
+            {
+                var otherPharmacy = obj as PharmacyDetailModel;
+
+                return Id == otherPharmacy.Id;
+            }
+            else
+            {
+                return false;
             }
         }
     }

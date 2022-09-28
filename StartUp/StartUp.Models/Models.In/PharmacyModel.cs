@@ -14,7 +14,7 @@ namespace StartUp.Models.Models.In
 
         public Pharmacy ToEntity()
         {
-            return new Pharmacy()
+            return new Pharmacy(this.Name, this.Address, this.Stock, this.Requests)
             {
                 Name = this.Name,
                 Address = this.Address,

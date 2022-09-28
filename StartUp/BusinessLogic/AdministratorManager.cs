@@ -5,80 +5,84 @@ using StartUp.Domain.SearchCriterias;
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using StartUp.IDataAccess;
+using System.Linq.Expressions;
 
 namespace BusinessLogic
 {
     public class AdministratorManager : IAdministratorManager
     {
-        private static List<Administrator> _admins = new List<Administrator>()
-    {
-        new Administrator() { Email = "admin1@gmail.com", Password = "contraseña1", Address = "direccion1", RegisterDate = DateTime.Now, Invitation = null},
-        new Administrator() { Email = "admin2@gmail.com", Password = "contraseña2", Address = "direccion2", RegisterDate = DateTime.Now, Invitation = null}
-    };
+        private readonly IRepository<Administrator> _adminRepository;
+
+        public AdministratorManager(IRepository<Administrator> adminRepository)
+        {
+            _adminRepository = adminRepository;
+        }
 
         public List<Administrator> GetAllAdministrator(AdministratorSearchCriteria searchCriteria)
         {
-            return _admins;
+            var emailCriteria = searchCriteria.Email?.ToLower() ?? string.Empty;
+            var passwordCriteria = searchCriteria.Password?.ToLower() ?? string.Empty;
+            var addressCriteria = searchCriteria.Address?.ToLower() ?? string.Empty;
+            var userNameCriteria = searchCriteria.Invitation.UserName?.ToLower() ?? string.Empty;
+            var registerDateCriteria = searchCriteria.RegisterDate?.ToString() ?? string.Empty;
+
+            Expression<Func<Administrator, bool>> adminFilter = admin =>
+                admin.Email.ToLower().Contains(emailCriteria) &&
+                admin.Password.ToLower().Contains(passwordCriteria) &&
+                admin.Address.ToLower().Contains(addressCriteria) &&
+                admin.Invitation.UserName.Contains(userNameCriteria) &&
+                admin.RegisterDate.ToString().Contains(registerDateCriteria);
+
+            return _adminRepository.GetAllExpression(adminFilter).ToList();
         }
 
-        public Administrator GetSpecificAdministrator(string email)
+        public Administrator GetSpecificAdministrator(int adminId)
         {
-            Administrator administratorSaved = _admins.FirstOrDefault(m => m.Email == email);
-
+           Administrator administratorSaved = _adminRepository.GetOneByExpression(a => a.Id == adminId);
+            
             if (administratorSaved == null)
             {
-                throw new ResourceNotFoundException($"The admin {email} not exist");
+                throw new ResourceNotFoundException($"The admin {adminId} not exist");
             }
             return administratorSaved;
         }
 
         public Administrator CreateAdministrator(Administrator admin)
         {
-            admin.ValidOrFail();
-            _admins.Add(admin);
+            admin.isValidAdministrator();
+
+            _adminRepository.InsertOne(admin);
+            _adminRepository.Save();
+
             return admin;
         }
 
-        public Administrator UpdateAdministrator(int id, Administrator updatedAdministrator)
+        public Administrator UpdateAdministrator(int adminId, Administrator updatedAdmin)
         {
-            /*updatedMovie.ValidOrFail();
-            var movieSaved = _movies.FirstOrDefault(m => m.Id == id);
+            updatedAdmin.isValidAdministrator();
 
-            if (movieSaved == null)
-                throw new ResourceNotFoundException($"Could not find specified movie {id}");
+            var adminStored = GetSpecificAdministrator(adminId);
 
-            // Workaround - como no puedo editar el elemento directamente en List, lo elimino y lo vuelvo a insertar actualizado
-            var newMovie = new Movie()
-            {
-                Id = movieSaved.Id,
-                Description = updatedMovie.Description,
-                Title = updatedMovie.Title
-            };
-            _movies.Remove(movieSaved);
-            _movies.Add(newMovie);*/
-            var newAdmin = new Administrator();
+            adminStored.Email = updatedAdmin.Email;
+            adminStored.Password = updatedAdmin.Password;
+            adminStored.Address = updatedAdmin.Address;
+            adminStored.RegisterDate = updatedAdmin.RegisterDate;
+            adminStored.Password = updatedAdmin.Password;
+            adminStored.Invitation = updatedAdmin.Invitation;
 
-            return newAdmin;
+            _adminRepository.UpdateOne(adminStored);
+            _adminRepository.Save();
+
+            return adminStored;
         }
 
-        public void DeleteAdministrator(int id)
+        public void DeleteAdministrator(int adminId)
         {
-            //var movieSaved = _movies.FirstOrDefault(m => m.Id == id);
+            var adminStored = GetSpecificAdministrator(adminId);
 
-            //if (movieSaved == null)
-            throw new ResourceNotFoundException($"Could not find specified movie {id}");
-
-            //_movies.Remove(movieSaved);
-        }
-
-        public Administrator UpdateAdministrator(string email, Administrator admin)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public Administrator DeleteAdministrator(string email)
-        {
-            throw new System.NotImplementedException();
+            _adminRepository.DeleteOne(adminStored);
+            _adminRepository.Save();
         }
     }
 }

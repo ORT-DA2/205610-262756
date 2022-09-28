@@ -2,79 +2,91 @@
 using StartUp.Domain.SearchCriterias;
 using StartUp.Exceptions;
 using StartUp.IBusinessLogic;
+using StartUp.IDataAccess;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace StartUp.BusinessLogic
 {
     public class EmployeeManager : IEmployeeManager
     {
-        private static List<Employee> _employees = new List<Employee>()
-    {
-        
-    };
+        private readonly IRepository<Employee> _employeeRepository;
+
+        public EmployeeManager(IRepository<Employee> employeeRepository)
+        {
+            _employeeRepository = employeeRepository;
+        }
 
         public List<Employee> GetAllEmployee(EmployeeSearchCriteria searchCriteria)
         {
-            throw new NotImplementedException();
+            var emailCriteria = searchCriteria.Email?.ToLower() ?? string.Empty;
+            var addressCriteria = searchCriteria.Address?.ToLower() ?? string.Empty;
+            //   HAY QUE AGREGAR farmacia, invitacion y registerdate`?????????
+            var regiterDateCriteria = searchCriteria.RegisterDate?.ToString() ?? string.Empty;
+            var pharmacyCriteria = searchCriteria.Pharmacy.Name?.ToString() ?? string.Empty;
+            var invitationCriteria = searchCriteria.Invitation.UserName?.ToString() ?? string.Empty;
+
+            Expression<Func<Employee, bool>> employeeFilter = employee =>
+                employee.Email.ToLower().Contains(emailCriteria) &&
+                employee.Address.ToLower().Contains(addressCriteria) &&
+                employee.RegisterDate.ToString().Contains(regiterDateCriteria) &&
+                employee.Pharmacy.Name.ToLower().Contains(pharmacyCriteria) &&
+                employee.Invitation.UserName.ToLower().Contains(invitationCriteria);
+
+            return _employeeRepository.GetAllExpression(employeeFilter).ToList();
         }
 
-        public Employee GetSpecificEmployee(int id)
+        public Employee GetSpecificEmployee(int employeeId)
         {
-            throw new NotImplementedException();
+            var employeeSaved = _employeeRepository.GetOneByExpression(e => e.Id == employeeId);
+
+            if (employeeSaved is null)
+            {
+                throw new ResourceNotFoundException($"Could not find specified employee {employeeId}");
+            }
+
+            return employeeSaved;
         }
 
         public Employee CreateEmployee(Employee employee)
         {
-            throw new NotImplementedException();
-        }
+            employee.isValidEmployee();
 
-        public Employee UpdateEmployee(int id, Employee updatedAdministrator)
-        {
-            /*updatedMovie.ValidOrFail();
-            var movieSaved = _movies.FirstOrDefault(m => m.Id == id);
-
-            if (movieSaved == null)
-                throw new ResourceNotFoundException($"Could not find specified movie {id}");
-
-            // Workaround - como no puedo editar el elemento directamente en List, lo elimino y lo vuelvo a insertar actualizado
-            var newMovie = new Movie()
-            {
-                Id = movieSaved.Id,
-                Description = updatedMovie.Description,
-                Title = updatedMovie.Title
-            };
-            _movies.Remove(movieSaved);
-            _movies.Add(newMovie);*/
-            var employee = new Employee();
+            _employeeRepository.InsertOne(employee);
+            _employeeRepository.Save();
 
             return employee;
         }
 
-        public void DeleteEmployee(int id)
+        public Employee UpdateEmployee(int employeeId, Employee updatedEmployee)
         {
-            //var movieSaved = _movies.FirstOrDefault(m => m.Id == id);
+            updatedEmployee.isValidEmployee();
 
-            //if (movieSaved == null)
-            throw new ResourceNotFoundException($"Could not find specified movie {id}");
+            var employeeStored = GetSpecificEmployee(employeeId);
 
-            //_movies.Remove(movieSaved);
+            employeeStored.Pharmacy = updatedEmployee.Pharmacy;
+            employeeStored.Email = updatedEmployee.Email;
+            employeeStored.Password = updatedEmployee.Password;
+            employeeStored.Address = updatedEmployee.Address;
+            employeeStored.RegisterDate = updatedEmployee.RegisterDate;
+            employeeStored.Password = updatedEmployee.Password;
+            employeeStored.Invitation = updatedEmployee.Invitation;
+
+            _employeeRepository.UpdateOne(employeeStored);
+            _employeeRepository.Save();
+
+            return employeeStored;
         }
 
-        public Employee GetSpecificEmployee(string email)
+        public void DeleteEmployee(int employeeId)
         {
-            throw new NotImplementedException();
-        }
+            var employeeStored = GetSpecificEmployee(employeeId);
 
-        public Employee UpdateEmployee(string email, Employee employee)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Employee DeleteEmployee(string email)
-        {
-            throw new NotImplementedException();
+            _employeeRepository.DeleteOne(employeeStored);
+            _employeeRepository.Save();
         }
     }
 }

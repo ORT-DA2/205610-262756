@@ -9,9 +9,9 @@ namespace StartUp.IBusinessLogic
     public interface ISaleManager
     {
         List<Sale> GetAllSale(SaleSearchCriteria searchCriteria);
-        Sale GetSpecificSale(Sale sale);
+        Sale GetSpecificSale(int saleId);
         Sale CreateSale(Sale sale);
-        Sale UpdateSale(List<Petition> listPetitionUpdate);
-        Sale DeleteSale(Sale sale);
+        Sale UpdateSale(int saleId, Sale updateSale);
+        void DeleteSale(int saleId);
     }
 }
