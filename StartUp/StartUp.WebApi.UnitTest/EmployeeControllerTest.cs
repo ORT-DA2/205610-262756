@@ -14,12 +14,12 @@ namespace StartUp.WebApi.UnitTest
 {
     public class EmployeeControllerTest
     {
-        private Mock<IEmployeeManager> _managerMock;
+        private Mock<IEmployeeService> _managerMock;
 
         [TestInitialize]
         public void Setup()
         {
-            _managerMock = new Mock<IEmployeeManager>(MockBehavior.Strict);
+            _managerMock = new Mock<IEmployeeService>(MockBehavior.Strict);
         }
 
         [TestCleanup]

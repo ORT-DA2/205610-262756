@@ -12,18 +12,18 @@ namespace StartUp.WebApi.Controllers
     [ApiController]
     public class EmployeeController : ControllerBase
     {
-        private readonly IEmployeeManager _employeeManager;
+        private readonly IEmployeeService _employeeService;
 
-        public EmployeeController(IEmployeeManager manager)
+        public EmployeeController(IEmployeeService service)
         {
-            _employeeManager = manager;
+            _employeeService = service;
         }
 
         // Index - Get all employee (/api/employee)
         [HttpGet]
         public IActionResult GetEmployee([FromQuery] EmployeeSearchCriteriaModel searchCriteria)
         {
-            var retrievedEmployees = _employeeManager.GetAllEmployee(searchCriteria.ToEntity());
+            var retrievedEmployees = _employeeService.GetAllEmployee(searchCriteria.ToEntity());
             return Ok(retrievedEmployees.Select(e => new EmployeeBasicModel(e)));
         }
 
@@ -33,7 +33,7 @@ namespace StartUp.WebApi.Controllers
         {
             try
             {
-                var retrievedEmployee = _employeeManager.GetSpecificEmployee(id);
+                var retrievedEmployee = _employeeService.GetSpecificEmployee(id);
                 return Ok(new EmployeeDetailModel(retrievedEmployee));
             }
             catch (ResourceNotFoundException e)
@@ -49,7 +49,7 @@ namespace StartUp.WebApi.Controllers
         {
             try
             {
-                var createdEmployee = _employeeManager.CreateEmployee(newEmployee.ToEntity());
+                var createdEmployee = _employeeService.CreateEmployee(newEmployee.ToEntity());
                 var employeeModel = new EmployeeDetailModel(createdEmployee);
                 return CreatedAtRoute("GetEmployee", new { id = employeeModel.Id }, employeeModel);
             }
@@ -65,7 +65,7 @@ namespace StartUp.WebApi.Controllers
         {
             try
             {
-                var retrievedEmployee = _employeeManager.UpdateEmployee(id, updatedEmployee.ToEntity());
+                var retrievedEmployee = _employeeService.UpdateEmployee(id, updatedEmployee.ToEntity());
                 return Ok(new EmployeeDetailModel(retrievedEmployee));
             }
             catch (InvalidResourceException e)
@@ -84,7 +84,7 @@ namespace StartUp.WebApi.Controllers
         {
             try
             {
-                _employeeManager.DeleteEmployee(id);
+                _employeeService.DeleteEmployee(id);
                 return Ok();
             }
             catch (ResourceNotFoundException e)

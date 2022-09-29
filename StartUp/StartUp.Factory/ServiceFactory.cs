@@ -30,16 +30,17 @@ namespace StartUp.Factory
         }
         public static void RegisterServices(this IServiceCollection serviceCollection)
         {
-            serviceCollection.AddTransient<IAdministratorManager, AdministratorManager>();
-            serviceCollection.AddTransient<IEmployeeManager, EmployeeManager>();
-            serviceCollection.AddTransient<IOwnerManager, OwnerManager>();
-            serviceCollection.AddTransient<IInvitationManager, InvitationManager>();
-            serviceCollection.AddTransient<IInvoiceLineManager, InvoiceLineManager>();
-            serviceCollection.AddTransient<IMedicineManager, MedicineManager>();
-            serviceCollection.AddTransient<IPetitionManager, PetitionManager>();
-            serviceCollection.AddTransient<IPharmacyManager, PharmacyManager>();
-            serviceCollection.AddTransient<IRequestManager, RequestManager>();
-            serviceCollection.AddTransient<ISaleManager, SaleManager>();
+            serviceCollection.AddTransient<IAdministratorService, AdministratorService>();
+            serviceCollection.AddTransient<IEmployeeService, EmployeeService>();
+            serviceCollection.AddTransient<IOwnerService, OwnerService>();
+            serviceCollection.AddTransient<IInvitationService, InvitationService>();
+            serviceCollection.AddTransient<IInvoiceLineService, InvoiceLineService>();
+            serviceCollection.AddTransient<IMedicineService, MedicineService>();
+            serviceCollection.AddTransient<IPetitionService, PetitionService>();
+            serviceCollection.AddTransient<IPharmacyService, PharmacyService>();
+            serviceCollection.AddTransient<IRequestService, RequestService>();
+            serviceCollection.AddTransient<ISaleService, SaleService>();
+            serviceCollection.AddTransient<ISymptomService, SymptomService>();
         }
     }
 }

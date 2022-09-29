@@ -197,12 +197,17 @@ namespace StartUp.DataAccess.Migrations
                     b.Property<string>("Password")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("PharmacyId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("RegisterDate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
                     b.HasIndex("InvitationId");
+
+                    b.HasIndex("PharmacyId");
 
                     b.ToTable("Owners");
                 });
@@ -240,11 +245,9 @@ namespace StartUp.DataAccess.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Address")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -338,7 +341,7 @@ namespace StartUp.DataAccess.Migrations
                         .HasForeignKey("MedicineId");
 
                     b.HasOne("StartUp.Domain.Sale", null)
-                        .WithMany("Medicines")
+                        .WithMany("InvoiceLines")
                         .HasForeignKey("SaleId");
 
                     b.Navigation("Medicine");
@@ -357,7 +360,13 @@ namespace StartUp.DataAccess.Migrations
                         .WithMany()
                         .HasForeignKey("InvitationId");
 
+                    b.HasOne("StartUp.Domain.Pharmacy", "Pharmacy")
+                        .WithMany()
+                        .HasForeignKey("PharmacyId");
+
                     b.Navigation("Invitation");
+
+                    b.Navigation("Pharmacy");
                 });
 
             modelBuilder.Entity("StartUp.Domain.Petition", b =>
@@ -400,7 +409,7 @@ namespace StartUp.DataAccess.Migrations
 
             modelBuilder.Entity("StartUp.Domain.Sale", b =>
                 {
-                    b.Navigation("Medicines");
+                    b.Navigation("InvoiceLines");
                 });
 #pragma warning restore 612, 618
         }

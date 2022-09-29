@@ -15,12 +15,12 @@ namespace StartUp.WebApi.UnitTest
     [TestClass]
     public class SaleControllerTest
     {
-        private Mock<ISaleManager> _managerMock;
+        private Mock<ISaleService> _managerMock;
 
         [TestInitialize]
         public void Setup()
         {
-            _managerMock = new Mock<ISaleManager>(MockBehavior.Strict);
+            _managerMock = new Mock<ISaleService>(MockBehavior.Strict);
         }
 
         [TestCleanup]

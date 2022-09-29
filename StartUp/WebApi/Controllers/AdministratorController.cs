@@ -16,18 +16,18 @@ namespace StartUp.WebApi.Controllers
     [ApiController]
     public class AdministratorController : ControllerBase
     {
-        private readonly IAdministratorManager _adminManager;
+        private readonly IAdministratorService _adminService;
 
-        public AdministratorController(IAdministratorManager manager)
+        public AdministratorController(IAdministratorService service)
         {
-            _adminManager = manager;
+            _adminService = service;
         }
 
         // Index - Get all administrator (/api/administrator)
         [HttpGet]
         public IActionResult GetAdministrator([FromQuery] AdministratorSearchCriteriaModel searchCriteria)
         {
-            var retrievedAdmins = _adminManager.GetAllAdministrator(searchCriteria.ToEntity());
+            var retrievedAdmins = _adminService.GetAllAdministrator(searchCriteria.ToEntity());
             return Ok(retrievedAdmins.Select(a => new AdministratorBasicModel(a)));
         }
         
@@ -37,7 +37,7 @@ namespace StartUp.WebApi.Controllers
         {
             try
             {
-                var retrievedAdmin = _adminManager.GetSpecificAdministrator(id);
+                var retrievedAdmin = _adminService.GetSpecificAdministrator(id);
                 return Ok(new AdministratorDetailModel(retrievedAdmin));
             }
             catch (ResourceNotFoundException e)
@@ -52,7 +52,7 @@ namespace StartUp.WebApi.Controllers
         {
             try
             {
-                var createdAdministrator = _adminManager.CreateAdministrator(newAdministrator.ToEntity());
+                var createdAdministrator = _adminService.CreateAdministrator(newAdministrator.ToEntity());
                 var adminModel = new AdministratorDetailModel(createdAdministrator);
                 return CreatedAtRoute("GetAdmin", new { id = adminModel.Id }, adminModel);
             }
@@ -68,7 +68,7 @@ namespace StartUp.WebApi.Controllers
         {
             try
             {
-                var retrievedAdmin = _adminManager.UpdateAdministrator(id, updatedAdmin.ToEntity());
+                var retrievedAdmin = _adminService.UpdateAdministrator(id, updatedAdmin.ToEntity());
                 return Ok(new AdministratorDetailModel(retrievedAdmin));
             }
             catch (InvalidResourceException e)
@@ -87,7 +87,7 @@ namespace StartUp.WebApi.Controllers
         {
             try
             {
-                _adminManager.DeleteAdministrator(id);
+                _adminService.DeleteAdministrator(id);
                 return Ok();
             }
             catch (ResourceNotFoundException e)
