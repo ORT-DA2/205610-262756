@@ -84,7 +84,7 @@ namespace StartUp.BusinessLogicTest
             Assert.AreEqual(updatedInvitation, invitation);
         }
         
-        /*[TestMethod]
+        [TestMethod]
         [ExpectedException(typeof(ResourceNotFoundException))]
         public void DeleteInvitationTest()
         {
@@ -96,13 +96,13 @@ namespace StartUp.BusinessLogicTest
             
             _service.DeleteInvitation(invitation.Id);
             Invitation retrivedInvi = _service.GetSpecificInvitation(invitation.Id);
-        }*/
+        }
 
-        /*[TestMethod]
+        [TestMethod]
         public void CreateInvitationTest()
         {
             Invitation dummyInvitation = CreateInvitation();
-            _repoMock.Setup(repo => repo.InsertOne(It.IsAny<Invitation>())).Equals(dummyInvitation);
+            _repoMock.Setup(repo => repo.InsertOne(dummyInvitation));
             _repoMock.Setup(repo => repo.Save());
             _repoMock.Setup(repo => repo.GetOneByExpression(It.IsAny<Expression<Func<Invitation, bool>>>())).Returns(dummyInvitation);
                         
@@ -112,7 +112,7 @@ namespace StartUp.BusinessLogicTest
             dummyInvitation.Code = newInvitation.Code;
 
             Assert.AreEqual(newInvitation, dummyInvitation);
-        }*/
+        }
         
         private List<Invitation> GenerateDummyInvitation() => new List<Invitation>()
         {
