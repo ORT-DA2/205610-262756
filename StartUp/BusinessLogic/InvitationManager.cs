@@ -26,7 +26,7 @@ namespace StartUp.BusinessLogic
             var rolCriteria = searchCriteria.Rol?.ToLower() ?? string.Empty;
             var userNameCriteria = searchCriteria.UserName?.ToLower() ?? string.Empty;
             var codeCriteria = searchCriteria.Code.ToString()?.ToLower() ?? string.Empty;
-            var isActiveCriteria = searchCriteria.s .ToLower() ?? string.Empty;
+            var isActiveCriteria = searchCriteria.State.ToLower() ?? string.Empty;
             var pharmacyCriteria = searchCriteria.Pharmacy ?? null;
 
             Expression<Func<Invitation, bool>> invitationFilter = invitation =>

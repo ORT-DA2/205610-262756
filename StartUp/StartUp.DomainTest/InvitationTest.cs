@@ -15,7 +15,7 @@ namespace StartUp.DomainTest
         public void ValidOrFailPassesWithValidAdministrator()
         {
             Invitation inv = new Invitation();
-            inv.isValidInvitation();
+            inv.IsValidInvitation();
         }
     }
 }

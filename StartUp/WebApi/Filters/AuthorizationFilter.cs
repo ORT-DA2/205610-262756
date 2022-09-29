@@ -7,9 +7,9 @@ namespace StartUp.WebApi.Filters
 {
     public class AuthorizationFilter : Attribute, IAuthorizationFilter
     {
-        private readonly ISessionLogic _sessionLogic;
+        private readonly ISessionManager _sessionLogic;
 
-        public AuthorizationFilter(ISessionLogic sessionLogic)
+        public AuthorizationFilter(ISessionManager sessionLogic)
         {
             _sessionLogic = sessionLogic;
         }

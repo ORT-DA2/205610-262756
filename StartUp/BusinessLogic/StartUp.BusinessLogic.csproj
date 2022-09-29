@@ -7,6 +7,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Domain\StartUp.Domain.csproj" />
     <ProjectReference Include="..\IBusinessLogic\StartUp.IBusinessLogic.csproj" />
+    <ProjectReference Include="..\StartUp.DataAccess\StartUp.DataAccess.csproj" />
     <ProjectReference Include="..\StartUp.Exceptions\StartUp.Exceptions.csproj" />
     <ProjectReference Include="..\StartUp.IDataAccess\StartUp.IDataAccess.csproj" />
   </ItemGroup>

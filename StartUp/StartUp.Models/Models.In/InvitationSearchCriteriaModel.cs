@@ -21,7 +21,7 @@ namespace StartUp.Models.Models.In
                 UserName = this.UserName,
                 Rol = this.Rol,
                 Code = this.Code,
-                IsActive = this.IsActive,
+                State = this.State,
                 Pharmacy = this.Pharmacy
             };
         }

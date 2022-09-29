@@ -1,14 +1,18 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DbUp;
+using Microsoft.AspNetCore.Mvc;
 using StartUp.Exceptions;
 using StartUp.IBusinessLogic;
 using StartUp.Models.Models.In;
 using StartUp.Models.Models.Out;
+using StartUp.WebApi.Filters;
 using System.Linq;
 
 namespace StartUp.WebApi.Controllers
 {
     [Route("api/request")]
     [ApiController]
+    //[Filters(AuthorizationFilter())]
+    //SOLO PUEDEN TENER ACCESO LOS DUEÑOS Y EMPLEADOS
     public class RequestController : ControllerBase
     {
         private readonly IRequestManager _requestManager;
@@ -45,6 +49,7 @@ namespace StartUp.WebApi.Controllers
 
         // Update - Update specific request (/api/request/{id})
         [HttpPut("{id}")]
+        //SOLO PUEDEN EDITAR LOS DUEÑOS
         public IActionResult Update(int id, [FromBody] RequestModel updatedRequest)
         {
             var retrievedRequest = _requestManager.UpdateRequest(id, updatedRequest.ToEntity());

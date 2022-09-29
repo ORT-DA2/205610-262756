@@ -24,14 +24,14 @@ namespace BusinessLogic
             var emailCriteria = searchCriteria.Email?.ToLower() ?? string.Empty;
             var passwordCriteria = searchCriteria.Password?.ToLower() ?? string.Empty;
             var addressCriteria = searchCriteria.Address?.ToLower() ?? string.Empty;
-            var userNameCriteria = searchCriteria.Invitation.UserName?.ToLower() ?? string.Empty;
+            var invitationCriteria = searchCriteria.Invitation ?? null;
             var registerDateCriteria = searchCriteria.RegisterDate?.ToString() ?? string.Empty;
 
             Expression<Func<Administrator, bool>> adminFilter = admin =>
                 admin.Email.ToLower().Contains(emailCriteria) &&
                 admin.Password.ToLower().Contains(passwordCriteria) &&
                 admin.Address.ToLower().Contains(addressCriteria) &&
-                admin.Invitation.UserName.Contains(userNameCriteria) &&
+                admin.Invitation == invitationCriteria &&
                 admin.RegisterDate.ToString().Contains(registerDateCriteria);
 
             return _adminRepository.GetAllExpression(adminFilter).ToList();

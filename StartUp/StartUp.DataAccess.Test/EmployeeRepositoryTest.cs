@@ -39,7 +39,7 @@ namespace StartUp.DataAccess.Test
             var eligibleEmployees = employees.Where(expression.Compile()).ToList();
             LoadEmployees(employees);
 
-            var retrievedEmployees = _repository.GetAllByExpression(expression);
+            var retrievedEmployees = _repository.GetAllExpression(expression);
             CollectionAssert.AreEquivalent(eligibleEmployees, retrievedEmployees.ToList());
         }
 

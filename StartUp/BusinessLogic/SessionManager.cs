@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace StartUp.BusinessLogic
 {
-    public class SessionLogic : ISessionLogic
+    public class SessionManager : ISessionLogic
     {
         public bool ValidateToken()
         {

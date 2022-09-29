@@ -27,7 +27,7 @@ namespace StartUp.WebApi.Controllers
         }
 
         // Show - Get specific owner (/api/owner/{id})
-        [HttpGet]
+        [HttpGet("{id}")]
         public IActionResult GetOwner(int id)
         {
             var retrievedOwner = _ownerManager.GetSpecificOwner(id);

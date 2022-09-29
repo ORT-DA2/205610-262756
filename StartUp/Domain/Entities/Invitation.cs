@@ -22,7 +22,7 @@ namespace StartUp.Domain
             {
                 throw new InputException("Empty fields");
             }
-            if(Rol.ToLower() != "Administrator" || Rol.ToLower() != "Owner" || Rol.ToLower() != "Employee")
+            if(Rol.ToLower() != "administrator" || Rol.ToLower() != "owner" || Rol.ToLower() != "employee")
             {
                 throw new InvalidResourceException("The user role must be administrator, owner or employee");
             }

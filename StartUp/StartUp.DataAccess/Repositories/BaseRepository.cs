@@ -16,14 +16,9 @@ public class BaseRepository<T> : IRepository<T> where T : class
         _context = context;
     }
 
-    public IEnumerable<T> GetAllByExpression(Expression<Func<T, bool>> expression)
-    {
-        return _context.Set<T>().Where(expression);
-    }
-
     public IEnumerable<T> GetAllExpression(Expression<Func<T, bool>> expression)
     {
-        throw new NotImplementedException();
+        return _context.Set<T>().Where(expression);
     }
 
     public T GetOneByExpression(Expression<Func<T, bool>> expression)

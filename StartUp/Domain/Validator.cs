@@ -1,13 +1,10 @@
 ﻿using StartUp.Exceptions;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StartUp.Domain
 {
-    public class Validator
+    public class Validator 
     {
         public void ValidateString(string value, string message)
         {
@@ -16,5 +13,22 @@ namespace StartUp.Domain
                 throw new InputException(message);
             }
         }
+
+        public void ValidateLengthString(string value, string message, int length)
+        {
+            if(value.Length > length)
+            {
+                throw new InputException(message);
+            }
+        }
+
+        /*
+        public void ValidateNotNull(List<T> value, string message)
+        {
+            if(value == null)
+            {
+                throw new InputException(message);
+            }
+        }*/
     }
 }

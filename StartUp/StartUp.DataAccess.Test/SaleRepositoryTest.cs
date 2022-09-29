@@ -39,7 +39,7 @@ namespace StartUp.DataAccess.Test
             var eligibleSales = sales.Where(expression.Compile()).ToList();
             LoadSales(sales);
 
-            var retrievedSales = _repository.GetAllByExpression(expression);
+            var retrievedSales = _repository.GetAllExpression(expression);
             CollectionAssert.AreEquivalent(eligibleSales, retrievedSales.ToList());
         }
 

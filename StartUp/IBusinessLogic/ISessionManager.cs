@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace StartUp.IBusinessLogic
 {
-    public interface ISessionLogic
+    public interface ISessionManager
     {
         bool ValidateToken();
     }

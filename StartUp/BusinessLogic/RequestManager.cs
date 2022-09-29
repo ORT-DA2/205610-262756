@@ -21,12 +21,12 @@ namespace StartUp.BusinessLogic
 
         public List<Request> GetAllRequest(RequestSearchCriteria searchCriteria)
         {
-            var petitionsCriteria = searchCriteria.Petitions.ToList() ?? null;
+            var petitionsCriteria = searchCriteria.Petitions ?? null;
             var stateCriteria = searchCriteria.State?.ToString().ToLower() ?? string.Empty;
 
             Expression<Func<Request, bool>> requestFilter = request =>
                 request.State.ToString().ToLower().Contains(stateCriteria) &&
-                request.Petitions.ToList() == petitionsCriteria;
+                request.Petitions == petitionsCriteria;
 
             return _requestRepository.GetAllExpression(requestFilter).ToList();
         }
@@ -59,7 +59,6 @@ namespace StartUp.BusinessLogic
             var requestStored = GetSpecificRequest(requestId);
 
             requestStored.State = updatedRequest.State;
-            requestStored.Petitions = updatedRequest.Petitions;
 
             _requestRepository.UpdateOne(requestStored);
             _requestRepository.Save();
