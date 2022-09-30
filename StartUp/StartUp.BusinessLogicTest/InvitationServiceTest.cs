@@ -49,7 +49,7 @@ namespace StartUp.BusinessLogicTest
             
             _repoMock.Setup(repo => repo.GetOneByExpression(It.IsAny<Expression<Func<Invitation, bool>>>())).Returns((Invitation)null);
 
-            var retrievedInvitation = _service.GetSpecificInvitation(invitation.Id);
+            _service.GetSpecificInvitation(invitation.Id);
         }
         
         [TestMethod]
@@ -86,16 +86,25 @@ namespace StartUp.BusinessLogicTest
         
         [TestMethod]
         [ExpectedException(typeof(ResourceNotFoundException))]
+        public void DeleteNotExistingInvitationTest()
+        {
+            _repoMock.Setup(repo => repo.GetOneByExpression(It.IsAny<Expression<Func<Invitation, bool>>>())).Returns((Invitation)null);
+            
+            _service.DeleteInvitation(1);
+        }
+        
+        [TestMethod]
+        [ExpectedException(typeof(ResourceNotFoundException))]
         public void DeleteInvitationTest()
         {
             var invitation = CreateInvitation();
-            _repoMock.Setup(repo => repo.InsertOne(invitation));
+            _repoMock.SetupSequence(repo => repo.GetOneByExpression(It.IsAny<Expression<Func<Invitation, bool>>>())).Returns(invitation).Returns((Invitation)null);
             _repoMock.Setup(repo => repo.DeleteOne(invitation));
-            _repoMock.Setup(repo => repo.GetOneByExpression(It.IsAny<Expression<Func<Invitation, bool>>>())).Returns((Invitation)null);
             _repoMock.Setup(repo => repo.Save());
             
             _service.DeleteInvitation(invitation.Id);
-            Invitation retrivedInvi = _service.GetSpecificInvitation(invitation.Id);
+
+            _service.GetSpecificInvitation(invitation.Id);
         }
 
         [TestMethod]
@@ -104,10 +113,24 @@ namespace StartUp.BusinessLogicTest
             Invitation dummyInvitation = CreateInvitation();
             _repoMock.Setup(repo => repo.InsertOne(dummyInvitation));
             _repoMock.Setup(repo => repo.Save());
-            _repoMock.Setup(repo => repo.GetOneByExpression(It.IsAny<Expression<Func<Invitation, bool>>>())).Returns(dummyInvitation);
-                        
-            InvitationService _service = new InvitationService(_repoMock.Object);
+            _repoMock.Setup(repo => repo.GetOneByExpression(It.IsAny<Expression<Func<Invitation, bool>>>())).Returns((Invitation)null);
 
+            Invitation newInvitation = _service.CreateInvitation(dummyInvitation);
+            dummyInvitation.Code = newInvitation.Code;
+
+            Assert.AreEqual(newInvitation, dummyInvitation);
+        }
+        
+        [TestMethod]
+        public void CreateExistingCodeInvitationTest()
+        {
+            Invitation dummyInvitation = CreateInvitation();
+            _repoMock.Setup(repo => repo.InsertOne(dummyInvitation));
+            _repoMock.Setup(repo => repo.Save());
+            _repoMock.SetupSequence(repo => repo.GetOneByExpression(It.IsAny<Expression<Func<Invitation, bool>>>()))
+                .Returns(dummyInvitation)
+                .Returns((Invitation) null);
+            
             Invitation newInvitation = _service.CreateInvitation(dummyInvitation);
             dummyInvitation.Code = newInvitation.Code;
 
