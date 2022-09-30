@@ -39,7 +39,7 @@ namespace StartUp.DataAccess.Test
             var eligibleMedicines = medicines.Where(expression.Compile()).ToList();
             LoadMedicines(medicines);
 
-            var retrievedMedicines = _repository.GetAllExpression(expression);
+            var retrievedMedicines = _repository.GetAllByExpression(expression);
             CollectionAssert.AreEquivalent(eligibleMedicines, retrievedMedicines.ToList());
         }
 

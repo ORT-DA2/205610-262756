@@ -2,6 +2,7 @@
 using StartUp.Domain.Entities;
 using StartUp.Exceptions;
 using System;
+using System.Collections.Generic;
 
 namespace StartUp.Domain
 {
@@ -70,14 +71,21 @@ namespace StartUp.Domain
                 throw new InputException(message);
             }
         }
-
-        /*
-        public void ValidateNotNull(List<T> value, string message)
+        
+        public void ValidateMedicineListNotNull(List<Medicine> value, string message)
         {
             if(value == null)
             {
                 throw new InputException(message);
             }
-        }*/
+        }
+        
+        public void ValidateRequestListNotNull(List<Request> value, string message)
+        {
+            if(value == null)
+            {
+                throw new InputException(message);
+            }
+        }
     }
 }

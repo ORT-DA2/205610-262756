@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace StartUp.IBusinessLogic
 {
-    public interface ITokenAccessManager
+    public interface ITokenAccessService
     {
         List<TokenAccess> GetAllTokenAccess();
         TokenAccess GetSpecificTokenAccess(Session session);

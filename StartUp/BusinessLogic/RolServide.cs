@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace StartUp.BusinessLogic
 {
-    public class RolManager : IRolManager
+    public class RolServide : IRolServide
     {
         public User user { get; set; }
 

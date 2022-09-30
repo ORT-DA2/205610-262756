@@ -13,12 +13,12 @@ using System.Threading.Tasks;
 
 namespace StartUp.BusinessLogic
 {
-    public class TokenAccessManager : ITokenAccessManager
+    public class TokenAccessService : ITokenAccessService
     {
         private readonly IRepository<TokenAccess> _tokenRepository;
         private Validator validator = new Validator();
 
-        public TokenAccessManager(IRepository<TokenAccess> tokenRepository)
+        public TokenAccessService(IRepository<TokenAccess> tokenRepository)
         {
             _tokenRepository = tokenRepository;
         }
@@ -27,7 +27,7 @@ namespace StartUp.BusinessLogic
         {
             Expression<Func<TokenAccess, bool>> tokenFilter = token => true;
 
-            return _tokenRepository.GetAllExpression(tokenFilter).ToList();
+            return _tokenRepository.GetAllByExpression(tokenFilter).ToList();
         }
 
         public TokenAccess GetSpecificTokenAccess(Session session)

@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace StartUp.IBusinessLogic
 {
-    public interface ISessionManager
+    public interface ISessionService
     {
         public User logUser { get; set; }
         List<string> GetAllUsername();

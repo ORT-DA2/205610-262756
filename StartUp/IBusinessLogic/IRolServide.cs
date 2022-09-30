@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace StartUp.IBusinessLogic
 {
-    public interface IRolManager
+    public interface IRolServide
     {
         User GetUser();
     }

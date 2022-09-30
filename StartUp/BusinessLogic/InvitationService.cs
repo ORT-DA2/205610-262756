@@ -26,7 +26,7 @@ namespace StartUp.BusinessLogic
             var rolCriteria = searchCriteria.Rol?.ToLower() ?? string.Empty;
             var userNameCriteria = searchCriteria.UserName?.ToLower() ?? string.Empty;
             var codeCriteria = searchCriteria.Code.ToString()?.ToLower() ?? string.Empty;
-            var isActiveCriteria = searchCriteria.State.ToLower() ?? string.Empty;
+            var isActiveCriteria = searchCriteria.State ?? null;
             var pharmacyCriteria = searchCriteria.Pharmacy ?? null;
 
             Expression<Func<Invitation, bool>> invitationFilter = invitation =>
@@ -89,8 +89,7 @@ namespace StartUp.BusinessLogic
             _invitationRepository.Save();
         }
 
-        
-        public void NotExistInDataBase(Invitation invitation)
+        private void NotExistInDataBase(Invitation invitation)
         {
             var invitationSaved = _invitationRepository.GetOneByExpression(i => i.UserName == invitation.UserName);
 

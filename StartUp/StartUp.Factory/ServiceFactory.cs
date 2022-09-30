@@ -45,9 +45,9 @@ namespace StartUp.Factory
             serviceCollection.AddTransient<IRequestService, RequestService>();
             serviceCollection.AddTransient<ISaleService, SaleService>();
             serviceCollection.AddTransient<ISymptomService, SymptomService>();
-            serviceCollection.AddTransient<ISessionManager, SessionManager>();
-            serviceCollection.AddTransient<ITokenAccessManager, TokenAccessManager>();
-            serviceCollection.AddTransient<IRolManager, RolManager>();
+            serviceCollection.AddTransient<ISessionService, SessionService>();
+            serviceCollection.AddTransient<ITokenAccessService, TokenAccessService>();
+            serviceCollection.AddTransient<IRolServide, RolServide>();
         }
     }
 }

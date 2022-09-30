@@ -12,7 +12,7 @@ using System.Linq.Expressions;
 
 namespace StartUp.BusinessLogic
 {
-    public class SessionManager : ISessionManager
+    public class SessionService : ISessionService
     {
         private readonly IRepository<Session> _sessionRepository;
         private readonly IRepository<Administrator> _adminRepository;
@@ -21,7 +21,7 @@ namespace StartUp.BusinessLogic
         private readonly IRepository<TokenAccess> _tokenAccessRepository;
         private Validator validator = new Validator();
         public User logUser { get; set; }
-        public SessionManager(IRepository<Session> sessionRepository, IRepository<Administrator> adminRepository,
+        public SessionService(IRepository<Session> sessionRepository, IRepository<Administrator> adminRepository,
             IRepository<Owner> ownerRepository, IRepository<Employee> employeeRepository,
             IRepository<TokenAccess> tokenRepository)
         {
@@ -38,9 +38,9 @@ namespace StartUp.BusinessLogic
             Expression<Func<Owner, bool>> owners = owner => true;
             Expression<Func<Employee, bool>> employees = employee => true;
 
-            List<Administrator> listA = _adminRepository.GetAllExpression(admins).ToList();
-            List<Owner> listO = _ownerRepository.GetAllExpression(owners).ToList();
-            List<Employee> listE = _employeeRepository.GetAllExpression(employees).ToList();
+            List<Administrator> listA = _adminRepository.GetAllByExpression(admins).ToList();
+            List<Owner> listO = _ownerRepository.GetAllByExpression(owners).ToList();
+            List<Employee> listE = _employeeRepository.GetAllByExpression(employees).ToList();
 
             List<string> response = new List<string>();
 

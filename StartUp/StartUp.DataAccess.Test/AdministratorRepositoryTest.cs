@@ -39,7 +39,7 @@ namespace StartUp.DataAccess.Test
             var eligibleAdministrators = administrators.Where(expression.Compile()).ToList();
             LoadAdministrators(administrators);
 
-            var retrievedAdministrators = _repository.GetAllExpression(expression);
+            var retrievedAdministrators = _repository.GetAllByExpression(expression);
             CollectionAssert.AreEquivalent(eligibleAdministrators, retrievedAdministrators.ToList());
         }
 

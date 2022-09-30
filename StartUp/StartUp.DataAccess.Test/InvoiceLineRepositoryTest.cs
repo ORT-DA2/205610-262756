@@ -39,7 +39,7 @@ namespace StartUp.DataAccess.Test
             var eligibleInvoiceLines = invoiceLines.Where(expression.Compile()).ToList();
             LoadInvoiceLines(invoiceLines);
 
-            var retrievedInvoiceLines = _repository.GetAllExpression(expression);
+            var retrievedInvoiceLines = _repository.GetAllByExpression(expression);
             CollectionAssert.AreEquivalent(eligibleInvoiceLines, retrievedInvoiceLines.ToList());
         }
 

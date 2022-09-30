@@ -17,7 +17,7 @@ namespace StartUp.Models.Models.In
         {
             return new SymptomSearchCriteria()
             {
-                Symptom = this.SymptomDescription
+                SymptomDescription = this.SymptomDescription
             };
         }
     }

@@ -30,7 +30,7 @@ namespace StartUp.Domain
             return UserName == other?.UserName;
         
         }
-        public void isValidInvitation()
+        public void IsValidInvitation()
         {
             Validator validator = new Validator();
             validator.ValidateString(UserName, "User name can not be empty or all spaces");
