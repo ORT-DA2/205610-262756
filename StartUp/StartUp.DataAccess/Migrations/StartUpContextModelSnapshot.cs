@@ -3,7 +3,6 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StartUp.DataAccess;
 
@@ -12,15 +11,9 @@ using StartUp.DataAccess;
 namespace StartUp.DataAccess.Migrations
 {
     [DbContext(typeof(StartUpContext))]
-<<<<<<<< HEAD:StartUp/StartUp.DataAccess/Migrations/20220929013337_InitialMigration.Designer.cs
-    [Migration("20220929013337_InitialMigration")]
-    partial class InitialMigration
-========
-    [Migration("20220928123831_InitialMigrations")]
-    partial class InitialMigrations
->>>>>>>> 86c79c9a3c4d22d0598654606cc052d536ae3c59:StartUp/StartUp.DataAccess/Migrations/20220928123831_InitialMigrations.Designer.cs
+    partial class StartUpContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

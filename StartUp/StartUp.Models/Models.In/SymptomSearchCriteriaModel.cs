@@ -1,4 +1,5 @@
 ﻿using StartUp.Domain;
+using StartUp.Domain.SearchCriterias;
 using System;
 using System.Collections.Generic;
 using System.Linq;

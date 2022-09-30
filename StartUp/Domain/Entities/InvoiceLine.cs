@@ -11,6 +11,7 @@ namespace StartUp.Domain
         public Medicine Medicine { get; set; }
         public int Amount { get; set; }
 
+        public InvoiceLine() { }
         public void isValidInvoiceLine()
         {
             if (Medicine == null || string.IsNullOrEmpty(Amount.ToString()))

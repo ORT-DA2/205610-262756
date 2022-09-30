@@ -11,6 +11,8 @@ namespace StartUp.Domain
         public List<Petition> Petitions { get; set; }
         public bool State { get; set; }
 
+
+        public Request() { }
         public void isValidRequest()
         {
             if (Petitions == null)

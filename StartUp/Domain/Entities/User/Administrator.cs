@@ -9,6 +9,7 @@ namespace StartUp.Domain
 {
     public class Administrator : User
     {
+        public Administrator() { }
         public bool isValidAdministrator()
         {
             if (string.IsNullOrEmpty(this.Email)

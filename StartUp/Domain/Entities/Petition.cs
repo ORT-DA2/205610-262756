@@ -11,6 +11,8 @@ namespace StartUp.Domain
         public string MedicineCode { get; set; }
         public int Amount { get; set; }
 
+
+        public Petition() { }
         public void isValidPetition()
         {
             if (string.IsNullOrEmpty(MedicineCode))

@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using StartUp.IBusinessLogic;
-using Microsoft.AspNetCore.Mvc;
 using StartUp.Exceptions;
 using StartUp.IBusinessLogic;
 using StartUp.Models.Models.In;
