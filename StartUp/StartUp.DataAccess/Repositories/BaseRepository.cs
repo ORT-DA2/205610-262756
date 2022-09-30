@@ -21,11 +21,6 @@ public abstract class BaseRepository<T> : IRepository<T> where T : class
         return _context.Set<T>().Where(expression);
     }
 
-    public IEnumerable<T> GetAllExpression(Expression<Func<T, bool>> expression)
-    {
-        throw new NotImplementedException();
-    }
-
     public T GetOneByExpression(Expression<Func<T, bool>> expression)
     {
         return _context.Set<T>().FirstOrDefault(expression);

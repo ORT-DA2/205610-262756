@@ -12,28 +12,28 @@ namespace StartUp.WebApi.Controllers
     [ApiController]
     public class MedicineController : ControllerBase
     {
-        private readonly IMedicineManager _medicineManager;
+        private readonly IMedicineService _medicineService;
 
-        public MedicineController(IMedicineManager manager)
+        public MedicineController(IMedicineService service)
         {
-            _medicineManager = manager;
+            _medicineService = service;
         }
 
         // Index - Get all medicine (/api/medicine)
         [HttpGet]
         public IActionResult GetMedicine([FromQuery] MedicineSearchCriteriaModel searchCriteria)
         {
-            var retrievedMedicines = _medicineManager.GetAllMedicine(searchCriteria.ToEntity());
+            var retrievedMedicines = _medicineService.GetAllMedicine(searchCriteria.ToEntity());
             return Ok(retrievedMedicines.Select(m => new MedicineBasicModel(m)));
         }
 
         // Show - Get specific medicine (/api/medicine/{id})
-        [HttpGet]
+        [HttpGet("{id}")]
         public IActionResult GetMedicine(int id)
         {
             try
             {
-                var retrievedMedicine = _medicineManager.GetSpecificMedicine(id);
+                var retrievedMedicine = _medicineService.GetSpecificMedicine(id);
                 return Ok(new MedicineDetailModel(retrievedMedicine));
             }
             catch (ResourceNotFoundException e)
@@ -48,7 +48,7 @@ namespace StartUp.WebApi.Controllers
         {
             try
             {
-                var createdMedicine = _medicineManager.CreateMedicine(newMedicine.ToEntity());
+                var createdMedicine = _medicineService.CreateMedicine(newMedicine.ToEntity());
                 var medicineModel = new MedicineDetailModel(createdMedicine);
                 return CreatedAtRoute("GetMedicine", new { id = medicineModel.Id }, medicineModel);
             }
@@ -64,7 +64,7 @@ namespace StartUp.WebApi.Controllers
         {
             try
             {
-                var retrievedMedicine = _medicineManager.UpdateMedicine(id, updatedMedicine.ToEntity());
+                var retrievedMedicine = _medicineService.UpdateMedicine(id, updatedMedicine.ToEntity());
                 return Ok(new MedicineDetailModel(retrievedMedicine));
             }
             catch (InvalidResourceException e)
@@ -83,7 +83,7 @@ namespace StartUp.WebApi.Controllers
         {
             try
             {
-                _medicineManager.DeleteMedicine(id);
+                _medicineService.DeleteMedicine(id);
                 return Ok();
             }
             catch (ResourceNotFoundException e)

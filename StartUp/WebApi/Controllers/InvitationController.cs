@@ -12,18 +12,18 @@ namespace StartUp.WebApi.Controllers
         [ApiController]
         public class InvitationController : ControllerBase
         {
-            private readonly IInvitationManager _invitationManager;
+            private readonly IInvitationService _invitationService;
 
-            public InvitationController(IInvitationManager manager)
+            public InvitationController(IInvitationService service)
             {
-                _invitationManager = manager;
+                _invitationService = service;
             }
 
             // Index - Get all invitation (/api/invitation)
             [HttpGet]
             public IActionResult GetInvitation([FromQuery] InvitationSearchCriteriaModel searchCriteria)
             {
-                var retrievedInvitations = _invitationManager.GetAllInvitation(searchCriteria.ToEntity());
+                var retrievedInvitations = _invitationService.GetAllInvitation(searchCriteria.ToEntity());
                 return Ok(retrievedInvitations.Select(i => new InvitationBasicModel(i)));
             }
 
@@ -33,7 +33,7 @@ namespace StartUp.WebApi.Controllers
             {
                 try
                 {
-                    var retrievedInvitation = _invitationManager.GetSpecificInvitation(id);
+                    var retrievedInvitation = _invitationService.GetSpecificInvitation(id);
                     return Ok(new InvitationDetailModel(retrievedInvitation));
                 }
                 catch (ResourceNotFoundException e)
@@ -48,7 +48,7 @@ namespace StartUp.WebApi.Controllers
             {
                 try
                 {
-                    var createdInvitation = _invitationManager.CreateInvitation(newInvitation.ToEntity());
+                    var createdInvitation = _invitationService.CreateInvitation(newInvitation.ToEntity());
                     var invitationModel = new InvitationDetailModel(createdInvitation);
                     return CreatedAtRoute("GetInvitation", new { id = invitationModel.Id }, invitationModel);
                 }
@@ -64,7 +64,7 @@ namespace StartUp.WebApi.Controllers
             {
                 try
                 {
-                    var retrievedInvitation = _invitationManager.UpdateInvitation(id, updatedInvitation.ToEntity());
+                    var retrievedInvitation = _invitationService.UpdateInvitation(id, updatedInvitation.ToEntity());
                     return Ok(new InvitationDetailModel(retrievedInvitation));
                 }
                 catch (InvalidResourceException e)
@@ -83,7 +83,7 @@ namespace StartUp.WebApi.Controllers
             {
                 try
                 {
-                    _invitationManager.DeleteInvitation(id);
+                    _invitationService.DeleteInvitation(id);
                     return Ok();
                 }
                 catch (ResourceNotFoundException e)

@@ -7,22 +7,22 @@ using System.Linq;
 
 namespace StartUp.WebApi.Controllers
 {
-    [Route("api/petition")]
+    [Route("api/sale")]
     [ApiController]
     public class SaleController : ControllerBase
     {
-        private readonly ISaleManager _saleManager;
+        private readonly ISaleService _saleService;
 
-        public SaleController(ISaleManager manager)
+        public SaleController(ISaleService service)
         {
-            _saleManager = manager;
+            _saleService = service;
         }
 
         // Index - Get all sale (/api/sale)
         [HttpGet]
         public IActionResult GetSale([FromQuery] SaleSearchCriteriaModel searchCriteria)
         {
-            var retrievedSale = _saleManager.GetAllSale(searchCriteria.ToEntity());
+            var retrievedSale = _saleService.GetAllSale(searchCriteria.ToEntity());
             return Ok(retrievedSale.Select(s => new SaleBasicModel(s)));
         }
 
@@ -32,7 +32,7 @@ namespace StartUp.WebApi.Controllers
         {
             try
             {
-                var retrievedSale = _saleManager.GetSpecificSale(id);
+                var retrievedSale = _saleService.GetSpecificSale(id);
                 return Ok(new SaleDetailModel(retrievedSale));
             }
             catch (ResourceNotFoundException e)
@@ -47,7 +47,7 @@ namespace StartUp.WebApi.Controllers
         {
             try
             {
-                var createdSale = _saleManager.CreateSale(newSale.ToEntity());
+                var createdSale = _saleService.CreateSale(newSale.ToEntity());
                 var saleModel = new SaleDetailModel(createdSale);
                 return CreatedAtRoute("GetSale", new { id = saleModel.Id }, saleModel);
             }
@@ -63,7 +63,7 @@ namespace StartUp.WebApi.Controllers
         {
             try
             {
-                var retrievedSale = _saleManager.UpdateSale(id, updatedSale.ToEntity());
+                var retrievedSale = _saleService.UpdateSale(id, updatedSale.ToEntity());
                 return Ok(new SaleDetailModel(retrievedSale));
             }
             catch (InvalidResourceException e)
@@ -82,7 +82,7 @@ namespace StartUp.WebApi.Controllers
         {
             try
             {
-                _saleManager.DeleteSale(id);
+                _saleService.DeleteSale(id);
                 return Ok();
             }
             catch (ResourceNotFoundException e)

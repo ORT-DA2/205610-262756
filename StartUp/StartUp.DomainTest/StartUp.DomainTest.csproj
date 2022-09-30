@@ -30,6 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BusinessLogic\StartUp.BusinessLogic.csproj" />
     <ProjectReference Include="..\Domain\StartUp.Domain.csproj" />
   </ItemGroup>
 

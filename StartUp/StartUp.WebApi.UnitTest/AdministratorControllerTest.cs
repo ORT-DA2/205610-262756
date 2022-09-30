@@ -11,12 +11,12 @@ namespace StartUp.WebApi.UnitTest
     [TestClass]
     public class AdministratorControllerTest
     {
-        private Mock<IAdministratorManager> _managerMock;
+        private Mock<IAdministratorService> _managerMock;
         
         [TestInitialize]
         public void Setup()
         {
-            _managerMock = new Mock<IAdministratorManager>(MockBehavior.Strict);
+            _managerMock = new Mock<IAdministratorService>(MockBehavior.Strict);
         }
         
         [TestCleanup]

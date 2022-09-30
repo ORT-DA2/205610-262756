@@ -11,18 +11,18 @@ namespace StartUp.WebApi.Controllers
     [ApiController]
     public class PharmacyController : ControllerBase
     {
-        private readonly IPharmacyManager _pharmacyManager;
+        private readonly IPharmacyService _pharmacyService;
 
-        public PharmacyController(IPharmacyManager manager)
+        public PharmacyController(IPharmacyService service)
         {
-            _pharmacyManager = manager;
+            _pharmacyService = service;
         }
 
         // Index - Get all pharmacy (/api/pharmacy)
         [HttpGet]
         public IActionResult GetPharmacy([FromQuery] PharmacySearchCriteriaModel searchCriteria)
         {
-            var retrievedPharmacy = _pharmacyManager.GetAllPharmacy(searchCriteria.ToEntity());
+            var retrievedPharmacy = _pharmacyService.GetAllPharmacy(searchCriteria.ToEntity());
             return Ok(retrievedPharmacy.Select(p => new PharmacyBasicModel(p)));
         }
 
@@ -32,7 +32,7 @@ namespace StartUp.WebApi.Controllers
         {
             try
             {
-                var retrievedPharmacy = _pharmacyManager.GetSpecificPharmacy(pharmacyId);
+                var retrievedPharmacy = _pharmacyService.GetSpecificPharmacy(pharmacyId);
                 return Ok(new PharmacyDetailModel(retrievedPharmacy));
             }
             catch (ResourceNotFoundException e)
@@ -47,7 +47,7 @@ namespace StartUp.WebApi.Controllers
         {
             try
             {
-                var createdPharmacy = _pharmacyManager.CreatePharmacy(newPharmacy.ToEntity());
+                var createdPharmacy = _pharmacyService.CreatePharmacy(newPharmacy.ToEntity());
                 var pharmacyModel = new PharmacyDetailModel(createdPharmacy);
                 return CreatedAtRoute("GetPharmacy", new { pharmacyId = pharmacyModel.Id }, pharmacyModel);
             }
@@ -63,7 +63,7 @@ namespace StartUp.WebApi.Controllers
         {
             try
             {
-                var retrievedPharmacy = _pharmacyManager.UpdatePharmacy(pharmacyId, updatedPharmacy.ToEntity());
+                var retrievedPharmacy = _pharmacyService.UpdatePharmacy(pharmacyId, updatedPharmacy.ToEntity());
                 return Ok(new PharmacyDetailModel(retrievedPharmacy));
             }
             catch (InvalidResourceException e)
@@ -82,7 +82,7 @@ namespace StartUp.WebApi.Controllers
         {
             try
             {
-                _pharmacyManager.DeletePharmacy(pharmacyId);
+                _pharmacyService.DeletePharmacy(pharmacyId);
                 return Ok();
             }
             catch (ResourceNotFoundException e)

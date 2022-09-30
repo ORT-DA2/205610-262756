@@ -15,12 +15,12 @@ namespace StartUp.WebApi.UnitTest
     [TestClass]
     public class InvoiceLineControllerTest
     {
-        private Mock<IInvoiceLineManager> _managerMock;
+        private Mock<IInvoiceLineService> _managerMock;
 
         [TestInitialize]
         public void Setup()
         {
-            _managerMock = new Mock<IInvoiceLineManager>(MockBehavior.Strict);
+            _managerMock = new Mock<IInvoiceLineService>(MockBehavior.Strict);
         }
 
         [TestCleanup]

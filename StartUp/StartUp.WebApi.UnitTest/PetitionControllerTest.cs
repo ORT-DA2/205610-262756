@@ -15,12 +15,12 @@ namespace StartUp.WebApi.UnitTest
     [TestClass]
     public class PetitionControllerTest
     {
-        private Mock<IPetitionManager> _managerMock;
+        private Mock<IPetitionService> _managerMock;
 
         [TestInitialize]
         public void Setup()
         {
-            _managerMock = new Mock<IPetitionManager>(MockBehavior.Strict);
+            _managerMock = new Mock<IPetitionService>(MockBehavior.Strict);
         }
 
         [TestCleanup]

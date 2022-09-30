@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using StartUp.Domain.SearchCriterias;
 
 namespace StartUp.Models.Models.In
 {
@@ -16,7 +17,7 @@ namespace StartUp.Models.Models.In
         {
             return new SymptomSearchCriteria()
             {
-                SymptomDescription = this.SymptomDescription
+                Symptom = this.SymptomDescription
             };
         }
     }

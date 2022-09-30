@@ -13,13 +13,12 @@ namespace StartUp.Domain
         public int Code { get; set; }
 
         public Invitation() { }
+        
         public void isValidInvitation()
         {
-            if (string.IsNullOrEmpty(UserName) || string.IsNullOrEmpty(Rol)
-                || string.IsNullOrEmpty(Code.ToString()))
-            {
-                throw new InputException("Enter a Invitation");
-            }
+            Validator validator = new Validator();
+            validator.ValidateString(UserName, "User name can not be empty or all spaces");
+            validator.ValidateString(Rol, "User rol can not be empty or all spaces");
         }
     }
 }

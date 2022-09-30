@@ -11,28 +11,29 @@ namespace StartUp.WebApi.Controllers
         [ApiController]
         public class OwnerController : ControllerBase
         {
-            private readonly IOwnerManager _ownerManager;
+            private readonly IOwnerService _ownerService;
 
-            public OwnerController(IOwnerManager manager)
+            public OwnerController(IOwnerService service)
             {
-                _ownerManager = manager;
+                _ownerService = service;
             }
 
             // Index - Get all owner (/api/owner)
             [HttpGet]
             public IActionResult GetOwner([FromQuery] OwnerSearchCriteriaModel searchCriteria)
             {
-                var retrievedOwners = _ownerManager.GetAllOwner(searchCriteria.ToEntity());
+                var retrievedOwners = _ownerService.GetAllOwner(searchCriteria.ToEntity());
                 return Ok(retrievedOwners.Select(o => new OwnerBasicModel(o)));
             }
 
             // Show - Get specific owner (/api/owner/{id})
-            [HttpGet]
+            [HttpGet("{id}")]
+
             public IActionResult GetOwner(int id)
             {
                 try
                 {
-                    var retrievedOwner = _ownerManager.GetSpecificOwner(id);
+                    var retrievedOwner = _ownerService.GetSpecificOwner(id);
                     return Ok(new OwnerDetailModel(retrievedOwner));
                 }
                 catch (ResourceNotFoundException e)
@@ -47,7 +48,7 @@ namespace StartUp.WebApi.Controllers
             {
                 try
                 {
-                    var createdOwner = _ownerManager.CreateOwner(newOwner.ToEntity());
+                    var createdOwner = _ownerService.CreateOwner(newOwner.ToEntity());
                     var ownerModel = new OwnerDetailModel(createdOwner);
                     return CreatedAtRoute("GetOwner", new { id = ownerModel.Id }, ownerModel);
                 }
@@ -63,7 +64,7 @@ namespace StartUp.WebApi.Controllers
             {
                 try
                 {
-                    var retrievedOwner = _ownerManager.UpdateOwner(id, updatedOwner.ToEntity());
+                    var retrievedOwner = _ownerService.UpdateOwner(id, updatedOwner.ToEntity());
                     return Ok(new OwnerDetailModel(retrievedOwner));
                 }
                 catch (InvalidResourceException e)
@@ -82,7 +83,7 @@ namespace StartUp.WebApi.Controllers
             {
                 try
                 {
-                    _ownerManager.DeleteOwner(id);
+                    _ownerService.DeleteOwner(id);
                     return Ok();
                 }
                 catch (ResourceNotFoundException e)

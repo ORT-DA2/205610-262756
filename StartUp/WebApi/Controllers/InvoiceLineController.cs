@@ -12,18 +12,18 @@ namespace StartUp.WebApi.Controllers
     [ApiController]
     public class InvoiceLineController : ControllerBase
     {
-        private readonly IInvoiceLineManager _invoiceLineManager;
+        private readonly IInvoiceLineService _invoiceLineService;
 
-        public InvoiceLineController(IInvoiceLineManager manager)
+        public InvoiceLineController(IInvoiceLineService service)
         {
-            _invoiceLineManager = manager;
+            _invoiceLineService = service;
         }
 
         // Index - Get all invoiceLine (/api/invoiceLine)
         [HttpGet]
         public IActionResult GetInvoiceLine([FromQuery] InvoiceLineSearchCriteriaModel searchCriteria)
         {
-            var retrievedInvoiceLine = _invoiceLineManager.GetAllInvoiceLine(searchCriteria.ToEntity());
+            var retrievedInvoiceLine = _invoiceLineService.GetAllInvoiceLine(searchCriteria.ToEntity());
             return Ok(retrievedInvoiceLine.Select(i => new InvoiceLineBasicModel(i)));
         }
 
@@ -33,7 +33,7 @@ namespace StartUp.WebApi.Controllers
         {
             try
             {
-                var retrievedInvoiceLine = _invoiceLineManager.GetSpecificInvoiceLine(id);
+                var retrievedInvoiceLine = _invoiceLineService.GetSpecificInvoiceLine(id);
                 return Ok(new InvoiceLineDetailModel(retrievedInvoiceLine));
             }
             catch (ResourceNotFoundException e)
@@ -48,7 +48,7 @@ namespace StartUp.WebApi.Controllers
         {
             try
             {
-                var createdInvoiceLine = _invoiceLineManager.CreateInvoiceLine(newInvoiceLine.ToEntity());
+                var createdInvoiceLine = _invoiceLineService.CreateInvoiceLine(newInvoiceLine.ToEntity());
                 var invoiceLineModel = new InvoiceLineDetailModel(createdInvoiceLine);
                 return CreatedAtRoute("GetInvoiceLine", new { id = invoiceLineModel.Id }, invoiceLineModel);
             }
@@ -64,7 +64,7 @@ namespace StartUp.WebApi.Controllers
         {
             try
             {
-                var retrievedInvoiceLine = _invoiceLineManager.UpdateInvoiceLine(id, updatedInvoiceLine.ToEntity());
+                var retrievedInvoiceLine = _invoiceLineService.UpdateInvoiceLine(id, updatedInvoiceLine.ToEntity());
                 return Ok(new InvoiceLineDetailModel(retrievedInvoiceLine));
             }
             catch (InvalidResourceException e)
@@ -83,7 +83,7 @@ namespace StartUp.WebApi.Controllers
         {
             try
             {
-                _invoiceLineManager.DeleteInvoiceLine(id);
+                _invoiceLineService.DeleteInvoiceLine(id);
                 return Ok();
             }
             catch (ResourceNotFoundException e)
