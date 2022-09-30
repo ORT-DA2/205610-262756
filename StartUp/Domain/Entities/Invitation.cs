@@ -22,11 +22,11 @@ namespace StartUp.Domain
             {
                 throw new InputException("Empty fields");
             }
-            if(Rol.ToLower() != "administrator" || Rol.ToLower() != "owner" || Rol.ToLower() != "employee")
+            if(Rol.ToLower() != "administrator" && Rol.ToLower() != "owner" && Rol.ToLower() != "employee")
             {
                 throw new InvalidResourceException("The user role must be administrator, owner or employee");
             }
-            if(Pharmacy == null && Rol != "Administrator")
+            if(Pharmacy == null && Rol != "administrator")
             {
                 throw new InvalidResourceException("Select a partner pharmacy for this type of user");
             }

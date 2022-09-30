@@ -22,7 +22,7 @@ namespace StartUp.DataAccess.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("StartUp.Domain.Administrator", b =>
+            modelBuilder.Entity("Domain.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -31,6 +31,10 @@ namespace StartUp.DataAccess.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
@@ -49,10 +53,12 @@ namespace StartUp.DataAccess.Migrations
 
                     b.HasIndex("InvitationId");
 
-                    b.ToTable("Administrators");
+                    b.ToTable("User");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("User");
                 });
 
-            modelBuilder.Entity("StartUp.Domain.Employee", b =>
+            modelBuilder.Entity("StartUp.Domain.Entities.Session", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -60,31 +66,36 @@ namespace StartUp.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("InvitationId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Password")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("PharmacyId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("RegisterDate")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("Username")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("InvitationId");
+                    b.ToTable("Session");
+                });
 
-                    b.HasIndex("PharmacyId");
+            modelBuilder.Entity("StartUp.Domain.Entities.TokenAccess", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.ToTable("Employees");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<Guid>("Token")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("TokenAccess");
                 });
 
             modelBuilder.Entity("StartUp.Domain.Invitation", b =>
@@ -98,13 +109,13 @@ namespace StartUp.DataAccess.Migrations
                     b.Property<int>("Code")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
                     b.Property<int?>("PharmacyId")
                         .HasColumnType("int");
 
                     b.Property<string>("Rol")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("State")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserName")
@@ -183,41 +194,6 @@ namespace StartUp.DataAccess.Migrations
                     b.HasIndex("PharmacyId");
 
                     b.ToTable("Medicines");
-                });
-
-            modelBuilder.Entity("StartUp.Domain.Owner", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("InvitationId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Password")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("PharmacyId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("RegisterDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("InvitationId");
-
-                    b.HasIndex("PharmacyId");
-
-                    b.ToTable("Owners");
                 });
 
             modelBuilder.Entity("StartUp.Domain.Petition", b =>
@@ -315,11 +291,43 @@ namespace StartUp.DataAccess.Migrations
 
                     b.HasIndex("MedicineId");
 
-                    b.ToTable("Symptom");
+                    b.ToTable("Symptoms");
                 });
 
             modelBuilder.Entity("StartUp.Domain.Administrator", b =>
                 {
+                    b.HasBaseType("Domain.User");
+
+                    b.HasDiscriminator().HasValue("Administrator");
+                });
+
+            modelBuilder.Entity("StartUp.Domain.Employee", b =>
+                {
+                    b.HasBaseType("Domain.User");
+
+                    b.Property<int?>("PharmacyId")
+                        .HasColumnType("int");
+
+                    b.HasIndex("PharmacyId");
+
+                    b.HasDiscriminator().HasValue("Employee");
+                });
+
+            modelBuilder.Entity("StartUp.Domain.Owner", b =>
+                {
+                    b.HasBaseType("Domain.User");
+
+                    b.Property<int?>("PharmacyId")
+                        .HasColumnType("int")
+                        .HasColumnName("Owner_PharmacyId");
+
+                    b.HasIndex("PharmacyId");
+
+                    b.HasDiscriminator().HasValue("Owner");
+                });
+
+            modelBuilder.Entity("Domain.User", b =>
+                {
                     b.HasOne("StartUp.Domain.Invitation", "Invitation")
                         .WithMany()
                         .HasForeignKey("InvitationId");
@@ -327,19 +335,13 @@ namespace StartUp.DataAccess.Migrations
                     b.Navigation("Invitation");
                 });
 
-            modelBuilder.Entity("StartUp.Domain.Employee", b =>
+            modelBuilder.Entity("StartUp.Domain.Entities.TokenAccess", b =>
                 {
-                    b.HasOne("StartUp.Domain.Invitation", "Invitation")
+                    b.HasOne("Domain.User", "User")
                         .WithMany()
-                        .HasForeignKey("InvitationId");
+                        .HasForeignKey("UserId");
 
-                    b.HasOne("StartUp.Domain.Pharmacy", "Pharmacy")
-                        .WithMany()
-                        .HasForeignKey("PharmacyId");
-
-                    b.Navigation("Invitation");
-
-                    b.Navigation("Pharmacy");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("StartUp.Domain.Invitation", b =>
@@ -371,21 +373,6 @@ namespace StartUp.DataAccess.Migrations
                         .HasForeignKey("PharmacyId");
                 });
 
-            modelBuilder.Entity("StartUp.Domain.Owner", b =>
-                {
-                    b.HasOne("StartUp.Domain.Invitation", "Invitation")
-                        .WithMany()
-                        .HasForeignKey("InvitationId");
-
-                    b.HasOne("StartUp.Domain.Pharmacy", "Pharmacy")
-                        .WithMany()
-                        .HasForeignKey("PharmacyId");
-
-                    b.Navigation("Invitation");
-
-                    b.Navigation("Pharmacy");
-                });
-
             modelBuilder.Entity("StartUp.Domain.Petition", b =>
                 {
                     b.HasOne("StartUp.Domain.Request", null)
@@ -405,6 +392,24 @@ namespace StartUp.DataAccess.Migrations
                     b.HasOne("StartUp.Domain.Medicine", null)
                         .WithMany("Symptoms")
                         .HasForeignKey("MedicineId");
+                });
+
+            modelBuilder.Entity("StartUp.Domain.Employee", b =>
+                {
+                    b.HasOne("StartUp.Domain.Pharmacy", "Pharmacy")
+                        .WithMany()
+                        .HasForeignKey("PharmacyId");
+
+                    b.Navigation("Pharmacy");
+                });
+
+            modelBuilder.Entity("StartUp.Domain.Owner", b =>
+                {
+                    b.HasOne("StartUp.Domain.Pharmacy", "Pharmacy")
+                        .WithMany()
+                        .HasForeignKey("PharmacyId");
+
+                    b.Navigation("Pharmacy");
                 });
 
             modelBuilder.Entity("StartUp.Domain.Medicine", b =>

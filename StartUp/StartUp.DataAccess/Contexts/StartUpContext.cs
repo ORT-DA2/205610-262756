@@ -2,6 +2,7 @@ using System.IO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using StartUp.Domain;
+using StartUp.Domain.Entities;
 
 namespace StartUp.DataAccess
 {
@@ -18,6 +19,8 @@ namespace StartUp.DataAccess
         public DbSet<Request> Requestes { get; set; }
         public DbSet<Sale> Sales { get; set; }
         public DbSet<Symptom> Symptoms { get; set; }
+        public DbSet<Session> Session { get; set; }
+        public DbSet<TokenAccess> TokenAccess { get; set; }
         
         public StartUpContext(DbContextOptions options) : base(options) { }
 

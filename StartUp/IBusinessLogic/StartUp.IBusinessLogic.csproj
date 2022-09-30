@@ -6,6 +6,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Domain\StartUp.Domain.csproj" />
+    <ProjectReference Include="..\StartUp.IDataAccess\StartUp.IDataAccess.csproj" />
+    <ProjectReference Include="..\StartUp.Models\StartUp.Models.csproj" />
   </ItemGroup>
 
   <ItemGroup>

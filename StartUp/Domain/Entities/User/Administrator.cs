@@ -10,6 +10,10 @@ namespace StartUp.Domain
     public class Administrator : User
     {
         public Administrator() { }
+
+        public override string GetType() { 
+            return "administrator"; 
+        }
         public void IsValidAdministrator()
         {
             if (string.IsNullOrEmpty(this.Email)
@@ -41,7 +45,7 @@ namespace StartUp.Domain
 
         public void VerifyInvitationStateIsAvailable()
         {
-            if (!Invitation.State.ToLower().Contains("available"))
+            if (!Invitation.State.ToString().ToLower().Contains("available"))
             {
                 throw new InputException("The invitation has already been used");
             }
@@ -56,7 +60,6 @@ namespace StartUp.Domain
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != GetType()) return false;
             return Equals((Administrator)obj);
         }
 

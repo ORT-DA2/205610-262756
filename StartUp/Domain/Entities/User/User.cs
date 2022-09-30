@@ -11,6 +11,8 @@ namespace Domain
         public string Address { get; set; }
         public DateTime RegisterDate { get; set; }
         public Invitation Invitation { get; set; }
+
+        public virtual string GetType() { return "user"; }
     }
 }
 

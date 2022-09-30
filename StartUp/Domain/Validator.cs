@@ -1,6 +1,7 @@
-﻿using StartUp.Exceptions;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Domain;
+using StartUp.Domain.Entities;
+using StartUp.Exceptions;
+using System;
 
 namespace StartUp.Domain
 {
@@ -14,9 +15,57 @@ namespace StartUp.Domain
             }
         }
 
+        public void ValidateToken(Guid token, string message)
+        {
+            if (string.IsNullOrEmpty(token.ToString()))
+            {
+                throw new InputException(message);
+            }
+        }
+
+        public void ValidateTokenAccess(TokenAccess token, string message)
+        {
+            if (token == null)
+            {
+                throw new InputException(message);
+            }
+        }
+
+        public void ValidateStringValue(string value, string message)
+        {
+            if (string.IsNullOrEmpty(value.ToString()))
+            {
+                throw new InputException(message);
+            }
+        }
+
         public void ValidateLengthString(string value, string message, int length)
         {
             if(value.Length > length)
+            {
+                throw new InputException(message);
+            }
+        }
+
+        public void ValidateUserNotNull(User user, string message)
+        {
+            if (user == null)
+            {
+                throw new InputException(message);
+            }
+        }
+
+        public void ValidateSessionNotNull(Session session, string message)
+        {
+            if (session == null)
+            {
+                throw new InputException(message);
+            }
+        }
+
+        public void ValidateStringEquals(string a, string b, string message)
+        {
+            if (a != b)
             {
                 throw new InputException(message);
             }

@@ -1,19 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using IBusinessLogic;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using StartUp.Exceptions;
 using StartUp.Models.Models.In;
 using StartUp.Models.Models.Out;
+using StartUp.WebApi.Filters;
 
 namespace StartUp.WebApi.Controllers
 {
 
     [Route("api/administrator")]
     [ApiController]
+    [RolFilter("administrator")]
     public class AdministratorController : ControllerBase
     {
         private readonly IAdministratorManager _adminManager;

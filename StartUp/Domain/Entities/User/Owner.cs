@@ -11,6 +11,11 @@ namespace StartUp.Domain
         public Pharmacy Pharmacy { get; set; }
 
         public Owner() { }
+
+        public override string GetType()
+        {
+            return "owner";
+        }
         public void isValidOwner()
         {
             if (Pharmacy == null || string.IsNullOrEmpty(this.Email)
@@ -23,7 +28,6 @@ namespace StartUp.Domain
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != GetType()) return false;
             return Equals((Owner)obj);
         }
 

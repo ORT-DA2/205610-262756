@@ -11,6 +11,11 @@ namespace StartUp.Domain
         public Pharmacy Pharmacy { get; set; }
 
         public Employee() { }
+
+        public override string GetType()
+        {
+            return "employee";
+        }
         public void isValidEmployee()
         {
             if (Pharmacy == null || string.IsNullOrEmpty(this.Email) 
@@ -24,7 +29,6 @@ namespace StartUp.Domain
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != GetType()) return false;
             return Equals((Employee)obj);
         }
 

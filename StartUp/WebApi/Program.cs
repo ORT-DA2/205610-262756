@@ -10,9 +10,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.RegisterServices();
 builder.Services.RegisterDataAccessServices();
 builder.Services.AddTransient<AuthorizationFilter>();
+builder.Services.AddTransient<RolFilter>();
 
-//builder.Services.AddControllers(options => options.Filters.Add(typeof(ExceptionFilter)));
-//builder.Services.AddControllers(options => options.Filters.Add(typeof(AuthorizationFilter)));
+builder.Services.AddControllers(options => options.Filters.Add(typeof(ExceptionFilter)));
+builder.Services.AddControllers(options => options.Filters.Add(typeof(RolFilter)));
+builder.Services.AddControllers(options => options.Filters.Add(typeof(AuthorizationFilter)));
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

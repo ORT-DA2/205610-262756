@@ -6,6 +6,7 @@ using StartUp.BusinessLogic;
 using StartUp.DataAccess;
 using StartUp.DataAccess.Repositories;
 using StartUp.Domain;
+using StartUp.Domain.Entities;
 using StartUp.IBusinessLogic;
 using StartUp.IDataAccess;
 
@@ -27,6 +28,9 @@ namespace StartUp.Factory
             serviceCollection.AddScoped<IRepository<Request>, RequestRepository>();
             serviceCollection.AddScoped<IRepository<Sale>, SaleRepository>();
             serviceCollection.AddScoped<IRepository<Symptom>, SymptomRepository>();
+            serviceCollection.AddScoped<IRepository<TokenAccess>, TokenRepository>();
+            serviceCollection.AddScoped<IRepository<Session>, SessionRepository>();
+            serviceCollection.AddScoped<IRepository<Rol>, RolRepository>();
         }
         public static void RegisterServices(this IServiceCollection serviceCollection)
         {
@@ -41,6 +45,8 @@ namespace StartUp.Factory
             serviceCollection.AddTransient<IRequestManager, RequestManager>();
             serviceCollection.AddTransient<ISaleManager, SaleManager>();
             serviceCollection.AddTransient<ISessionManager, SessionManager>();
+            serviceCollection.AddTransient<ITokenAccessManager, TokenAccessManager>();
+            serviceCollection.AddTransient<IRolManager, RolManager>();
         }
     }
 }
