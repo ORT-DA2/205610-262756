@@ -11,6 +11,11 @@ namespace StartUp.Domain
         public Pharmacy Pharmacy { get; set; }
 
         public Employee() { }
+
+        public override string GetType()
+        {
+            return "employee";
+        }
         public void isValidEmployee()
         {
             if (Pharmacy == null || string.IsNullOrEmpty(this.Email) 
@@ -18,6 +23,18 @@ namespace StartUp.Domain
                 || this.Invitation == null 
                 || string.IsNullOrEmpty(this.Password))
                 throw new InputException("empty");
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            return Equals((Employee)obj);
+        }
+
+        protected bool Equals(Employee other)
+        {
+            return Id == other?.Id;
         }
     }
 }

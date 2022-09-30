@@ -10,21 +10,6 @@ namespace StartUp.DataAccess.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Invitations",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Rol = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Code = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Invitations", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Pharmacies",
                 columns: table => new
                 {
@@ -51,50 +36,36 @@ namespace StartUp.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Administrators",
+                name: "Session",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RegisterDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    InvitationId = table.Column<int>(type: "int", nullable: true)
+                    Username = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Administrators", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Administrators_Invitations_InvitationId",
-                        column: x => x.InvitationId,
-                        principalTable: "Invitations",
-                        principalColumn: "Id");
+                    table.PrimaryKey("PK_Session", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Employees",
+                name: "Invitations",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    PharmacyId = table.Column<int>(type: "int", nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RegisterDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    InvitationId = table.Column<int>(type: "int", nullable: true)
+                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Rol = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Code = table.Column<int>(type: "int", nullable: false),
+                    State = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PharmacyId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Employees", x => x.Id);
+                    table.PrimaryKey("PK_Invitations", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Employees_Invitations_InvitationId",
-                        column: x => x.InvitationId,
-                        principalTable: "Invitations",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Employees_Pharmacies_PharmacyId",
+                        name: "FK_Invitations_Pharmacies_PharmacyId",
                         column: x => x.PharmacyId,
                         principalTable: "Pharmacies",
                         principalColumn: "Id");
@@ -127,34 +98,6 @@ namespace StartUp.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Owners",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    PharmacyId = table.Column<int>(type: "int", nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RegisterDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    InvitationId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Owners", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Owners_Invitations_InvitationId",
-                        column: x => x.InvitationId,
-                        principalTable: "Invitations",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Owners_Pharmacies_PharmacyId",
-                        column: x => x.PharmacyId,
-                        principalTable: "Pharmacies",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Requestes",
                 columns: table => new
                 {
@@ -168,6 +111,41 @@ namespace StartUp.DataAccess.Migrations
                     table.PrimaryKey("PK_Requestes", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Requestes_Pharmacies_PharmacyId",
+                        column: x => x.PharmacyId,
+                        principalTable: "Pharmacies",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "User",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RegisterDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    InvitationId = table.Column<int>(type: "int", nullable: true),
+                    Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PharmacyId = table.Column<int>(type: "int", nullable: true),
+                    Owner_PharmacyId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_User", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_User_Invitations_InvitationId",
+                        column: x => x.InvitationId,
+                        principalTable: "Invitations",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_User_Pharmacies_Owner_PharmacyId",
+                        column: x => x.Owner_PharmacyId,
+                        principalTable: "Pharmacies",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_User_Pharmacies_PharmacyId",
                         column: x => x.PharmacyId,
                         principalTable: "Pharmacies",
                         principalColumn: "Id");
@@ -199,7 +177,7 @@ namespace StartUp.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Symptom",
+                name: "Symptoms",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -209,9 +187,9 @@ namespace StartUp.DataAccess.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Symptom", x => x.Id);
+                    table.PrimaryKey("PK_Symptoms", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Symptom_Medicines_MedicineId",
+                        name: "FK_Symptoms_Medicines_MedicineId",
                         column: x => x.MedicineId,
                         principalTable: "Medicines",
                         principalColumn: "Id");
@@ -237,19 +215,28 @@ namespace StartUp.DataAccess.Migrations
                         principalColumn: "Id");
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Administrators_InvitationId",
-                table: "Administrators",
-                column: "InvitationId");
+            migrationBuilder.CreateTable(
+                name: "TokenAccess",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Token = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TokenAccess", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TokenAccess_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "Id");
+                });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Employees_InvitationId",
-                table: "Employees",
-                column: "InvitationId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Employees_PharmacyId",
-                table: "Employees",
+                name: "IX_Invitations_PharmacyId",
+                table: "Invitations",
                 column: "PharmacyId");
 
             migrationBuilder.CreateIndex(
@@ -268,16 +255,6 @@ namespace StartUp.DataAccess.Migrations
                 column: "PharmacyId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Owners_InvitationId",
-                table: "Owners",
-                column: "InvitationId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Owners_PharmacyId",
-                table: "Owners",
-                column: "PharmacyId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Petitions_RequestId",
                 table: "Petitions",
                 column: "RequestId");
@@ -288,42 +265,62 @@ namespace StartUp.DataAccess.Migrations
                 column: "PharmacyId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Symptom_MedicineId",
-                table: "Symptom",
+                name: "IX_Symptoms_MedicineId",
+                table: "Symptoms",
                 column: "MedicineId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TokenAccess_UserId",
+                table: "TokenAccess",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_User_InvitationId",
+                table: "User",
+                column: "InvitationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_User_Owner_PharmacyId",
+                table: "User",
+                column: "Owner_PharmacyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_User_PharmacyId",
+                table: "User",
+                column: "PharmacyId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Administrators");
-
-            migrationBuilder.DropTable(
-                name: "Employees");
-
-            migrationBuilder.DropTable(
                 name: "InvoiceLines");
-
-            migrationBuilder.DropTable(
-                name: "Owners");
 
             migrationBuilder.DropTable(
                 name: "Petitions");
 
             migrationBuilder.DropTable(
-                name: "Symptom");
+                name: "Session");
+
+            migrationBuilder.DropTable(
+                name: "Symptoms");
+
+            migrationBuilder.DropTable(
+                name: "TokenAccess");
 
             migrationBuilder.DropTable(
                 name: "Sales");
-
-            migrationBuilder.DropTable(
-                name: "Invitations");
 
             migrationBuilder.DropTable(
                 name: "Requestes");
 
             migrationBuilder.DropTable(
                 name: "Medicines");
+
+            migrationBuilder.DropTable(
+                name: "User");
+
+            migrationBuilder.DropTable(
+                name: "Invitations");
 
             migrationBuilder.DropTable(
                 name: "Pharmacies");

@@ -1,14 +1,18 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DbUp;
+using Microsoft.AspNetCore.Mvc;
 using StartUp.Exceptions;
 using StartUp.IBusinessLogic;
 using StartUp.Models.Models.In;
 using StartUp.Models.Models.Out;
+using StartUp.WebApi.Filters;
 using System.Linq;
 
 namespace StartUp.WebApi.Controllers
 {
     [Route("api/request")]
     [ApiController]
+    //[Filters(AuthorizationFilter())]
+    //SOLO PUEDEN TENER ACCESO LOS DUEÑOS Y EMPLEADOS
     public class RequestController : ControllerBase
     {
         private readonly IRequestService _requestService;
@@ -30,66 +34,34 @@ namespace StartUp.WebApi.Controllers
         [HttpGet("{id}", Name = "GetRequest")]
         public IActionResult GetRequest(int id)
         {
-            try
-            {
-                var retrievedRequest = _requestService.GetSpecificRequest(id);
-                return Ok(new RequestDetailModel(retrievedRequest));
-            }
-            catch (ResourceNotFoundException e)
-            {
-                return NotFound(e.Message);
-            }
+            var retrievedRequest = _requestService.GetSpecificRequest(id);
+            return Ok(new RequestDetailModel(retrievedRequest));
         }
 
         // Create - Create new request (/api/request)
         [HttpPost]
         public IActionResult CreateRequest([FromBody] RequestModel newRequest)
         {
-            try
-            {
-                var createdRequest = _requestService.CreateRequest(newRequest.ToEntity());
-                var requestModel = new RequestDetailModel(createdRequest);
-                return CreatedAtRoute("GetRequest", new { id = requestModel.Id }, requestModel);
-            }
-            catch (InvalidResourceException e)
-            {
-                return BadRequest(e.Message);
-            }
+            var createdRequest = _requestService.CreateRequest(newRequest.ToEntity());
+            var requestModel = new RequestDetailModel(createdRequest);
+            return CreatedAtRoute("GetRequest", new { id = requestModel.Id }, requestModel);
         }
 
         // Update - Update specific request (/api/request/{id})
         [HttpPut("{id}")]
+        //SOLO PUEDEN EDITAR LOS DUEÑOS
         public IActionResult Update(int id, [FromBody] RequestModel updatedRequest)
         {
-            try
-            {
-                var retrievedRequest = _requestService.UpdateRequest(id, updatedRequest.ToEntity());
-                return Ok(new RequestDetailModel(retrievedRequest));
-            }
-            catch (InvalidResourceException e)
-            {
-                return BadRequest(e.Message);
-            }
-            catch (ResourceNotFoundException e)
-            {
-                return NotFound(e.Message);
-            }
+            var retrievedRequest = _requestService.UpdateRequest(id, updatedRequest.ToEntity());
+            return Ok(new RequestDetailModel(retrievedRequest));
         }
 
         // Delete - Delete specific request (/api/request/{id})
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            try
-            {
-                _requestService.DeleteRequest(id);
-                return Ok();
-            }
-            catch (ResourceNotFoundException e)
-            {
-                return NotFound(e.Message);
-            }
+            _requestService.DeleteRequest(id);
+            return Ok();
         }
-
     }
 }

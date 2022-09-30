@@ -10,7 +10,11 @@ namespace StartUp.Domain
     public class Administrator : User
     {
         public Administrator() { }
-        public bool isValidAdministrator()
+
+        public override string GetType() { 
+            return "administrator"; 
+        }
+        public void IsValidAdministrator()
         {
             if (string.IsNullOrEmpty(this.Email)
                 || string.IsNullOrEmpty(this.Address)
@@ -19,11 +23,14 @@ namespace StartUp.Domain
             {
                 throw new InvalidResourceException("Empty fields");
             }
-            return true;
+            if (!EmailIsValid(this.Email))
+            {
+                throw new ResourceNotFoundException("Email incorrect");
+            }
         }
 
         public bool EmailIsValid(string emailAddress)
-        {/*
+        {
             try
             {
                 MailAddress m = new MailAddress(emailAddress);
@@ -33,8 +40,32 @@ namespace StartUp.Domain
             catch (FormatException)
             {
                 return false;
-            }*/
-            return true;
+            }
+        }
+
+        public void VerifyInvitationStateIsAvailable()
+        {
+            if (!Invitation.State.ToString().ToLower().Contains("available"))
+            {
+                throw new InputException("The invitation has already been used");
+            }
+        }
+
+        public void ChangeStatusInvitation()
+        {
+            Invitation.State = "Not available";
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            return Equals((Administrator)obj);
+        }
+
+        protected bool Equals(Administrator other)
+        {
+            return Email == other?.Email;
         }
     }
 }

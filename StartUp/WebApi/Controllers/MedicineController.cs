@@ -31,65 +31,33 @@ namespace StartUp.WebApi.Controllers
         [HttpGet("{id}")]
         public IActionResult GetMedicine(int id)
         {
-            try
-            {
-                var retrievedMedicine = _medicineService.GetSpecificMedicine(id);
-                return Ok(new MedicineDetailModel(retrievedMedicine));
-            }
-            catch (ResourceNotFoundException e)
-            {
-                return NotFound(e.Message);
-            }
+            var retrievedMedicine = _medicineService.GetSpecificMedicine(id);
+            return Ok(new MedicineDetailModel(retrievedMedicine));
         }
 
         // Create - Create new medicine (/api/medicine)
         [HttpPost]
         public IActionResult CreateMedicine([FromBody] MedicineModel newMedicine)
         {
-            try
-            {
-                var createdMedicine = _medicineService.CreateMedicine(newMedicine.ToEntity());
-                var medicineModel = new MedicineDetailModel(createdMedicine);
-                return CreatedAtRoute("GetMedicine", new { id = medicineModel.Id }, medicineModel);
-            }
-            catch (InvalidResourceException e)
-            {
-                return BadRequest(e.Message);
-            }
+            var createdMedicine = _medicineService.CreateMedicine(newMedicine.ToEntity());
+            var medicineModel = new MedicineDetailModel(createdMedicine);
+            return CreatedAtRoute("GetMedicine", new { id = medicineModel.Id }, medicineModel);
         }
 
         // Update - Update specific medicine (/api/medicine/{id})
         [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody] MedicineModel updatedMedicine)
         {
-            try
-            {
-                var retrievedMedicine = _medicineService.UpdateMedicine(id, updatedMedicine.ToEntity());
-                return Ok(new MedicineDetailModel(retrievedMedicine));
-            }
-            catch (InvalidResourceException e)
-            {
-                return BadRequest(e.Message);
-            }
-            catch (ResourceNotFoundException e)
-            {
-                return NotFound(e.Message);
-            }
+            var retrievedMedicine = _medicineService.UpdateMedicine(id, updatedMedicine.ToEntity());
+            return Ok(new MedicineDetailModel(retrievedMedicine));
         }
 
         // Delete - Delete specific medicine (/api/medicine/{id})
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            try
-            {
-                _medicineService.DeleteMedicine(id);
-                return Ok();
-            }
-            catch (ResourceNotFoundException e)
-            {
-                return NotFound(e.Message);
-            }
+            _medicineService.DeleteMedicine(id);
+            return Ok();
         }
     }
 }

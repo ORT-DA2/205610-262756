@@ -50,17 +50,21 @@ namespace BusinessLogic
 
         public Administrator CreateAdministrator(Administrator admin)
         {
-            admin.isValidAdministrator();
+            admin.IsValidAdministrator();
+            EmailNotExistInDataBase(admin);
+            admin.VerifyInvitationStateIsAvailable();
 
             _adminRepository.InsertOne(admin);
             _adminRepository.Save();
+
+            admin.ChangeStatusInvitation();
 
             return admin;
         }
 
         public Administrator UpdateAdministrator(int adminId, Administrator updatedAdmin)
         {
-            updatedAdmin.isValidAdministrator();
+            updatedAdmin.IsValidAdministrator();
 
             var adminStored = GetSpecificAdministrator(adminId);
 
@@ -84,5 +88,17 @@ namespace BusinessLogic
             _adminRepository.DeleteOne(adminStored);
             _adminRepository.Save();
         }
+
+        ///////////
+        private void EmailNotExistInDataBase(Administrator admin)
+        {
+            Administrator administratorSaved = _adminRepository.GetOneByExpression(a => a == admin);
+
+            if (administratorSaved != null)
+            {
+                throw new ResourceNotFoundException($"There is already an administrator with { admin.Email} email");
+            }
+        }
+
     }
 }

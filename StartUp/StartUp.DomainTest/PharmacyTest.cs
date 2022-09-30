@@ -1,10 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using StartUp.Domain;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StartUp.DomainTest
 {
@@ -15,6 +11,8 @@ namespace StartUp.DomainTest
         List<Medicine> medicines;
         Request request;
         List<Request> requests;
+
+
         [TestInitialize]
         public void Setup()
         {
@@ -41,10 +39,41 @@ namespace StartUp.DomainTest
         }
 
         [TestMethod]
-        [ExpectedException(typeof(StartUp.Exceptions.InputException))]
-        public void NewPharmacyTestNameNull()
+        [ExpectedException(typeof(Exceptions.InputException))]
+        public void NewPharmacyWithoutNameTest()
         {
-            Pharmacy pharmacy = new Pharmacy(null, "Carlos Maria Ramirez 106", null, requests);
+            Pharmacy pharmacy = new Pharmacy("", "Carlos Maria Ramirez 106", medicines, requests);
+
+            pharmacy.isValidPharmacy();
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(Exceptions.InputException))]
+        public void NewPharmacyWithoutAddressTest()
+        {
+            Pharmacy pharmacy = new Pharmacy("Una farmacia", "", medicines, requests);
+
+            pharmacy.isValidPharmacy();
+        }
+
+
+        [TestMethod]
+        [ExpectedException(typeof(Exceptions.InputException))]
+        public void NewPharmacyWithoutMedicinesTest()
+        {
+            Pharmacy pharmacy = new Pharmacy("Una farmacia", "18 de julio", null, requests);
+
+            pharmacy.isValidPharmacy();
+        }
+
+
+        [TestMethod]
+        [ExpectedException(typeof(Exceptions.InputException))]
+        public void NewPharmacyWithoutRequestTest()
+        {
+            Pharmacy pharmacy = new Pharmacy("Una farmacia", "Arenal grande", medicines, null);
+
+            pharmacy.isValidPharmacy();
         }
 
     }

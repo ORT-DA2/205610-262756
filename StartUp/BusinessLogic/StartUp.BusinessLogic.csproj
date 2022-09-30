@@ -7,11 +7,13 @@
   <ItemGroup>
     <ProjectReference Include="..\Domain\StartUp.Domain.csproj" />
     <ProjectReference Include="..\IBusinessLogic\StartUp.IBusinessLogic.csproj" />
+    <ProjectReference Include="..\StartUp.DataAccess\StartUp.DataAccess.csproj" />
     <ProjectReference Include="..\StartUp.Exceptions\StartUp.Exceptions.csproj" />
     <ProjectReference Include="..\StartUp.IDataAccess\StartUp.IDataAccess.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.2.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

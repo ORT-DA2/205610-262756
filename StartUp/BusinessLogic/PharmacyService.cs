@@ -25,13 +25,13 @@ namespace StartUp.BusinessLogic
         {
             var nameCriteria = searchCriteria.Name?.ToLower() ?? string.Empty;
             var addressCriteria = searchCriteria.Address?.ToLower() ?? string.Empty;
-            //   HAY QUE AGREGAR LAS LISTAS DE MEDICAMENTOS Y SOLICITUDES?
-            // var stockCriteria = searchCriteria.Stock?.ToString() ?? string.Empty;
-            //var requestCriteria = searchCriteria.Requests?.ToString() ?? string.Empty;
+            var stockCriteria = searchCriteria.Stock ?? null;
+            var requestCriteria = searchCriteria.Requests ?? null;
 
             Expression<Func<Pharmacy, bool>> pharmacyFilter = pharmacy =>
                 pharmacy.Name.ToLower().Contains(nameCriteria) &&
-                pharmacy.Address.ToLower().Contains(addressCriteria);
+                pharmacy.Address.ToLower().Contains(addressCriteria) &&
+                pharmacy.Stock == stockCriteria && pharmacy.Requests == requestCriteria;
 
             return _pharmacyRepository.GetAllByExpression(pharmacyFilter).ToList();
         }
@@ -51,6 +51,7 @@ namespace StartUp.BusinessLogic
         public Pharmacy CreatePharmacy(Pharmacy pharmacy)
         {
             pharmacy.isValidPharmacy();
+            notExistInDataBase(pharmacy);
 
             _pharmacyRepository.InsertOne(pharmacy);
             _pharmacyRepository.Save();
@@ -79,6 +80,17 @@ namespace StartUp.BusinessLogic
 
             _pharmacyRepository.DeleteOne(pharmacyStored);
             _pharmacyRepository.Save();
+        }
+
+        //metodos agregados despues de hacer la interfaz
+        public void notExistInDataBase(Pharmacy pharmacy)
+        {
+            var pharmacySaved = _pharmacyRepository.GetOneByExpression(p => p == pharmacy);
+
+            if (pharmacySaved != null)
+            {
+                throw new InputException("Currently there is a pharmacy with that name");
+            }
         }
     }
 }

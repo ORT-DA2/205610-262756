@@ -9,13 +9,13 @@ namespace StartUp.Domain
     public class Pharmacy
     {
         public int Id { get; set; }
-        
+
         public string Name { get; set; }
-        
+
         public string Address { get; set; }
 
         public List<Medicine> Stock { get; set; }
-       
+
         public List<Request> Requests { get; set; }
 
 
@@ -31,9 +31,26 @@ namespace StartUp.Domain
 
         public void isValidPharmacy()
         {
-            if (string.IsNullOrEmpty(Name) || string.IsNullOrEmpty(Address) ||
-                    Stock==null || Requests==null)
-                throw new InputException("Name or address or stock empty");
+
+            Validator validator = new Validator();
+            validator.ValidateString(Name, "Name can not be empty or all spaces");
+            validator.ValidateString(Address, "Address can not be empty or all spaces");
+            validator.ValidateLengthString(Name, "The name of the pharmacy must not exceed 50 characters", 50);
+            //validator.ValidateNotNull(Stock, "The list of medicines must be created");
+            //validator.ValidateNotNull(Requests, "The list of request must be created");
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != GetType()) return false;
+            return Equals((Pharmacy)obj);
+        }
+
+        protected bool Equals(Pharmacy other)
+        {
+            return Name == other?.Name;
         }
     }
 
