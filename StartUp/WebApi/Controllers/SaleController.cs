@@ -11,18 +11,18 @@ namespace StartUp.WebApi.Controllers
     [ApiController]
     public class SaleController : ControllerBase
     {
-        private readonly ISaleManager _saleManager;
+        private readonly ISaleService _saleService;
 
-        public SaleController(ISaleManager manager)
+        public SaleController(ISaleService service)
         {
-            _saleManager = manager;
+            _saleService = service;
         }
 
         // Index - Get all sale (/api/sale)
         [HttpGet]
         public IActionResult GetSale([FromQuery] SaleSearchCriteriaModel searchCriteria)
         {
-            var retrievedSale = _saleManager.GetAllSale(searchCriteria.ToEntity());
+            var retrievedSale = _saleService.GetAllSale(searchCriteria.ToEntity());
             return Ok(retrievedSale.Select(s => new SaleBasicModel(s)));
         }
 
@@ -30,7 +30,7 @@ namespace StartUp.WebApi.Controllers
         [HttpGet("{id}", Name = "GetSale")]
         public IActionResult GetSale(int id)
         {
-            var retrievedSale = _saleManager.GetSpecificSale(id);
+            var retrievedSale = _saleService.GetSpecificSale(id);
             return Ok(new SaleDetailModel(retrievedSale));
         }
 
@@ -38,7 +38,7 @@ namespace StartUp.WebApi.Controllers
         [HttpPost]
         public IActionResult CreateSale([FromBody] SaleModel newSale)
         {
-            var createdSale = _saleManager.CreateSale(newSale.ToEntity());
+            var createdSale = _saleService.CreateSale(newSale.ToEntity());
             var saleModel = new SaleDetailModel(createdSale);
             return CreatedAtRoute("GetSale", new { id = saleModel.Id }, saleModel);
         }
@@ -47,7 +47,7 @@ namespace StartUp.WebApi.Controllers
         [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody] SaleModel updatedSale)
         {
-            var retrievedSale = _saleManager.UpdateSale(id, updatedSale.ToEntity());
+            var retrievedSale = _saleService.UpdateSale(id, updatedSale.ToEntity());
             return Ok(new SaleDetailModel(retrievedSale));
         }
 
@@ -55,7 +55,7 @@ namespace StartUp.WebApi.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            _saleManager.DeleteSale(id);
+            _saleService.DeleteSale(id);
             return Ok();
         }
     }

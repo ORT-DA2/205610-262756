@@ -15,12 +15,12 @@ namespace StartUp.WebApi.UnitTest
     [TestClass]
     public class InvitationControllerTest
     {
-        private Mock<IInvitationManager> _managerMock;
+        private Mock<IInvitationService> _managerMock;
 
         [TestInitialize]
         public void Setup()
         {
-            _managerMock = new Mock<IInvitationManager>(MockBehavior.Strict);
+            _managerMock = new Mock<IInvitationService>(MockBehavior.Strict);
         }
 
         [TestCleanup]

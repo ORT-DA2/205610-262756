@@ -13,18 +13,18 @@ namespace StartUp.WebApi.Controllers
     [RolFilter("administrator")]
     public class AdministratorController : ControllerBase
     {
-        private readonly IAdministratorManager _adminManager;
+        private readonly IAdministratorService _adminService;
 
-        public AdministratorController(IAdministratorManager manager)
+        public AdministratorController(IAdministratorService service)
         {
-            _adminManager = manager;
+            _adminService = service;
         }
 
         // Index - Get all administrator (/api/administrator)
         [HttpGet]
         public IActionResult GetAdministrator([FromQuery] AdministratorSearchCriteriaModel searchCriteria)
         {
-            var retrievedAdmins = _adminManager.GetAllAdministrator(searchCriteria.ToEntity());
+            var retrievedAdmins = _adminService.GetAllAdministrator(searchCriteria.ToEntity());
             return Ok(retrievedAdmins.Select(a => new AdministratorBasicModel(a)));
         }
 
@@ -32,7 +32,7 @@ namespace StartUp.WebApi.Controllers
         [HttpGet("{id}", Name = "GetAdmin")]
         public IActionResult GetAdministrator(int id)
         {
-            var retrievedAdmin = _adminManager.GetSpecificAdministrator(id);
+            var retrievedAdmin = _adminService.GetSpecificAdministrator(id);
             return Ok(new AdministratorDetailModel(retrievedAdmin));
         }
 
@@ -40,7 +40,7 @@ namespace StartUp.WebApi.Controllers
         [HttpPost]
         public IActionResult CreateAdministrator([FromBody] AdministratorModel newAdministrator)
         {
-            var createdAdministrator = _adminManager.CreateAdministrator(newAdministrator.ToEntity());
+            var createdAdministrator = _adminService.CreateAdministrator(newAdministrator.ToEntity());
             var adminModel = new AdministratorDetailModel(createdAdministrator);
             return CreatedAtRoute("GetAdmin", new { id = adminModel.Id }, adminModel);
         }
@@ -49,7 +49,7 @@ namespace StartUp.WebApi.Controllers
         [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody] AdministratorModel updatedAdmin)
         {
-            var retrievedAdmin = _adminManager.UpdateAdministrator(id, updatedAdmin.ToEntity());
+            var retrievedAdmin = _adminService.UpdateAdministrator(id, updatedAdmin.ToEntity());
             return Ok(new AdministratorDetailModel(retrievedAdmin));
         }
 
@@ -57,7 +57,7 @@ namespace StartUp.WebApi.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            _adminManager.DeleteAdministrator(id);
+            _adminService.DeleteAdministrator(id);
             return Ok();
         }
     }

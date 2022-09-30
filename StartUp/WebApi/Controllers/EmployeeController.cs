@@ -12,18 +12,18 @@ namespace StartUp.WebApi.Controllers
     [ApiController]
     public class EmployeeController : ControllerBase
     {
-        private readonly IEmployeeManager _employeeManager;
+        private readonly IEmployeeService _employeeService;
 
-        public EmployeeController(IEmployeeManager manager)
+        public EmployeeController(IEmployeeService service)
         {
-            _employeeManager = manager;
+            _employeeService = service;
         }
 
         // Index - Get all employee (/api/employee)
         [HttpGet]
         public IActionResult GetEmployee([FromQuery] EmployeeSearchCriteriaModel searchCriteria)
         {
-            var retrievedEmployees = _employeeManager.GetAllEmployee(searchCriteria.ToEntity());
+            var retrievedEmployees = _employeeService.GetAllEmployee(searchCriteria.ToEntity());
             return Ok(retrievedEmployees.Select(e => new EmployeeBasicModel(e)));
         }
 
@@ -31,7 +31,7 @@ namespace StartUp.WebApi.Controllers
         [HttpGet("{id}", Name = "GetEmployee")]
         public IActionResult GetEmployee(int id)
         {
-            var retrievedEmployee = _employeeManager.GetSpecificEmployee(id);
+            var retrievedEmployee = _employeeService.GetSpecificEmployee(id);
             return Ok(new EmployeeDetailModel(retrievedEmployee));
         }
 
@@ -40,7 +40,7 @@ namespace StartUp.WebApi.Controllers
         [HttpPost]
         public IActionResult CreateEmployee([FromBody] EmployeeModel newEmployee)
         {
-            var createdEmployee = _employeeManager.CreateEmployee(newEmployee.ToEntity());
+            var createdEmployee = _employeeService.CreateEmployee(newEmployee.ToEntity());
             var employeeModel = new EmployeeDetailModel(createdEmployee);
             return CreatedAtRoute("GetEmployee", new { id = employeeModel.Id }, employeeModel);
         }
@@ -49,7 +49,7 @@ namespace StartUp.WebApi.Controllers
         [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody] EmployeeModel updatedEmployee)
         {
-            var retrievedEmployee = _employeeManager.UpdateEmployee(id, updatedEmployee.ToEntity());
+            var retrievedEmployee = _employeeService.UpdateEmployee(id, updatedEmployee.ToEntity());
             return Ok(new EmployeeDetailModel(retrievedEmployee));
         }
 
@@ -57,7 +57,7 @@ namespace StartUp.WebApi.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteEmployee(int id)
         {
-            _employeeManager.DeleteEmployee(id);
+            _employeeService.DeleteEmployee(id);
             return Ok();
         }
     }

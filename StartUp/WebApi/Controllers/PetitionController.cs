@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StartUp.Exceptions;
 using StartUp.IBusinessLogic;
-using StartUp.Models.Models.In;
+using StartUp.Models.Models.In;using
 using StartUp.Models.Models.Out;
 using System.Linq;
 
@@ -11,18 +11,18 @@ namespace StartUp.WebApi.Controllers
     [ApiController]
     public class PetitionController : ControllerBase
     {
-        private readonly IPetitionManager _petitionManager;
+        private readonly IPetitionService _petitionService;
 
-        public PetitionController(IPetitionManager manager)
+        public PetitionController(IPetitionService service)
         {
-            _petitionManager = manager;
+            _petitionService = service;
         }
 
         // Index - Get all petition (/api/petition)
         [HttpGet]
         public IActionResult GetPetition([FromQuery] PetitionSearchCriteriaModel searchCriteria)
         {
-            var retrievedPetition = _petitionManager.GetAllPetition(searchCriteria.ToEntity());
+            var retrievedPetition = _petitionService.GetAllPetition(searchCriteria.ToEntity());
             return Ok(retrievedPetition.Select(p => new PetitionBasicModel(p)));
         }
 
@@ -30,7 +30,7 @@ namespace StartUp.WebApi.Controllers
         [HttpGet("{id}", Name = "GetPetition")]
         public IActionResult GetPetition(int id)
         {
-            var retrievedPetition = _petitionManager.GetSpecificPetition(id);
+            var retrievedPetition = _petitionService.GetSpecificPetition(id);
             return Ok(new PetitionDetailModel(retrievedPetition));
         }
 
@@ -38,7 +38,7 @@ namespace StartUp.WebApi.Controllers
         [HttpPost]
         public IActionResult CreatePetition([FromBody] PetitionModel newPetition)
         {
-            var createdPetition = _petitionManager.CreatePetition(newPetition.ToEntity());
+            var createdPetition = _petitionService.CreatePetition(newPetition.ToEntity());
             var petitionModel = new PetitionDetailModel(createdPetition);
             return CreatedAtRoute("GetPetition", new { id = petitionModel.Id }, petitionModel);
         }
@@ -47,7 +47,7 @@ namespace StartUp.WebApi.Controllers
         [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody] PetitionModel updatedPetition)
         {
-            var retrievedPetition = _petitionManager.UpdatePetition(id, updatedPetition.ToEntity());
+            var retrievedPetition = _petitionService.UpdatePetition(id, updatedPetition.ToEntity());
             return Ok(new PetitionDetailModel(retrievedPetition));
         }
 
@@ -55,7 +55,7 @@ namespace StartUp.WebApi.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            _petitionManager.DeletePetition(id);
+            _petitionService.DeletePetition(id);
             return Ok();
         }
     }

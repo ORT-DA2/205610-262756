@@ -11,12 +11,12 @@ namespace StartUp.WebApi.UnitTest
     [TestClass]
     public class OwnerControllerTest
     {
-        private Mock<IOwnerManager> _managerMock;
+        private Mock<IOwnerService> _managerMock;
 
         [TestInitialize]
         public void Setup()
         {
-            _managerMock = new Mock<IOwnerManager>(MockBehavior.Strict);
+            _managerMock = new Mock<IOwnerService>(MockBehavior.Strict);
         }
 
         [TestCleanup]

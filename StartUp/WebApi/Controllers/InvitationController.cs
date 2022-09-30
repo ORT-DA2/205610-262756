@@ -15,9 +15,9 @@ namespace StartUp.WebApi.Controllers
     //SOLO TIENEN ACCESO LOS ADMINISTRADORES
     public class InvitationController : ControllerBase
     {
-        private readonly IInvitationManager _invitationManager;
+        private readonly IInvitationService _invitationManager;
 
-        public InvitationController(IInvitationManager manager)
+        public InvitationController(IInvitationService manager)
         {
             _invitationManager = manager;
         }

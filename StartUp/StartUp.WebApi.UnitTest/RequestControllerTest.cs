@@ -15,12 +15,12 @@ namespace StartUp.WebApi.UnitTest
     [TestClass]
     public class RequestControllerTest
     {
-        private Mock<IRequestManager> _managerMock;
+        private Mock<IRequestService> _managerMock;
 
         [TestInitialize]
         public void Setup()
         {
-            _managerMock = new Mock<IRequestManager>(MockBehavior.Strict);
+            _managerMock = new Mock<IRequestService>(MockBehavior.Strict);
         }
 
         [TestCleanup]

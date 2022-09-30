@@ -11,18 +11,18 @@ namespace StartUp.WebApi.Controllers
     [ApiController]
     public class OwnerController : ControllerBase
     {
-        private readonly IOwnerManager _ownerManager;
+        private readonly IOwnerService _ownerService;
 
-        public OwnerController(IOwnerManager manager)
+        public OwnerController(IOwnerService manager)
         {
-            _ownerManager = manager;
+            _ownerService = manager;
         }
 
         // Index - Get all owner (/api/owner)
         [HttpGet]
         public IActionResult GetOwner([FromQuery] OwnerSearchCriteriaModel searchCriteria)
         {
-            var retrievedOwners = _ownerManager.GetAllOwner(searchCriteria.ToEntity());
+            var retrievedOwners = _ownerService.GetAllOwner(searchCriteria.ToEntity());
             return Ok(retrievedOwners.Select(o => new OwnerBasicModel(o)));
         }
 
@@ -30,7 +30,7 @@ namespace StartUp.WebApi.Controllers
         [HttpGet("{id}")]
         public IActionResult GetOwner(int id)
         {
-            var retrievedOwner = _ownerManager.GetSpecificOwner(id);
+            var retrievedOwner = _ownerService.GetSpecificOwner(id);
             return Ok(new OwnerDetailModel(retrievedOwner));
         }
 
@@ -38,7 +38,7 @@ namespace StartUp.WebApi.Controllers
         [HttpPost]
         public IActionResult CreateOwner([FromBody] OwnerModel newOwner)
         {
-            var createdOwner = _ownerManager.CreateOwner(newOwner.ToEntity());
+            var createdOwner = _ownerService.CreateOwner(newOwner.ToEntity());
             var ownerModel = new OwnerDetailModel(createdOwner);
             return CreatedAtRoute("GetOwner", new { id = ownerModel.Id }, ownerModel);
         }
@@ -47,7 +47,7 @@ namespace StartUp.WebApi.Controllers
         [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody] OwnerModel updatedOwner)
         {
-            var retrievedOwner = _ownerManager.UpdateOwner(id, updatedOwner.ToEntity());
+            var retrievedOwner = _ownerService.UpdateOwner(id, updatedOwner.ToEntity());
             return Ok(new OwnerDetailModel(retrievedOwner));
         }
 
@@ -55,7 +55,7 @@ namespace StartUp.WebApi.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            _ownerManager.DeleteOwner(id);
+            _ownerService.DeleteOwner(id);
             return Ok();
         }
     }

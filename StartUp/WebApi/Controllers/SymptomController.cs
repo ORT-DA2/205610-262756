@@ -11,18 +11,18 @@ namespace StartUp.WebApi.Controllers
     [ApiController]
     public class SymptomController : ControllerBase
     {
-        private readonly ISymptomManager _symptomManager;
+        private readonly ISymptomService _symptomService;
 
-        public SymptomController(ISymptomManager manager)
+        public SymptomController(ISymptomService service)
         {
-            _symptomManager = manager;
+            _symptomService = service;
         }
 
         // Index - Get all symptom (/api/symptom)
         [HttpGet]
         public IActionResult GetSymptom([FromQuery] SymptomSearchCriteriaModel searchCriteria)
         {
-            var retrievedSymptom = _symptomManager.GetAllSymptom(searchCriteria.ToEntity());
+            var retrievedSymptom = _symptomService.GetAllSymptom(searchCriteria.ToEntity());
             return Ok(retrievedSymptom.Select(s => new SymptomBasicModel(s)));
         }
 
@@ -30,7 +30,7 @@ namespace StartUp.WebApi.Controllers
         [HttpGet("{id}", Name = "GetSymptom")]
         public IActionResult GetSymptom(int id)
         {
-            var retrievedSymptom = _symptomManager.GetSpecificSymptom(id);
+            var retrievedSymptom = _symptomService.GetSpecificSymptom(id);
             return Ok(new SymptomDetailModel(retrievedSymptom));
         }
 
@@ -38,7 +38,7 @@ namespace StartUp.WebApi.Controllers
         [HttpPost]
         public IActionResult CreateSymptom([FromBody] SymptomModel newSymptom)
         {
-            var createdSymptom = _symptomManager.CreateSymptom(newSymptom.ToEntity());
+            var createdSymptom = _symptomService.CreateSymptom(newSymptom.ToEntity());
             var symptomModel = new SymptomDetailModel(createdSymptom);
             return CreatedAtRoute("GetSymptom", new { id = symptomModel.Id }, symptomModel);
         }
@@ -47,7 +47,7 @@ namespace StartUp.WebApi.Controllers
         [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody] SymptomModel updatedSymptom)
         {
-            var retrievedSymptom = _symptomManager.UpdateSymptom(id, updatedSymptom.ToEntity());
+            var retrievedSymptom = _symptomService.UpdateSymptom(id, updatedSymptom.ToEntity());
             return Ok(new SymptomDetailModel(retrievedSymptom));
         }
 
@@ -55,7 +55,7 @@ namespace StartUp.WebApi.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteSymptom(int id)
         {
-            _symptomManager.DeleteSymptom(id);
+            _symptomService.DeleteSymptom(id);
             return Ok();
         }
     }

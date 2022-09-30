@@ -15,12 +15,12 @@ namespace StartUp.WebApi.UnitTest
     [TestClass]
     public class MedicineControllerTest
     {
-        private Mock<IMedicineManager> _managerMock;
+        private Mock<IMedicineService> _managerMock;
 
         [TestInitialize]
         public void Setup()
         {
-            _managerMock = new Mock<IMedicineManager>(MockBehavior.Strict);
+            _managerMock = new Mock<IMedicineService>(MockBehavior.Strict);
         }
 
         [TestCleanup]

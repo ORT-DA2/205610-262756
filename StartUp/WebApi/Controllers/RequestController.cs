@@ -15,18 +15,18 @@ namespace StartUp.WebApi.Controllers
     //SOLO PUEDEN TENER ACCESO LOS DUEÑOS Y EMPLEADOS
     public class RequestController : ControllerBase
     {
-        private readonly IRequestManager _requestManager;
+        private readonly IRequestService _requestService;
 
-        public RequestController(IRequestManager manager)
+        public RequestController(IRequestService service)
         {
-            _requestManager = manager;
+            _requestService = service;
         }
 
         // Index - Get all request (/api/request)
         [HttpGet]
         public IActionResult GetRequest([FromQuery] RequestSearchCriteriaModels searchCriteria)
         {
-            var retrievedRequest = _requestManager.GetAllRequest(searchCriteria.ToEntity());
+            var retrievedRequest = _requestService.GetAllRequest(searchCriteria.ToEntity());
             return Ok(retrievedRequest.Select(r => new RequestBasicModel(r)));
         }
 
@@ -34,7 +34,7 @@ namespace StartUp.WebApi.Controllers
         [HttpGet("{id}", Name = "GetRequest")]
         public IActionResult GetRequest(int id)
         {
-            var retrievedRequest = _requestManager.GetSpecificRequest(id);
+            var retrievedRequest = _requestService.GetSpecificRequest(id);
             return Ok(new RequestDetailModel(retrievedRequest));
         }
 
@@ -42,7 +42,7 @@ namespace StartUp.WebApi.Controllers
         [HttpPost]
         public IActionResult CreateRequest([FromBody] RequestModel newRequest)
         {
-            var createdRequest = _requestManager.CreateRequest(newRequest.ToEntity());
+            var createdRequest = _requestService.CreateRequest(newRequest.ToEntity());
             var requestModel = new RequestDetailModel(createdRequest);
             return CreatedAtRoute("GetRequest", new { id = requestModel.Id }, requestModel);
         }
@@ -52,7 +52,7 @@ namespace StartUp.WebApi.Controllers
         //SOLO PUEDEN EDITAR LOS DUEÑOS
         public IActionResult Update(int id, [FromBody] RequestModel updatedRequest)
         {
-            var retrievedRequest = _requestManager.UpdateRequest(id, updatedRequest.ToEntity());
+            var retrievedRequest = _requestService.UpdateRequest(id, updatedRequest.ToEntity());
             return Ok(new RequestDetailModel(retrievedRequest));
         }
 
@@ -60,7 +60,7 @@ namespace StartUp.WebApi.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            _requestManager.DeleteRequest(id);
+            _requestService.DeleteRequest(id);
             return Ok();
         }
     }

@@ -12,18 +12,18 @@ namespace StartUp.WebApi.Controllers
     [ApiController]
     public class MedicineController : ControllerBase
     {
-        private readonly IMedicineManager _medicineManager;
+        private readonly IMedicineService _medicineService;
 
-        public MedicineController(IMedicineManager manager)
+        public MedicineController(IMedicineService service)
         {
-            _medicineManager = manager;
+            _medicineService = service;
         }
 
         // Index - Get all medicine (/api/medicine)
         [HttpGet]
         public IActionResult GetMedicine([FromQuery] MedicineSearchCriteriaModel searchCriteria)
         {
-            var retrievedMedicines = _medicineManager.GetAllMedicine(searchCriteria.ToEntity());
+            var retrievedMedicines = _medicineService.GetAllMedicine(searchCriteria.ToEntity());
             return Ok(retrievedMedicines.Select(m => new MedicineBasicModel(m)));
         }
 
@@ -31,7 +31,7 @@ namespace StartUp.WebApi.Controllers
         [HttpGet("{id}")]
         public IActionResult GetMedicine(int id)
         {
-            var retrievedMedicine = _medicineManager.GetSpecificMedicine(id);
+            var retrievedMedicine = _medicineService.GetSpecificMedicine(id);
             return Ok(new MedicineDetailModel(retrievedMedicine));
         }
 
@@ -39,7 +39,7 @@ namespace StartUp.WebApi.Controllers
         [HttpPost]
         public IActionResult CreateMedicine([FromBody] MedicineModel newMedicine)
         {
-            var createdMedicine = _medicineManager.CreateMedicine(newMedicine.ToEntity());
+            var createdMedicine = _medicineService.CreateMedicine(newMedicine.ToEntity());
             var medicineModel = new MedicineDetailModel(createdMedicine);
             return CreatedAtRoute("GetMedicine", new { id = medicineModel.Id }, medicineModel);
         }
@@ -48,7 +48,7 @@ namespace StartUp.WebApi.Controllers
         [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody] MedicineModel updatedMedicine)
         {
-            var retrievedMedicine = _medicineManager.UpdateMedicine(id, updatedMedicine.ToEntity());
+            var retrievedMedicine = _medicineService.UpdateMedicine(id, updatedMedicine.ToEntity());
             return Ok(new MedicineDetailModel(retrievedMedicine));
         }
 
@@ -56,7 +56,7 @@ namespace StartUp.WebApi.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            _medicineManager.DeleteMedicine(id);
+            _medicineService.DeleteMedicine(id);
             return Ok();
         }
     }
