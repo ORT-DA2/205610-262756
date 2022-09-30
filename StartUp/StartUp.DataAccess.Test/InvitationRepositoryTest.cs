@@ -37,7 +37,7 @@ namespace StartUp.DataAccess.Test
             var eligibleInvitations = invitations.Where(expression.Compile()).ToList();
             LoadInvitations(invitations);
 
-            var retrievedInvitations = _repository.GetAllExpression(expression);
+            var retrievedInvitations = _repository.GetAllByExpression(expression);
             CollectionAssert.AreEquivalent(eligibleInvitations, retrievedInvitations.ToList());
         }
 

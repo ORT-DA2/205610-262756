@@ -39,7 +39,7 @@ namespace StartUp.DataAccess.Test
             var eligibleOwners = owners.Where(expression.Compile()).ToList();
             LoadOwners(owners);
 
-            var retrievedOwners = _repository.GetAllExpression(expression);
+            var retrievedOwners = _repository.GetAllByExpression(expression);
             CollectionAssert.AreEquivalent(eligibleOwners, retrievedOwners.ToList());
         }
 

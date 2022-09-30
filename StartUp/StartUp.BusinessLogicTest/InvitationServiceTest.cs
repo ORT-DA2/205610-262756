@@ -33,7 +33,7 @@ namespace StartUp.BusinessLogicTest
         [TestMethod]
         public void GetSpecificInvitationTest()
         {
-            var invitation = CreateInvitation();
+            var invitation = CreateInvitation("julia");
             _repoMock.Setup(repo => repo.GetOneByExpression(It.IsAny<Expression<Func<Invitation, bool>>>())).Returns(invitation);
 
             var retrievedInvitation = _service.GetSpecificInvitation(invitation.Id);
@@ -45,7 +45,7 @@ namespace StartUp.BusinessLogicTest
         [ExpectedException(typeof(ResourceNotFoundException))]
         public void GetSpecificNullInvitationTest()
         {
-            var invitation = CreateInvitation();
+            var invitation = CreateInvitation("Jualia");
             
             _repoMock.Setup(repo => repo.GetOneByExpression(It.IsAny<Expression<Func<Invitation, bool>>>())).Returns((Invitation)null);
 
@@ -67,7 +67,7 @@ namespace StartUp.BusinessLogicTest
         [TestMethod]
         public void UpdateInvitationTest()
         {
-            var invitation = CreateInvitation();
+            var invitation = CreateInvitation("Julia");
             _repoMock.Setup(repo => repo.GetOneByExpression(It.IsAny<Expression<Func<Invitation, bool>>>())).Returns(invitation);
             Invitation updateData = new Invitation
             {
@@ -97,7 +97,7 @@ namespace StartUp.BusinessLogicTest
         [ExpectedException(typeof(ResourceNotFoundException))]
         public void DeleteInvitationTest()
         {
-            var invitation = CreateInvitation();
+            var invitation = CreateInvitation("Julia");
             _repoMock.SetupSequence(repo => repo.GetOneByExpression(It.IsAny<Expression<Func<Invitation, bool>>>())).Returns(invitation).Returns((Invitation)null);
             _repoMock.Setup(repo => repo.DeleteOne(invitation));
             _repoMock.Setup(repo => repo.Save());
@@ -110,7 +110,7 @@ namespace StartUp.BusinessLogicTest
         [TestMethod]
         public void CreateInvitationTest()
         {
-            Invitation dummyInvitation = CreateInvitation();
+            Invitation dummyInvitation = CreateInvitation("Julia");
             _repoMock.Setup(repo => repo.InsertOne(dummyInvitation));
             _repoMock.Setup(repo => repo.Save());
             _repoMock.Setup(repo => repo.GetOneByExpression(It.IsAny<Expression<Func<Invitation, bool>>>())).Returns((Invitation)null);
@@ -124,10 +124,11 @@ namespace StartUp.BusinessLogicTest
         [TestMethod]
         public void CreateExistingCodeInvitationTest()
         {
-            Invitation dummyInvitation = CreateInvitation();
+            Invitation dummyInvitation = CreateInvitation("Julia");
             _repoMock.Setup(repo => repo.InsertOne(dummyInvitation));
             _repoMock.Setup(repo => repo.Save());
             _repoMock.SetupSequence(repo => repo.GetOneByExpression(It.IsAny<Expression<Func<Invitation, bool>>>()))
+                .Returns((Invitation) null)
                 .Returns(dummyInvitation)
                 .Returns((Invitation) null);
             
@@ -137,20 +138,44 @@ namespace StartUp.BusinessLogicTest
             Assert.AreEqual(newInvitation, dummyInvitation);
         }
         
+        [TestMethod]
+        [ExpectedException(typeof(InputException))]
+        public void CreateExistingUserNameInvitationTest()
+        {
+            Invitation dummyInvitation = CreateInvitation("Julia");
+            _repoMock.SetupSequence(repo => repo.GetOneByExpression(It.IsAny<Expression<Func<Invitation, bool>>>()))
+                .Returns(dummyInvitation);
+            
+            _service.CreateInvitation(dummyInvitation);
+        }
+        
         private List<Invitation> GenerateDummyInvitation() => new List<Invitation>()
         {
             new Invitation() { Id = 2, UserName = "Julia", Rol = "Administrator" },
             new Invitation() { UserName = "leticia", Rol = "Employee" }
         };
 
-        private Invitation CreateInvitation()
+        private Invitation CreateInvitation(string user)
         {
+            List<Medicine> listMedicines = new List<Medicine>();
+            List<Request> listRequests = new List<Request>();
+
+            Pharmacy pharmacy = new Pharmacy
+            {
+                Name = "Una farmacia", 
+                Address = "18 de julio",
+                Stock = listMedicines,
+                Requests = listRequests
+            };
+            
             return new Invitation()
             {
                 Id = 1,
                 Rol = "Admin",
-                UserName = "Julia",
-                Code = 100000
+                UserName = user,
+                Code = 100000,
+                State = "Available",
+                Pharmacy = pharmacy,
             };
         }
     }

@@ -54,11 +54,11 @@ namespace StartUp.WebApi.Filters
             }
         }
 
-        private ISessionManager GetSessionForContext(AuthorizationFilterContext context)
+        private ISessionService GetSessionForContext(AuthorizationFilterContext context)
         {
-            var sessionManagerType = typeof(ISessionManager);
+            var sessionManagerType = typeof(ISessionService);
             object sessionManagerObject = context.HttpContext.RequestServices.GetService(sessionManagerType);
-            var sessionManager = (ISessionManager)sessionManagerObject;
+            var sessionManager = (ISessionService)sessionManagerObject;
             return sessionManager;
         }
 
