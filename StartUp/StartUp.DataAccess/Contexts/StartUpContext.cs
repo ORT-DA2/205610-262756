@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -8,9 +9,7 @@ namespace StartUp.DataAccess
 {
     public class StartUpContext : DbContext
     {
-        public DbSet<Administrator> Administrators { get; set; }
-        public DbSet<Employee> Employees { get; set; }
-        public DbSet<Owner> Owners { get; set; }
+        public DbSet<User> Users { get; set; }
         public DbSet<Invitation> Invitations { get; set; }
         public DbSet<InvoiceLine> InvoiceLines { get; set; }
         public DbSet<Medicine> Medicines { get; set; }
@@ -39,6 +38,18 @@ namespace StartUp.DataAccess
                 var connectionString = configuration.GetConnectionString("StartUpDb");
                 optionsBuilder.UseSqlServer(connectionString);
             } 
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder
+                .Entity<List<string>>(
+                    eb =>
+                    {
+                        eb.HasNoKey();
+                        eb.ToView("View_BlogPostCounts");
+                        eb.Property(v => v).HasColumnName("Rol");
+                    });
         }
     }
 }

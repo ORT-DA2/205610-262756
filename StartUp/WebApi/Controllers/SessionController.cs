@@ -1,7 +1,6 @@
-﻿
-using Domain;
-using IBusinessLogic;
+﻿using IBusinessLogic;
 using Microsoft.AspNetCore.Mvc;
+using StartUp.BusinessLogic;
 using StartUp.Domain.Entities;
 using StartUp.Exceptions;
 using StartUp.IBusinessLogic;
@@ -15,20 +14,16 @@ namespace StartUp.WebApi.Controllers;
 [ApiController]
 public class SessionController : ControllerBase
 {
-    private readonly ISessionManager _sessionManager;
-    private readonly IAdministratorManager _adminManager;
-    private readonly IOwnerManager _ownerManager;
-    private readonly IEmployeeManager _employeeManager;
-    private readonly ITokenAccessManager _tokenAccessManager;
+    private readonly ISessionService _sessionService;
+    private readonly IUserService _userService;
+    private readonly ITokenAccessService _tokenAccessService;
 
-    public SessionController(ISessionManager manager, IAdministratorManager adminManager,
-        IOwnerManager ownerManager, IEmployeeManager employeeManager, ITokenAccessManager tokenManager)
+    public SessionController(ISessionService sessionService, IUserService userService,
+        ITokenAccessService tokenService)
     {
-        _sessionManager = manager;
-        _adminManager = adminManager;
-        _ownerManager = ownerManager;
-        _employeeManager = employeeManager;
-        _tokenAccessManager = tokenManager;
+        _sessionService = sessionService;
+        _userService = userService;
+        _tokenAccessService = tokenService;
     }
     // Create - Log in (/api/sessions)
     [HttpPost]
@@ -37,20 +32,20 @@ public class SessionController : ControllerBase
         //que los campos no sean vacios
         //que exista un usuario con ese username
         //que la password coincida con la password del usuario
-        _sessionManager.VerifySessionModel(sessionModel);
+        _sessionService.VerifySessionModel(sessionModel);
 
-        User user = _sessionManager.GetSpecificUser(sessionModel.UserName);
+        User user = _sessionService.GetSpecificUser(sessionModel.UserName);
 
-        Session session = _sessionManager.CreateOrRetrieveSession(sessionModel);
+        Session session = _sessionService.CreateOrRetrieveSession(sessionModel);
 
         try
         {
-            var tokenExist = _tokenAccessManager.GetSpecificTokenAccess(session);
+            var tokenExist = _tokenAccessService.GetSpecificTokenAccess(session);
             return Created("Successful login", tokenExist);
         }
         catch (ResourceNotFoundException)
         {
-            var newToken = _tokenAccessManager.CreateTokenAccess(user);
+            var newToken = _tokenAccessService.CreateTokenAccess(user);
 
             return Created("Successful login", newToken);
         }
@@ -60,7 +55,7 @@ public class SessionController : ControllerBase
 
     // Delete - Log out (/api/sessions/{username})
     [HttpDelete("{username}")]
-    [RolFilter("administrator")]
+    [RolFilter("User")]
     public ActionResult Logout([FromHeader] string authorization, string username)
     {
         if(string.IsNullOrEmpty(authorization) || string.IsNullOrEmpty(username))
@@ -72,11 +67,11 @@ public class SessionController : ControllerBase
         if (authHeader is null)
             return BadRequest("Missing credentials. Cannot Logout");
 
-        Session session = _sessionManager.GetSpecificSession(username);
-        _sessionManager.VerifySession(session);
+        Session session = _sessionService.GetSpecificSession(username);
+        _sessionService.VerifySession(session);
         
-        _tokenAccessManager.DeleteTokenAccess(session);
-        _sessionManager.Delete(username);
+        _tokenAccessService.DeleteTokenAccess(session);
+        _sessionService.Delete(username);
         return Ok("{username} delete");
     }
 }

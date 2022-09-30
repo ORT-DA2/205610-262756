@@ -1,7 +1,5 @@
-﻿using Domain;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Extensions.Primitives;
 using StartUp.IBusinessLogic;
 using System;
 
@@ -9,9 +7,9 @@ namespace StartUp.WebApi.Filters
 {
     public class AuthorizationFilter : Attribute, IAuthorizationFilter
     {
-        private readonly ISessionManager _sessionLogic;
+        private readonly ISessionService _sessionLogic;
 
-        public AuthorizationFilter(ISessionManager sessionLogic)
+        public AuthorizationFilter(ISessionService sessionLogic)
         {
             _sessionLogic = sessionLogic;
         }

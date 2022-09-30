@@ -23,7 +23,7 @@ namespace StartUp.DomainTest
                 UserName = "Julia"
             };
 
-            inv.isValidInvitation();
+            inv.IsValidInvitation();
             
             Assert.IsNotNull(inv);
         }
@@ -40,7 +40,7 @@ namespace StartUp.DomainTest
                 UserName = "Julia"
             };
 
-            inv.isValidInvitation();
+            inv.IsValidInvitation();
         }
         
         [TestMethod]
@@ -55,7 +55,7 @@ namespace StartUp.DomainTest
                 UserName = "Julia"
             };
 
-            inv.isValidInvitation();
+            inv.IsValidInvitation();
         }
         
         [TestMethod]
@@ -70,7 +70,7 @@ namespace StartUp.DomainTest
                 UserName = ""
             };
 
-            inv.isValidInvitation();
+            inv.IsValidInvitation();
         }
         
         [TestMethod]
@@ -85,7 +85,7 @@ namespace StartUp.DomainTest
                 UserName = "     "
             };
 
-            inv.isValidInvitation();
+            inv.IsValidInvitation();
         }
     }
 }

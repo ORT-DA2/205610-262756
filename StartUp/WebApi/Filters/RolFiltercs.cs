@@ -1,7 +1,6 @@
-﻿using Domain;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using StartUp.Domain;
+using StartUp.Domain.Entities;
 using StartUp.IBusinessLogic;
 using System;
 
@@ -54,11 +53,11 @@ namespace StartUp.WebApi.Filters
             }
         }
 
-        private ISessionManager GetSessionForContext(AuthorizationFilterContext context)
+        private ISessionService GetSessionForContext(AuthorizationFilterContext context)
         {
-            var sessionManagerType = typeof(ISessionManager);
+            var sessionManagerType = typeof(ISessionService);
             object sessionManagerObject = context.HttpContext.RequestServices.GetService(sessionManagerType);
-            var sessionManager = (ISessionManager)sessionManagerObject;
+            var sessionManager = (ISessionService)sessionManagerObject;
             return sessionManager;
         }
 

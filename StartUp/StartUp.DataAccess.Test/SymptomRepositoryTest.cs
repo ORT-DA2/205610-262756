@@ -39,7 +39,7 @@ namespace StartUp.DataAccess.Test
             var eligibleSymptoms = symptoms.Where(expression.Compile()).ToList();
             LoadSymptoms(symptoms);
 
-            var retrievedSymptoms = _repository.GetAllExpression(expression);
+            var retrievedSymptoms = _repository.GetAllByExpression(expression);
             CollectionAssert.AreEquivalent(eligibleSymptoms, retrievedSymptoms.ToList());
         }
 

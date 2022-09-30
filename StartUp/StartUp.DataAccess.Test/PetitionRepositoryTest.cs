@@ -39,7 +39,7 @@ namespace StartUp.DataAccess.Test
             var eligiblePetitions = petitions.Where(expression.Compile()).ToList();
             LoadPetitions(petitions);
 
-            var retrievedPetitions = _repository.GetAllExpression(expression);
+            var retrievedPetitions = _repository.GetAllByExpression(expression);
             CollectionAssert.AreEquivalent(eligiblePetitions, retrievedPetitions.ToList());
         }
 

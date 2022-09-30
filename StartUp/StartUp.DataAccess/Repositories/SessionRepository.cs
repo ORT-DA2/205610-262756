@@ -1,10 +1,4 @@
-﻿using Domain;
-using StartUp.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using StartUp.Domain.Entities;
 
 namespace StartUp.DataAccess.Repositories
 {

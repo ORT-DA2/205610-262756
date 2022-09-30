@@ -1,5 +1,4 @@
-﻿using Domain;
-using StartUp.Domain.Entities;
+﻿using StartUp.Domain.Entities;
 using StartUp.Exceptions;
 using System;
 
@@ -9,7 +8,7 @@ namespace StartUp.Domain
     {
         public void ValidateString(string value, string message)
         {
-            if (value.Length == 0 || string.IsNullOrWhiteSpace(value))
+            if (string.IsNullOrWhiteSpace(value) || value.Length == 0)
             {
                 throw new InputException(message);
             }
@@ -31,14 +30,6 @@ namespace StartUp.Domain
             }
         }
 
-        public void ValidateStringValue(string value, string message)
-        {
-            if (string.IsNullOrEmpty(value.ToString()))
-            {
-                throw new InputException(message);
-            }
-        }
-
         public void ValidateLengthString(string value, string message, int length)
         {
             if(value.Length > length)
@@ -50,6 +41,14 @@ namespace StartUp.Domain
         public void ValidateUserNotNull(User user, string message)
         {
             if (user == null)
+            {
+                throw new InputException(message);
+            }
+        }
+
+        public void ValidateInvitationNotNull(Invitation invitation, string message)
+        {
+            if (invitation == null)
             {
                 throw new InputException(message);
             }
