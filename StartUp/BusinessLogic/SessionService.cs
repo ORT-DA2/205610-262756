@@ -1,5 +1,5 @@
-﻿using Domain;
-using Microsoft.Extensions.Primitives;
+﻿using Microsoft.Extensions.Primitives;
+using StartUp.DataAccess.Repositories;
 using StartUp.Domain;
 using StartUp.Domain.Entities;
 using StartUp.IBusinessLogic;
@@ -15,68 +15,39 @@ namespace StartUp.BusinessLogic
     public class SessionService : ISessionService
     {
         private readonly IRepository<Session> _sessionRepository;
-        private readonly IRepository<Administrator> _adminRepository;
-        private readonly IRepository<Owner> _ownerRepository;
-        private readonly IRepository<Employee> _employeeRepository;
+        private readonly IRepository<User> _userRepository;
         private readonly IRepository<TokenAccess> _tokenAccessRepository;
         private Validator validator = new Validator();
-        public User logUser { get; set; }
-        public SessionService(IRepository<Session> sessionRepository, IRepository<Administrator> adminRepository,
-            IRepository<Owner> ownerRepository, IRepository<Employee> employeeRepository,
-            IRepository<TokenAccess> tokenRepository)
+        public User UserLogged { get; set; }
+
+        public SessionService(IRepository<Session> sessionRepository, IRepository<User> userRepository,
+                                         IRepository<TokenAccess> tokenRepository)
         {
             _sessionRepository = sessionRepository;
-            _adminRepository = adminRepository;
-            _ownerRepository = ownerRepository;
-            _employeeRepository = employeeRepository;
+            _userRepository = userRepository;
             _tokenAccessRepository = tokenRepository;
         }
 
-        public List<string> GetAllUsername()
+        public List<User> GetAllUser()
         {
-            Expression<Func<Administrator, bool>> admins = admin => true;
-            Expression<Func<Owner, bool>> owners = owner => true;
-            Expression<Func<Employee, bool>> employees = employee => true;
-
-            List<Administrator> listA = _adminRepository.GetAllByExpression(admins).ToList();
-            List<Owner> listO = _ownerRepository.GetAllByExpression(owners).ToList();
-            List<Employee> listE = _employeeRepository.GetAllByExpression(employees).ToList();
-
-            List<string> response = new List<string>();
-
-            AddUsernameAdministrators(response, listA);
-            AddUsernameOwners(response, listO);
-            AddUsernameEmployee(response, listE);
-
-            return response;
+            Expression<Func<User, bool>> users = user => true;
+            return _userRepository.GetAllByExpression(users).ToList();
         }
 
         public User GetSpecificUser(string username)
         {
-            Administrator admin = _adminRepository.GetOneByExpression(a => a.Invitation.UserName == username);
-            if (admin != null)
-            {
-                return admin;
-            }
-
-            Owner owner = _ownerRepository.GetOneByExpression(o => o.Invitation.UserName == username);
-            if (owner != null)
-            {
-                return owner;
-            }
-
-            return _employeeRepository.GetOneByExpression(e => e.Invitation.UserName == username);
+            return _userRepository.GetOneByExpression(u => u.Invitation.UserName == username);
         }
 
         public void VerifySessionModel(SessionModel sessionModel)
-        { 
+        {
 
             validator.ValidateString(sessionModel.UserName, "Username empty");
             validator.ValidateString(sessionModel.Password, "Password empty");
 
             var userSalved = GetSpecificUser(sessionModel.UserName);
 
-            validator.ValidateUserNotNull(userSalved, "Username not exist in sistem");
+            validator.ValidateUserNotNull(userSalved, "Username not exist in system");
             validator.ValidateStringEquals(userSalved.Password, sessionModel.Password, "Password incorrect");
         }
 
@@ -104,14 +75,15 @@ namespace StartUp.BusinessLogic
 
         public Session CreateOrRetrieveSession(SessionModel session)
         {
-            var sessionSalved = GetSpecificSession(session.UserName);
+            var sessionSalved = SearchSession(session.UserName);
 
             if (sessionSalved == null)
             {
                 sessionSalved = new Session();
                 sessionSalved.Username = session.UserName;
                 sessionSalved.Password = session.Password;
-                
+
+                _sessionRepository.Name = session.UserName;
                 _sessionRepository.InsertOne(sessionSalved);
                 _sessionRepository.Save();
 
@@ -126,7 +98,16 @@ namespace StartUp.BusinessLogic
 
             Session session = _sessionRepository.GetOneByExpression(s => s.Username == username);
             validator.ValidateSessionNotNull(session, "Username not exist");
-            
+
+            return session;
+        }
+
+        public Session SearchSession(string username)
+        {
+            validator.ValidateString(username, "Username empty");
+
+            Session session = _sessionRepository.GetOneByExpression(s => s.Username == username);
+
             return session;
         }
 
@@ -148,14 +129,14 @@ namespace StartUp.BusinessLogic
             }
         }
 
-        public bool Permission(User user, string rol)
+        public bool HasPermission(string roles, User user)
         {
-            //'administrator,owner,employee,anonymous'
-            string[] roles = rol.Split(",");
+            string[] rolesList = roles.Split(",");
             bool permission = false;
-            foreach (string role in roles)
+
+            foreach (string role in rolesList)
             {
-                permission = permission || user.GetType() == rol;
+                //eliminar si no se usa
             }
             return permission;
         }
@@ -170,19 +151,6 @@ namespace StartUp.BusinessLogic
             return tokenSalved.User;
         }
 
-        public string GetTypeOfAuthorization(string username)
-        {
-            validator.ValidateString(username, "Username empty");
-
-            User user = GetSpecificUser(username);
-            validator.ValidateUserNotNull(user, "Username not exist");
-
-            return user.GetType();
-        }
-
-
-        /////////////////////////////////
-
         public void Delete(string username)
         {
             validator.ValidateString(username, "Username empty");
@@ -193,31 +161,6 @@ namespace StartUp.BusinessLogic
             _sessionRepository.DeleteOne(session);
             _sessionRepository.Save();
         }
-
-        public void AddUsernameEmployee(List<string> response, List<Employee> listE)
-        {
-            foreach (Employee employee in listE)
-            {
-                response.Add(employee.Invitation.UserName);
-            }
-        }
-
-        public void AddUsernameOwners(List<string> response, List<Owner> listO)
-        {
-            foreach (Owner owner in listO)
-            {
-                response.Add(owner.Invitation.UserName);
-            }
-        }
-
-        public void AddUsernameAdministrators(List<string> response, List<Administrator> listA)
-        {
-            foreach (Administrator admin in listA)
-            {
-                response.Add(admin.Invitation.UserName);
-            }
-        }
-
         public void Update(Session updateSession)
         {
             validator.ValidateString(updateSession.Username, "Username empty");
@@ -234,5 +177,34 @@ namespace StartUp.BusinessLogic
             throw new NotImplementedException();
         }
 
+        public bool IsFormatValidOfAuthorizationHeader(string authorizationHeader)
+        {
+            if (string.IsNullOrEmpty(authorizationHeader))
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public void AuthenticateAndSaveUser(string authorizationHeader)
+        {
+            TokenAccess token; 
+
+            if (authorizationHeader.ToString().Contains("Bearer "))
+            {
+                token = _tokenAccessRepository.GetOneByExpression(t => "Bearer " + t.Token.ToString() == authorizationHeader);
+            }
+            else
+            {
+                token = _tokenAccessRepository.GetOneByExpression(t => t.Token.ToString() == authorizationHeader);
+            }
+            validator.ValidateTokenAccess(token, "Token not exist in the system");
+            UserLogged = token.User;
+        }
+
+        public TokenAccess GetTokenUser()
+        {
+            return _tokenAccessRepository.GetOneByExpression(t => t.User == UserLogged);
+        }
     }
 }

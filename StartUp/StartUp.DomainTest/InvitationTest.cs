@@ -49,7 +49,6 @@ namespace StartUp.DomainTest
         {
             Invitation inv = CreateInvitation(000000,1,"Admin","", pharmacy1, "Available" );
 
-
             inv.IsValidInvitation();
         }
         

@@ -27,7 +27,7 @@ namespace StartUp.Domain
 
         protected bool Equals(Invitation other)
         {
-            return UserName == other?.UserName;
+            return Code == other?.Code;
         
         }
         public void IsValidInvitation()

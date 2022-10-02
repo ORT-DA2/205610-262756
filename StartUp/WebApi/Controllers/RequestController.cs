@@ -1,6 +1,4 @@
-﻿using DbUp;
-using Microsoft.AspNetCore.Mvc;
-using StartUp.Exceptions;
+﻿using Microsoft.AspNetCore.Mvc;
 using StartUp.IBusinessLogic;
 using StartUp.Models.Models.In;
 using StartUp.Models.Models.Out;
@@ -11,6 +9,7 @@ namespace StartUp.WebApi.Controllers
 {
     [Route("api/request")]
     [ApiController]
+    [EmployeeFilter]
     //[Filters(AuthorizationFilter())]
     //SOLO PUEDEN TENER ACCESO LOS DUEÑOS Y EMPLEADOS
     public class RequestController : ControllerBase

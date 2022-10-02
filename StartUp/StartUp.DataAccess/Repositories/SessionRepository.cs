@@ -1,18 +1,21 @@
-﻿using Domain;
-using StartUp.Domain.Entities;
+﻿using StartUp.Domain.Entities;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Linq.Expressions;
 
 namespace StartUp.DataAccess.Repositories
 {
     public class SessionRepository : BaseRepository<Session>
     {
+        private StartUpContext _context;
         public SessionRepository(StartUpContext context) : base(context)
         {
+            _context = context;
         }
 
+        public override Session GetOneByExpression(Expression<Func<Session, bool>> expression)
+        {
+            return _context.Set<Session>().FirstOrDefault(expression);
+        }
     }
 }

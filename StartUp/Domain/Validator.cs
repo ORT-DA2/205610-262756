@@ -1,5 +1,4 @@
-﻿using Domain;
-using StartUp.Domain.Entities;
+﻿using StartUp.Domain.Entities;
 using StartUp.Exceptions;
 using System;
 using System.Collections.Generic;
@@ -10,7 +9,15 @@ namespace StartUp.Domain
     {
         public void ValidateString(string value, string message)
         {
-            if (value.Length == 0 || string.IsNullOrWhiteSpace(value))
+            if (string.IsNullOrWhiteSpace(value) || value.Length == 0)
+            {
+                throw new InputException(message);
+            }
+        }
+
+        public void ValidateRoleIsNotNull(Role role, string message)
+        {
+            if(role == null)
             {
                 throw new InputException(message);
             }
@@ -24,6 +31,26 @@ namespace StartUp.Domain
             }
         }
 
+        public void ValidateContains(string roles, string permissions, string message)
+        {
+            string[] rolesArray = permissions.Split(",");
+            foreach (var role in rolesArray)
+            {
+                if (!roles.Contains(role))
+                {
+                    throw new InputException(message);
+                }
+            }
+        }
+
+        public void ValidateArray(string[] array, string message)
+        {
+            if(array == null || array.Length == 0)
+            {
+                throw new InputException(message);
+            }
+        }
+
         public void ValidateTokenAccess(TokenAccess token, string message)
         {
             if (token == null)
@@ -32,13 +59,7 @@ namespace StartUp.Domain
             }
         }
 
-        public void ValidateStringValue(string value, string message)
-        {
-            if (string.IsNullOrEmpty(value.ToString()))
-            {
-                throw new InputException(message);
-            }
-        }
+        
 
         public void ValidateLengthString(string value, string message, int length)
         {
@@ -51,6 +72,14 @@ namespace StartUp.Domain
         public void ValidateUserNotNull(User user, string message)
         {
             if (user == null)
+            {
+                throw new InputException(message);
+            }
+        }
+
+        public void ValidateInvitationNotNull(Invitation invitation, string message)
+        {
+            if (invitation == null)
             {
                 throw new InputException(message);
             }

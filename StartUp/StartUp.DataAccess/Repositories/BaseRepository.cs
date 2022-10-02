@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 using StartUp.DataAccess;
@@ -21,7 +22,7 @@ public class BaseRepository<T> : IRepository<T> where T : class
         return _context.Set<T>().Where(expression);
     }
 
-    public T GetOneByExpression(Expression<Func<T, bool>> expression)
+    public virtual T GetOneByExpression(Expression<Func<T, bool>> expression)
     {
         return _context.Set<T>().FirstOrDefault(expression);
     }
@@ -45,4 +46,5 @@ public class BaseRepository<T> : IRepository<T> where T : class
     {
         _context.SaveChanges();
     }
+
 }
