@@ -12,14 +12,14 @@ namespace StartUp.Models.Models.Out
         public int Id { get; set; }
         public string Email { get; set; }
         public string Address { get; set; }
-        public List<string> Rol { get; set; }
+        public Role Role { get; set; }
 
         public UserBasicModel(User user)
         {
             this.Address = user.Address;
             this.Email = user.Email;
             this.Id = user.Id;
-            Rol = user.Rol;
+            Role = user.Roles;
         }
 
         public override bool Equals(object? obj)

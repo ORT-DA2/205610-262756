@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using StartUp.BusinessLogic;
-using StartUp.Exceptions;
 using StartUp.IBusinessLogic;
 using StartUp.Models.Models.In;
 using StartUp.Models.Models.Out;
@@ -12,7 +10,7 @@ namespace StartUp.WebApi.Controllers
 
     [Route("api/invitation")]
     [ApiController]
-    //SOLO TIENEN ACCESO LOS ADMINISTRADORES
+    [AdministratorFilter]
     public class InvitationController : ControllerBase
     {
         private readonly IInvitationService _invitationManager;

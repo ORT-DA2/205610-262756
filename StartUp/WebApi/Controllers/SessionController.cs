@@ -1,5 +1,6 @@
 ﻿using IBusinessLogic;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using StartUp.BusinessLogic;
 using StartUp.Domain.Entities;
 using StartUp.Exceptions;
@@ -15,23 +16,17 @@ namespace StartUp.WebApi.Controllers;
 public class SessionController : ControllerBase
 {
     private readonly ISessionService _sessionService;
-    private readonly IUserService _userService;
     private readonly ITokenAccessService _tokenAccessService;
 
-    public SessionController(ISessionService sessionService, IUserService userService,
-        ITokenAccessService tokenService)
+    public SessionController(ISessionService sessionService, ITokenAccessService tokenService)
     {
         _sessionService = sessionService;
-        _userService = userService;
         _tokenAccessService = tokenService;
     }
     // Create - Log in (/api/sessions)
     [HttpPost]
     public ActionResult<Guid> Login([FromBody] SessionModel sessionModel)
     {
-        //que los campos no sean vacios
-        //que exista un usuario con ese username
-        //que la password coincida con la password del usuario
         _sessionService.VerifySessionModel(sessionModel);
 
         User user = _sessionService.GetSpecificUser(sessionModel.UserName);
@@ -41,11 +36,15 @@ public class SessionController : ControllerBase
         try
         {
             var tokenExist = _tokenAccessService.GetSpecificTokenAccess(session);
+            _sessionService.UserLogged = tokenExist.User;
+            _sessionService.x = "1";
             return Created("Successful login", tokenExist);
         }
         catch (ResourceNotFoundException)
         {
             var newToken = _tokenAccessService.CreateTokenAccess(user);
+            _sessionService.UserLogged = newToken.User;
+            _sessionService.x = "2";
 
             return Created("Successful login", newToken);
         }
@@ -55,23 +54,19 @@ public class SessionController : ControllerBase
 
     // Delete - Log out (/api/sessions/{username})
     [HttpDelete("{username}")]
-    [RolFilter("User")]
+    //[RolFilter("User")]
     public ActionResult Logout([FromHeader] string authorization, string username)
     {
-        if(string.IsNullOrEmpty(authorization) || string.IsNullOrEmpty(username))
+        if (string.IsNullOrEmpty(authorization) || string.IsNullOrEmpty(username))
         {
             return BadRequest();
         }
-        string authHeader = HttpContext.Request.Headers["Authorization"];
-
-        if (authHeader is null)
-            return BadRequest("Missing credentials. Cannot Logout");
 
         Session session = _sessionService.GetSpecificSession(username);
         _sessionService.VerifySession(session);
         
         _tokenAccessService.DeleteTokenAccess(session);
-        _sessionService.Delete(username);
-        return Ok("{username} delete");
+
+        return Ok();
     }
 }

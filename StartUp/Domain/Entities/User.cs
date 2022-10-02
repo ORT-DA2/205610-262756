@@ -1,23 +1,18 @@
 ﻿using StartUp.Exceptions;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Mail;
 
 namespace StartUp.Domain.Entities
 {
-    public enum Rol
-    {
-        Administrator,
-        Owner,
-        Employee
-    }
     public class User
     {
         public int Id { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
         public string Address { get; set; }
-        public List<string> Rol { get; set; }
+        public Role Roles { get; set; }
         public DateTime RegisterDate { get; set; }
         public Invitation Invitation { get; set; }
         public Pharmacy Pharmacy { get; set; }
@@ -33,6 +28,7 @@ namespace StartUp.Domain.Entities
             validator.ValidateString(Password, "Password empty");
             validator.ValidateString(RegisterDate.ToString(), "Register date empty");
             validator.ValidateInvitationNotNull(Invitation, "Invitation empty");
+            validator.ValidateRoleIsNotNull(Roles, "Role empty");
         }
 
         public bool EmailIsValid(string emailAddress)
@@ -49,9 +45,17 @@ namespace StartUp.Domain.Entities
             }
         }
 
+        public bool HasPermissions(string[] permissions)
+        {
+            string[] permList = this.Roles.Permission.Split(",");
+            var hasPermission = permList.ToList().Any(permission => permissions.Contains(permission));
+
+            return hasPermission;
+        }
+
         public void VerifyInvitationStateIsAvailable()
         {
-            if (!Invitation.State.ToString().ToLower().Contains("available"))
+            if (Invitation.State.ToLower() != "available")
             {
                 throw new InputException("The invitation has already been used");
             }
@@ -71,7 +75,7 @@ namespace StartUp.Domain.Entities
 
         protected bool Equals(User other)
         {
-            return Email == other?.Email;
+            return Id == other?.Id;
         }
     }
 }

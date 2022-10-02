@@ -11,7 +11,7 @@ namespace StartUp.Models.Models.Out
         public int Id { get; set; }
         public string Email { get; set; }
         public string Address { get; set; }
-        public List<string> Rol { get; set; }
+        public Role Roles { get; set; }
         public DateTime RegisterDate { get; set; }
         public Invitation Invitation { get; set; }
 
@@ -21,7 +21,7 @@ namespace StartUp.Models.Models.Out
             this.Email = user.Email;
             this.RegisterDate = user.RegisterDate;
             this.Invitation = user.Invitation;
-            this.Rol = user.Rol;
+            this.Roles = user.Roles;
         }
 
         public override bool Equals(object? obj)

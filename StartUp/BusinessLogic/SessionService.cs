@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Primitives;
+using StartUp.DataAccess.Repositories;
 using StartUp.Domain;
 using StartUp.Domain.Entities;
 using StartUp.IBusinessLogic;
@@ -17,7 +18,8 @@ namespace StartUp.BusinessLogic
         private readonly IRepository<User> _userRepository;
         private readonly IRepository<TokenAccess> _tokenAccessRepository;
         private Validator validator = new Validator();
-        public User logUser { get; set; }
+        public User UserLogged { get; set; }
+        public string x { get; set; }
         public SessionService(IRepository<Session> sessionRepository, IRepository<User> userRepository,
                                          IRepository<TokenAccess> tokenRepository)
         {
@@ -38,14 +40,14 @@ namespace StartUp.BusinessLogic
         }
 
         public void VerifySessionModel(SessionModel sessionModel)
-        { 
+        {
 
             validator.ValidateString(sessionModel.UserName, "Username empty");
             validator.ValidateString(sessionModel.Password, "Password empty");
 
             var userSalved = GetSpecificUser(sessionModel.UserName);
 
-            validator.ValidateUserNotNull(userSalved, "Username not exist in sistem");
+            validator.ValidateUserNotNull(userSalved, "Username not exist in system");
             validator.ValidateStringEquals(userSalved.Password, sessionModel.Password, "Password incorrect");
         }
 
@@ -73,14 +75,15 @@ namespace StartUp.BusinessLogic
 
         public Session CreateOrRetrieveSession(SessionModel session)
         {
-            var sessionSalved = GetSpecificSession(session.UserName);
+            var sessionSalved = SearchSession(session.UserName);
 
             if (sessionSalved == null)
             {
                 sessionSalved = new Session();
                 sessionSalved.Username = session.UserName;
                 sessionSalved.Password = session.Password;
-                
+
+                _sessionRepository.Name = session.UserName;
                 _sessionRepository.InsertOne(sessionSalved);
                 _sessionRepository.Save();
 
@@ -95,7 +98,16 @@ namespace StartUp.BusinessLogic
 
             Session session = _sessionRepository.GetOneByExpression(s => s.Username == username);
             validator.ValidateSessionNotNull(session, "Username not exist");
-            
+
+            return session;
+        }
+
+        public Session SearchSession(string username)
+        {
+            validator.ValidateString(username, "Username empty");
+
+            Session session = _sessionRepository.GetOneByExpression(s => s.Username == username);
+
             return session;
         }
 
@@ -117,14 +129,14 @@ namespace StartUp.BusinessLogic
             }
         }
 
-        public bool Permission(User user, string rol)
+        public bool HasPermission(string roles, User user)
         {
-            //'User,owner,employee,anonymous'
-            string[] roles = rol.Split(",");
+            string[] rolesList = roles.Split(",");
             bool permission = false;
-            foreach (string role in roles)
+
+            foreach (string role in rolesList)
             {
-                permission = permission || user.Rol.ToString().ToLower() == rol;
+                //eliminar si no se usa
             }
             return permission;
         }
@@ -165,5 +177,34 @@ namespace StartUp.BusinessLogic
             throw new NotImplementedException();
         }
 
+        public bool IsFormatValidOfAuthorizationHeader(string authorizationHeader)
+        {
+            if (string.IsNullOrEmpty(authorizationHeader))
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public void AuthenticateAndSaveUser(string authorizationHeader)
+        {
+            TokenAccess token; 
+
+            if (authorizationHeader.ToString().Contains("Bearer "))
+            {
+                token = _tokenAccessRepository.GetOneByExpression(t => "Bearer " + t.Token.ToString() == authorizationHeader);
+            }
+            else
+            {
+                token = _tokenAccessRepository.GetOneByExpression(t => t.Token.ToString() == authorizationHeader);
+            }
+            validator.ValidateTokenAccess(token, "Token not exist in the system");
+            UserLogged = token.User;
+        }
+
+        public TokenAccess GetTokenUser()
+        {
+            return _tokenAccessRepository.GetOneByExpression(t => t.User == UserLogged);
+        }
     }
 }

@@ -28,7 +28,7 @@ namespace BusinessLogic
             var invitationCriteria = searchCriteria.Invitation ?? null;
             var registerDateCriteria = searchCriteria.RegisterDate?.ToString() ?? string.Empty;
             var pharmacyCriteria = searchCriteria.Pharmacy ?? null;
-            var rolCriteria = searchCriteria.Rol ?? null;
+            var rolCriteria = searchCriteria.Roles ?? null;
 
             Expression<Func<User, bool>> userFilter = user =>
                 user.Email.ToLower().Contains(emailCriteria) &&
@@ -36,7 +36,7 @@ namespace BusinessLogic
                 user.Address.ToLower().Contains(addressCriteria) &&
                 user.Invitation == invitationCriteria &&
                 user.RegisterDate.ToString().Contains(registerDateCriteria) &&
-                user.Pharmacy == pharmacyCriteria && user.Rol == rolCriteria;
+                user.Pharmacy == pharmacyCriteria && user.Roles == rolCriteria;
 
             return _userRepository.GetAllByExpression(userFilter).ToList();
         }
@@ -57,11 +57,10 @@ namespace BusinessLogic
             user.IsValidUser();
             EmailNotExistInDataBase(user);
             user.VerifyInvitationStateIsAvailable();
+            user.ChangeStatusInvitation();
 
             _userRepository.InsertOne(user);
             _userRepository.Save();
-
-            user.ChangeStatusInvitation();
 
             return user;
         }
@@ -79,7 +78,7 @@ namespace BusinessLogic
             userStored.Password = updateduser.Password;
             userStored.Invitation = updateduser.Invitation;
             userStored.Pharmacy = updateduser.Pharmacy;
-            userStored.Rol = updateduser.Rol;
+            userStored.Roles = updateduser.Roles;
 
             _userRepository.UpdateOne(userStored);
             _userRepository.Save();
@@ -97,7 +96,7 @@ namespace BusinessLogic
 
         private void EmailNotExistInDataBase(User user)
         {
-            User UserSaved = _userRepository.GetOneByExpression(u => u == user);
+            User UserSaved = _userRepository.GetOneByExpression(u => u.Email == user.Email);
 
             if (UserSaved != null)
             {

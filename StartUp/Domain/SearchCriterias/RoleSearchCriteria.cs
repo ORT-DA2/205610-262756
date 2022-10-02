@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StartUp.Domain.Entities
+namespace StartUp.Domain.SearchCriterias
 {
-    public class Rol
+    public class RoleSearchCriteria
     {
-        public string RolType { get; set; }
+        public string? Permission { get; set; }
     }
 }

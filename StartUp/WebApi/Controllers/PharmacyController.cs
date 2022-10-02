@@ -9,6 +9,7 @@ namespace StartUp.WebApi.Controllers
 {
     [Route("api/pharmacy")]
     [ApiController]
+    [AdministratorFilter]
     public class PharmacyController : ControllerBase
     {
         private readonly IPharmacyService _pharmacyService;
@@ -18,7 +19,6 @@ namespace StartUp.WebApi.Controllers
             _pharmacyService = service;
         }
 
-        // Index - Get all pharmacy (/api/pharmacy)
         [HttpGet]
         public IActionResult GetPharmacy([FromQuery] PharmacySearchCriteriaModel searchCriteria)
         {
@@ -26,7 +26,7 @@ namespace StartUp.WebApi.Controllers
             return Ok(retrievedPharmacy.Select(p => new PharmacyBasicModel(p)));
         }
 
-        // Show - Get specific pharmacy (/api/pharmacy/{id})
+
         [HttpGet("{pharmacyId}", Name = "GetPharmacy")]
         public IActionResult GetPharmacy(int pharmacyId)
         {
@@ -34,10 +34,7 @@ namespace StartUp.WebApi.Controllers
             return Ok(new PharmacyDetailModel(retrievedPharmacy));
         }
 
-        // Create - Create new pharmacy (/api/pharmacy)
         [HttpPost]
-        //solo deben de tener acceso los administradores
-        //[Filters(AuthorizationFilter(ISessionLogic))]
         public IActionResult CreatePharmacy([FromBody] PharmacyModel newPharmacy)
         {
             var createdPharmacy = _pharmacyService.CreatePharmacy(newPharmacy.ToEntity());
@@ -45,7 +42,6 @@ namespace StartUp.WebApi.Controllers
             return CreatedAtRoute("GetPharmacy", new { pharmacyId = pharmacyModel.Id }, pharmacyModel);
         }
 
-        // Update - Update specific pharmacy (/api/pharmacy/{id})
         [HttpPut("{pharmacyId}")]
         public IActionResult UpdatePharmacy(int pharmacyId, [FromBody] PharmacyModel updatedPharmacy)
         {
@@ -53,7 +49,6 @@ namespace StartUp.WebApi.Controllers
             return Ok(new PharmacyDetailModel(retrievedPharmacy));
         }
 
-        // Delete - Delete specific pharmacy (/api/pharmacy/{id})
         [HttpDelete("{pharmacyId}")]
         public IActionResult DeletePharmacy(int pharmacyId)
         {

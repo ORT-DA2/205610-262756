@@ -15,11 +15,12 @@ namespace StartUp.DataAccess
         public DbSet<Medicine> Medicines { get; set; }
         public DbSet<Petition> Petitions { get; set; }
         public DbSet<Pharmacy> Pharmacies { get; set; }
-        public DbSet<Request> Requestes { get; set; }
+        public DbSet<Request> Requests { get; set; }
         public DbSet<Sale> Sales { get; set; }
         public DbSet<Symptom> Symptoms { get; set; }
         public DbSet<Session> Session { get; set; }
         public DbSet<TokenAccess> TokenAccess { get; set; }
+        public DbSet<Role> Roles { get; set; }
         
         public StartUpContext(DbContextOptions options) : base(options) { }
 
@@ -37,19 +38,7 @@ namespace StartUp.DataAccess
 
                 var connectionString = configuration.GetConnectionString("StartUpDb");
                 optionsBuilder.UseSqlServer(connectionString);
-            } 
-        }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder
-                .Entity<List<string>>(
-                    eb =>
-                    {
-                        eb.HasNoKey();
-                        eb.ToView("View_BlogPostCounts");
-                        eb.Property(v => v).HasColumnName("Rol");
-                    });
+            }
         }
     }
 }

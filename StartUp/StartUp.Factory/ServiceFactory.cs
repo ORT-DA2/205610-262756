@@ -28,6 +28,7 @@ namespace StartUp.Factory
             serviceCollection.AddScoped<IRepository<Symptom>, SymptomRepository>();
             serviceCollection.AddScoped<IRepository<TokenAccess>, TokenRepository>();
             serviceCollection.AddScoped<IRepository<Session>, SessionRepository>();
+            serviceCollection.AddScoped<IRepository<Role>, RoleRepository>();
         }
         public static void RegisterServices(this IServiceCollection serviceCollection)
         {
@@ -42,6 +43,7 @@ namespace StartUp.Factory
             serviceCollection.AddTransient<ISymptomService, SymptomService>();
             serviceCollection.AddTransient<ISessionService, SessionService>();
             serviceCollection.AddTransient<ITokenAccessService, TokenAccessService>();
+            serviceCollection.AddTransient<IRoleService, RoleService>();
         }
     }
 }

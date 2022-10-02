@@ -10,9 +10,7 @@ namespace StartUp.Models.Models.In
     {
         public string? UserName { get; set; }
         public string? Rol { get; set; }
-        public int? Code { get; set; }
-        public string? State { get; set; }
-        public Pharmacy? Pharmacy { get; set; }
+
 
         public InvitationSearchCriteria ToEntity()
         {
@@ -20,9 +18,6 @@ namespace StartUp.Models.Models.In
             {
                 UserName = this.UserName,
                 Rol = this.Rol,
-                Code = this.Code,
-                State = this.State,
-                Pharmacy = this.Pharmacy
             };
         }
     }

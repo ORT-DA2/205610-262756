@@ -1,6 +1,7 @@
 ﻿using StartUp.Domain.Entities;
 using StartUp.Exceptions;
 using System;
+using System.Collections.Generic;
 
 namespace StartUp.Domain
 {
@@ -14,9 +15,37 @@ namespace StartUp.Domain
             }
         }
 
+        public void ValidateRoleIsNotNull(Role role, string message)
+        {
+            if(role == null)
+            {
+                throw new InputException(message);
+            }
+        }
+
         public void ValidateToken(Guid token, string message)
         {
             if (string.IsNullOrEmpty(token.ToString()))
+            {
+                throw new InputException(message);
+            }
+        }
+
+        public void ValidateContains(string roles, string permissions, string message)
+        {
+            string[] rolesArray = permissions.Split(",");
+            foreach (var role in rolesArray)
+            {
+                if (!roles.Contains(role))
+                {
+                    throw new InputException(message);
+                }
+            }
+        }
+
+        public void ValidateArray(string[] array, string message)
+        {
+            if(array == null || array.Length == 0)
             {
                 throw new InputException(message);
             }
@@ -29,6 +58,8 @@ namespace StartUp.Domain
                 throw new InputException(message);
             }
         }
+
+        
 
         public void ValidateLengthString(string value, string message, int length)
         {

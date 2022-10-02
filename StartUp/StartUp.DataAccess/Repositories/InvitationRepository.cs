@@ -1,17 +1,23 @@
 ﻿using StartUp.Domain;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StartUp.DataAccess.Repositories
 {
     public class InvitationRepository : BaseRepository<Invitation>
     {
+        private StartUpContext _context;
         public InvitationRepository(StartUpContext context) : base(context)
         {
+            _context = context;
+        }
+
+        public override Invitation GetOneByExpression(Expression<Func<Invitation, bool>> expression)
+        {
+            return _context.Set<Invitation>().Include("Pharmacy").FirstOrDefault(expression);
         }
     }
 }

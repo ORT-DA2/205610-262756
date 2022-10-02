@@ -45,6 +45,7 @@ namespace StartUp.BusinessLogic
 
         public TokenAccess CreateTokenAccess(User user)
         {
+            validator.ValidateUserNotNull(user, "User empty");
             var tokenAccess = new TokenAccess();
             tokenAccess.Token = Guid.NewGuid();
             tokenAccess.User = user;
