@@ -13,10 +13,11 @@ namespace StartUp.Domain
 
 
         public Petition() { }
-        public void isValidPetition()
+        public void IsValidPetition()
         {
-            if (string.IsNullOrEmpty(MedicineCode))
-                throw new InputException("Enter a Petition");
+            Validator validator = new Validator();
+            validator.ValidateString(MedicineCode, "The code can't be null");
+            validator.ValidateAmount(Amount, 1, "The Amount can't be less than 1");
         }
 
         public override bool Equals(object? obj)

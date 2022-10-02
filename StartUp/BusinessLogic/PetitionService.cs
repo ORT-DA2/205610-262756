@@ -45,7 +45,7 @@ namespace StartUp.BusinessLogic
 
         public Petition CreatePetition(Petition petition)
         {
-            petition.isValidPetition();
+            petition.IsValidPetition();
 
             _petitionRepository.InsertOne(petition);
             _petitionRepository.Save();
@@ -55,7 +55,7 @@ namespace StartUp.BusinessLogic
 
         public Petition UpdatePetition(int petitionId, Petition updatedPetition)
         {
-            updatedPetition.isValidPetition();
+            updatedPetition.IsValidPetition();
 
             var petitionStored = GetSpecificPetition(petitionId);
 
