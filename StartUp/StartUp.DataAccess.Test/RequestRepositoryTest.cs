@@ -58,14 +58,14 @@ namespace StartUp.DataAccess.Test
             _repository.Save();
 
             // Voy directo al contexto a buscarla
-            var requestInDb = _context.Requestes.FirstOrDefault(r => r.State.Equals(newRequest.State));
+            var requestInDb = _context.Requests.FirstOrDefault(r => r.State.Equals(newRequest.State));
             Assert.IsNotNull(requestInDb);
         }
 
 
         private void LoadRequests(List<Request> requests)
         {
-            requests.ForEach(r => _context.Requestes.Add(r));
+            requests.ForEach(r => _context.Requests.Add(r));
             _context.SaveChanges();
         }
 

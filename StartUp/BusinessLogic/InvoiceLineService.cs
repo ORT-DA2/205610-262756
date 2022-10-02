@@ -22,7 +22,7 @@ namespace StartUp.BusinessLogic
 
         public List<InvoiceLine> GetAllInvoiceLine(InvoiceLineSearchCriteria searchCriteria)
         {
-            var medicineMeasureCriteria = searchCriteria.Medicine.Measure?.ToLower() ?? string.Empty;
+            var medicineMeasureCriteria = searchCriteria.Medicine?.Measure?.ToLower() ?? string.Empty;
             var amountCriteria = searchCriteria.Amount?.ToString() ?? string.Empty;
 
             Expression<Func<InvoiceLine, bool>> invoiceLineFilter = invoiceLine =>
@@ -47,7 +47,7 @@ namespace StartUp.BusinessLogic
 
         public InvoiceLine CreateInvoiceLine(InvoiceLine invoiceLine)
         {
-            invoiceLine.isValidInvoiceLine();
+            invoiceLine.IsValidInvoiceLine();
 
             _invoiceLineRepository.InsertOne(invoiceLine);
             _invoiceLineRepository.Save();
@@ -57,7 +57,7 @@ namespace StartUp.BusinessLogic
 
         public InvoiceLine UpdateInvoiceLine(int invoiceLineId, InvoiceLine updatedInvoiceLine)
         {
-            updatedInvoiceLine.isValidInvoiceLine();
+            updatedInvoiceLine.IsValidInvoiceLine();
 
             var invoiceLineStored = GetSpecificInvoiceLine(invoiceLineId);
 
