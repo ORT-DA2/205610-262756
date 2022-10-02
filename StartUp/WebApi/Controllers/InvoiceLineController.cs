@@ -3,6 +3,7 @@ using StartUp.Exceptions;
 using StartUp.IBusinessLogic;
 using StartUp.Models.Models.In;
 using StartUp.Models.Models.Out;
+using StartUp.WebApi.Filters;
 using System.Linq;
 
 namespace StartUp.WebApi.Controllers
@@ -10,6 +11,7 @@ namespace StartUp.WebApi.Controllers
 
     [Route("api/invoiceLine")]
     [ApiController]
+    [AdministratorFilter]
     public class InvoiceLineController : ControllerBase
     {
         private readonly IInvoiceLineService _invoiceLineService;

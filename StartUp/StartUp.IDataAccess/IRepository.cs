@@ -7,7 +7,6 @@ namespace StartUp.IDataAccess
 {
     public interface IRepository<T> where T : class
     {
-        public string Name { get; set; }
         IEnumerable<T> GetAllByExpression(Expression<Func<T, bool>> expression);
         T GetOneByExpression(Expression<Func<T, bool>> expression);
         void InsertOne(T elem);

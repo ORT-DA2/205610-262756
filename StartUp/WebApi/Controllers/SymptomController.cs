@@ -1,14 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using StartUp.Exceptions;
 using StartUp.IBusinessLogic;
 using StartUp.Models.Models.In;
 using StartUp.Models.Models.Out;
+using StartUp.WebApi.Filters;
 using System.Linq;
 
 namespace StartUp.WebApi.Controllers
 {
     [Route("api/symptom")]
     [ApiController]
+    [EmployeeFilter]
     public class SymptomController : ControllerBase
     {
         private readonly ISymptomService _symptomService;
@@ -18,7 +19,6 @@ namespace StartUp.WebApi.Controllers
             _symptomService = service;
         }
 
-        // Index - Get all symptom (/api/symptom)
         [HttpGet]
         public IActionResult GetSymptom([FromQuery] SymptomSearchCriteriaModel searchCriteria)
         {
@@ -26,7 +26,6 @@ namespace StartUp.WebApi.Controllers
             return Ok(retrievedSymptom.Select(s => new SymptomBasicModel(s)));
         }
 
-        // Show - Get specific symptom (/api/symptom/{id})
         [HttpGet("{id}", Name = "GetSymptom")]
         public IActionResult GetSymptom(int id)
         {
@@ -34,7 +33,6 @@ namespace StartUp.WebApi.Controllers
             return Ok(new SymptomDetailModel(retrievedSymptom));
         }
 
-        // Create - Create new symptom (/api/symptom)
         [HttpPost]
         public IActionResult CreateSymptom([FromBody] SymptomModel newSymptom)
         {
@@ -43,7 +41,6 @@ namespace StartUp.WebApi.Controllers
             return CreatedAtRoute("GetSymptom", new { id = symptomModel.Id }, symptomModel);
         }
 
-        // Update - Update specific symptom (/api/symptom/{id})
         [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody] SymptomModel updatedSymptom)
         {
@@ -51,7 +48,6 @@ namespace StartUp.WebApi.Controllers
             return Ok(new SymptomDetailModel(retrievedSymptom));
         }
 
-        // Delete - Delete specific symptom (/api/symptom/{id})
         [HttpDelete("{id}")]
         public IActionResult DeleteSymptom(int id)
         {

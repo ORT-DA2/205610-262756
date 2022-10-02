@@ -9,9 +9,6 @@ namespace StartUp.WebApi.Controllers
 {
     [Route("api/request")]
     [ApiController]
-    [EmployeeFilter]
-    //[Filters(AuthorizationFilter())]
-    //SOLO PUEDEN TENER ACCESO LOS DUEÑOS Y EMPLEADOS
     public class RequestController : ControllerBase
     {
         private readonly IRequestService _requestService;
@@ -21,24 +18,24 @@ namespace StartUp.WebApi.Controllers
             _requestService = service;
         }
 
-        // Index - Get all request (/api/request)
         [HttpGet]
+        [OwnerFilter]
         public IActionResult GetRequest([FromQuery] RequestSearchCriteriaModels searchCriteria)
         {
             var retrievedRequest = _requestService.GetAllRequest(searchCriteria.ToEntity());
             return Ok(retrievedRequest.Select(r => new RequestBasicModel(r)));
         }
 
-        // Show - Get specific request (/api/request/{id})
         [HttpGet("{id}", Name = "GetRequest")]
+        [OwnerFilter]
         public IActionResult GetRequest(int id)
         {
             var retrievedRequest = _requestService.GetSpecificRequest(id);
             return Ok(new RequestDetailModel(retrievedRequest));
         }
 
-        // Create - Create new request (/api/request)
         [HttpPost]
+        [EmployeeFilter]
         public IActionResult CreateRequest([FromBody] RequestModel newRequest)
         {
             var createdRequest = _requestService.CreateRequest(newRequest.ToEntity());
@@ -46,17 +43,16 @@ namespace StartUp.WebApi.Controllers
             return CreatedAtRoute("GetRequest", new { id = requestModel.Id }, requestModel);
         }
 
-        // Update - Update specific request (/api/request/{id})
         [HttpPut("{id}")]
-        //SOLO PUEDEN EDITAR LOS DUEÑOS
+        [OwnerFilter]
         public IActionResult Update(int id, [FromBody] RequestModel updatedRequest)
         {
             var retrievedRequest = _requestService.UpdateRequest(id, updatedRequest.ToEntity());
             return Ok(new RequestDetailModel(retrievedRequest));
         }
 
-        // Delete - Delete specific request (/api/request/{id})
         [HttpDelete("{id}")]
+        [OwnerFilter]
         public IActionResult Delete(int id)
         {
             _requestService.DeleteRequest(id);

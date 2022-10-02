@@ -3,6 +3,7 @@ using StartUp.Exceptions;
 using StartUp.IBusinessLogic;
 using StartUp.Models.Models.In;
 using StartUp.Models.Models.Out;
+using StartUp.WebApi.Filters;
 using System.Linq;
 
 namespace StartUp.WebApi.Controllers
@@ -19,7 +20,6 @@ namespace StartUp.WebApi.Controllers
             _medicineService = service;
         }
 
-        // Index - Get all medicine (/api/medicine)
         [HttpGet]
         public IActionResult GetMedicine([FromQuery] MedicineSearchCriteriaModel searchCriteria)
         {
@@ -27,7 +27,6 @@ namespace StartUp.WebApi.Controllers
             return Ok(retrievedMedicines.Select(m => new MedicineBasicModel(m)));
         }
 
-        // Show - Get specific medicine (/api/medicine/{id})
         [HttpGet("{id}")]
         public IActionResult GetMedicine(int id)
         {
@@ -35,8 +34,8 @@ namespace StartUp.WebApi.Controllers
             return Ok(new MedicineDetailModel(retrievedMedicine));
         }
 
-        // Create - Create new medicine (/api/medicine)
         [HttpPost]
+        [EmployeeFilter]
         public IActionResult CreateMedicine([FromBody] MedicineModel newMedicine)
         {
             var createdMedicine = _medicineService.CreateMedicine(newMedicine.ToEntity());
@@ -44,16 +43,16 @@ namespace StartUp.WebApi.Controllers
             return CreatedAtRoute("GetMedicine", new { id = medicineModel.Id }, medicineModel);
         }
 
-        // Update - Update specific medicine (/api/medicine/{id})
         [HttpPut("{id}")]
+        [OwnerFilter]
         public IActionResult Update(int id, [FromBody] MedicineModel updatedMedicine)
         {
             var retrievedMedicine = _medicineService.UpdateMedicine(id, updatedMedicine.ToEntity());
             return Ok(new MedicineDetailModel(retrievedMedicine));
         }
 
-        // Delete - Delete specific medicine (/api/medicine/{id})
         [HttpDelete("{id}")]
+        [EmployeeFilter]
         public IActionResult Delete(int id)
         {
             _medicineService.DeleteMedicine(id);

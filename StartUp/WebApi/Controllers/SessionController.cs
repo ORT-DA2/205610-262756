@@ -23,7 +23,7 @@ public class SessionController : ControllerBase
         _sessionService = sessionService;
         _tokenAccessService = tokenService;
     }
-    // Create - Log in (/api/sessions)
+
     [HttpPost]
     public ActionResult<Guid> Login([FromBody] SessionModel sessionModel)
     {
@@ -51,9 +51,7 @@ public class SessionController : ControllerBase
     }
 
 
-    // Delete - Log out (/api/sessions/{username})
     [HttpDelete("{username}")]
-    //[RolFilter("User")]
     public ActionResult Logout([FromHeader] string authorization, string username)
     {
         if (string.IsNullOrEmpty(authorization) || string.IsNullOrEmpty(username))
