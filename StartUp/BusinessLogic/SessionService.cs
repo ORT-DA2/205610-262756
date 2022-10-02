@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Primitives;
-using StartUp.DataAccess.Repositories;
-using StartUp.Domain;
+﻿using StartUp.Domain;
 using StartUp.Domain.Entities;
 using StartUp.IBusinessLogic;
 using StartUp.IDataAccess;
@@ -19,7 +17,6 @@ namespace StartUp.BusinessLogic
         private readonly IRepository<TokenAccess> _tokenAccessRepository;
         private Validator validator = new Validator();
         public User UserLogged { get; set; }
-
         public SessionService(IRepository<Session> sessionRepository, IRepository<User> userRepository,
                                          IRepository<TokenAccess> tokenRepository)
         {
@@ -83,7 +80,6 @@ namespace StartUp.BusinessLogic
                 sessionSalved.Username = session.UserName;
                 sessionSalved.Password = session.Password;
 
-                _sessionRepository.Name = session.UserName;
                 _sessionRepository.InsertOne(sessionSalved);
                 _sessionRepository.Save();
 
@@ -129,18 +125,6 @@ namespace StartUp.BusinessLogic
             }
         }
 
-        public bool HasPermission(string roles, User user)
-        {
-            string[] rolesList = roles.Split(",");
-            bool permission = false;
-
-            foreach (string role in rolesList)
-            {
-                //eliminar si no se usa
-            }
-            return permission;
-        }
-
         public User GetUserToken(string token)
         {
             validator.ValidateString(token, "Token is empty");
@@ -172,11 +156,6 @@ namespace StartUp.BusinessLogic
             _sessionRepository.Save();
         }
 
-        public void Update(string username)
-        {
-            throw new NotImplementedException();
-        }
-
         public bool IsFormatValidOfAuthorizationHeader(string authorizationHeader)
         {
             if (string.IsNullOrEmpty(authorizationHeader))
@@ -206,5 +185,6 @@ namespace StartUp.BusinessLogic
         {
             return _tokenAccessRepository.GetOneByExpression(t => t.User == UserLogged);
         }
-    }
+
+        }
 }
