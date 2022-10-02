@@ -24,9 +24,9 @@ namespace StartUp.BusinessLogic
             var nameCriteria = searchCriteria.Name?.ToLower() ?? string.Empty;
             var amountCriteria = searchCriteria.Amount?.ToString().ToLower() ?? string.Empty;
             var presentationCriteria = searchCriteria.Presentation?.ToLower() ?? string.Empty;
-            var priceCriteria = searchCriteria.Price.ToString() ?? string.Empty;
-            var measureCriteria = searchCriteria.Measure?.ToString() ?? string.Empty;
-            var codeCriteria = searchCriteria.Code.ToLower() ?? string.Empty;
+            var priceCriteria = searchCriteria.Price?.ToString() ?? string.Empty;
+            var measureCriteria = searchCriteria.Measure?.ToLower() ?? string.Empty;
+            var codeCriteria = searchCriteria.Code?.ToLower() ?? string.Empty;
             var prescriptionCriteria = searchCriteria.Prescription?.ToString() ?? string.Empty;
             var stockCriteria = searchCriteria.Stock?.ToString() ?? string.Empty;
 
@@ -56,8 +56,9 @@ namespace StartUp.BusinessLogic
 
         public Medicine CreateMedicine(Medicine medicine)
         {
-            medicine.isValidMedicine();
-
+            medicine.IsValidMedicine();
+            IsMedicineRegistered(medicine);
+            
             _medicineRepository.InsertOne(medicine);
             _medicineRepository.Save();
 
@@ -66,7 +67,7 @@ namespace StartUp.BusinessLogic
 
         public Medicine UpdateMedicine(int medicineId, Medicine updatedMedicine)
         {
-            updatedMedicine.isValidMedicine();
+            updatedMedicine.IsValidMedicine();
 
             var medicineStored = GetSpecificMedicine(medicineId);
 
@@ -92,6 +93,16 @@ namespace StartUp.BusinessLogic
 
             _medicineRepository.DeleteOne(medicineStored);
             _medicineRepository.Save();
+        }
+
+        private void IsMedicineRegistered(Medicine medicine)
+        {
+            var med = _medicineRepository.GetOneByExpression(m => m.Code == medicine.Code);
+
+            if (med != null)
+            {
+                throw new InputException("The medicine with that code already exist");
+            }
         }
     }
 }

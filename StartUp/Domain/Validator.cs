@@ -87,5 +87,21 @@ namespace StartUp.Domain
                 throw new InputException(message);
             }
         }
+        
+        public void ValidateSymptomsListNotNull(List<Symptom> value, string message)
+        {
+            if(value == null)
+            {
+                throw new InputException(message);
+            }
+        }
+        
+        public void ValidateAmount(int value, int min, string message)
+        {
+            if(value < min)
+            {
+                throw new InputException(message);
+            }
+        }
     }
 }
