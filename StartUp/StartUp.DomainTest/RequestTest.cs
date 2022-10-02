@@ -31,7 +31,7 @@ namespace StartUp.DomainTest
         
         [TestMethod]
         [ExpectedException(typeof(Exceptions.InputException))]
-        public void NewRequestWithNoPetitionsTest()
+        public void NewRequestWithNoRequestsTest()
         {
             Request request = CreateRequest(1, null, true);
            
@@ -39,7 +39,7 @@ namespace StartUp.DomainTest
         }
         
         [TestMethod]
-        public void CompareTwoPetitionsTest()
+        public void CompareTwoRequestsTest()
         {
             Request request = CreateRequest(1, petitionsList, true);
             Request request1 = CreateRequest(1, petitionsList, true);
@@ -50,7 +50,7 @@ namespace StartUp.DomainTest
         }
         
         [TestMethod]
-        public void CompareTwoDiferentPetitionsTest()
+        public void CompareTwoDiferentRequestTest()
         {
             Request request = CreateRequest(1, petitionsList, true);
             Request request1 = CreateRequest(2, petitionsList, true);
@@ -61,7 +61,7 @@ namespace StartUp.DomainTest
         }
         
         [TestMethod]
-        public void CompareNullPetitionsTest()
+        public void CompareNullRequestTest()
         {
             Request request = CreateRequest(1, petitionsList, true);
             Request request1 = null;
