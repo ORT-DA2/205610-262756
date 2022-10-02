@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Text;
-using DocumentFormat.OpenXml.Drawing.Charts;
 using Moq;
 using StartUp.BusinessLogic;
 using StartUp.Domain;
