@@ -37,14 +37,13 @@ public class SessionController : ControllerBase
         {
             var tokenExist = _tokenAccessService.GetSpecificTokenAccess(session);
             _sessionService.UserLogged = tokenExist.User;
-            _sessionService.x = "1";
+
             return Created("Successful login", tokenExist);
         }
         catch (ResourceNotFoundException)
         {
             var newToken = _tokenAccessService.CreateTokenAccess(user);
             _sessionService.UserLogged = newToken.User;
-            _sessionService.x = "2";
 
             return Created("Successful login", newToken);
         }

@@ -33,27 +33,54 @@ namespace StartUp.DomainTest
         [TestMethod]
         public void NewPharmacyTestOK()
         {
-            Pharmacy pharmacy = new Pharmacy("Abichuela", "Carlos Maria Ramirez 106", medicines, requests);
+            Pharmacy pharmacy1 = CreatePharmacy("a Pharmacy", "SolanoGarcia", medicines, requests);
 
-            Assert.IsNotNull(pharmacy);
+            Assert.IsNotNull(pharmacy1);
         }
 
         [TestMethod]
         [ExpectedException(typeof(Exceptions.InputException))]
         public void NewPharmacyWithoutNameTest()
         {
-            Pharmacy pharmacy = new Pharmacy("", "Carlos Maria Ramirez 106", medicines, requests);
+            Pharmacy pharmacy1 = CreatePharmacy("", "SolanoGarcia", medicines, requests);
 
-            pharmacy.isValidPharmacy();
+            pharmacy1.isValidPharmacy();
+        }
+        
+        [TestMethod]
+        [ExpectedException(typeof(Exceptions.InputException))]
+        public void NewPharmacyWithSpacesNameTest()
+        {
+            Pharmacy pharmacy1 = CreatePharmacy("    ", "SolanoGarcia", medicines, requests);
+
+            pharmacy1.isValidPharmacy();
+        }
+        
+        [TestMethod]
+        [ExpectedException(typeof(Exceptions.InputException))]
+        public void NewPharmacyWithMoreThan50NameTest()
+        {
+            Pharmacy pharmacy1 = CreatePharmacy("012345678901234567890123456789012345678901234567890", "SolanoGarcia", medicines, requests);
+
+            pharmacy1.isValidPharmacy();
         }
 
         [TestMethod]
         [ExpectedException(typeof(Exceptions.InputException))]
         public void NewPharmacyWithoutAddressTest()
         {
-            Pharmacy pharmacy = new Pharmacy("Una farmacia", "", medicines, requests);
+            Pharmacy pharmacy1 = CreatePharmacy("Una farmacia", "", medicines, requests);
 
-            pharmacy.isValidPharmacy();
+            pharmacy1.isValidPharmacy();
+        }
+        
+        [TestMethod]
+        [ExpectedException(typeof(Exceptions.InputException))]
+        public void NewPharmacyWithSpacesAddressTest()
+        {
+            Pharmacy pharmacy1 = CreatePharmacy("Una farmacia", "      ", medicines, requests);
+            
+            pharmacy1.isValidPharmacy();
         }
 
 
@@ -61,9 +88,9 @@ namespace StartUp.DomainTest
         [ExpectedException(typeof(Exceptions.InputException))]
         public void NewPharmacyWithoutMedicinesTest()
         {
-            Pharmacy pharmacy = new Pharmacy("Una farmacia", "18 de julio", null, requests);
+            Pharmacy pharmacy1 = CreatePharmacy("Una farmacia", "SolanoGarcia", null, requests);
 
-            pharmacy.isValidPharmacy();
+            pharmacy1.isValidPharmacy();
         }
 
 
@@ -71,10 +98,44 @@ namespace StartUp.DomainTest
         [ExpectedException(typeof(Exceptions.InputException))]
         public void NewPharmacyWithoutRequestTest()
         {
-            Pharmacy pharmacy = new Pharmacy("Una farmacia", "Arenal grande", medicines, null);
+            Pharmacy pharmacy1 = CreatePharmacy("Una farmacia", "SolanoGarcia", medicines, null);
 
-            pharmacy.isValidPharmacy();
+            pharmacy1.isValidPharmacy();
+        }
+        
+        [TestMethod]
+        public void ComparingEqualPharmacies()
+        {
+            Pharmacy pharmacy1 = CreatePharmacy("Una farmacia", "SolanoGarcia", medicines, requests);
+            Pharmacy pharmacy = CreatePharmacy("Una farmacia", "SolanoGarcia", medicines, requests);
+            
+            bool areSame = pharmacy.Equals(pharmacy1);
+
+            Assert.IsTrue(areSame);
+        }
+        
+        [TestMethod]
+        public void ComparingDiferentPharmacies()
+        {
+            Pharmacy pharmacy = CreatePharmacy("el tunel", "SolanoGarcia", medicines, requests);
+            Pharmacy pharmacy1 = CreatePharmacy("Una farmacia", "SolanoGarcia", medicines, requests);
+
+            bool areSame = pharmacy.Equals(pharmacy1);
+
+            Assert.IsFalse(areSame);
         }
 
+        private Pharmacy CreatePharmacy(string name, string address, List<Medicine> stock, List<Request> request)
+        {
+            Pharmacy pharmacy1 = new Pharmacy
+            {
+                Name = name, 
+                Address = address,
+                Stock = stock,
+                Requests = request
+            };
+
+            return pharmacy1;
+        }
     }
 }

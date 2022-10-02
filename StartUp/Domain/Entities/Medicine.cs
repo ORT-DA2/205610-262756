@@ -21,11 +21,16 @@ namespace StartUp.Domain
 
 
         public Medicine() { }
-        public void isValidMedicine()
+        public void IsValidMedicine()
         {
-            if (string.IsNullOrEmpty(Code) || string.IsNullOrEmpty(Name) || string.IsNullOrEmpty(Presentation)
-                || string.IsNullOrEmpty(Measure) || Symptoms == null)
-                throw new InputException("Enter a Medicine");
+            Validator validator = new Validator();
+            validator.ValidateString(Code, "The Code can't be empty or only white spaces");
+            validator.ValidateString(Name, "The Name can't be empty or only white spaces");
+            validator.ValidateString(Measure, "The Name can't be empty or only white spaces");
+            validator.ValidateString(Presentation, "The Name can't be empty or only white spaces");
+            validator.ValidateSymptomsListNotNull(Symptoms, "The Symptoms list can't be null");
+            validator.ValidateAmount(Amount, 1, "The amount of the medicine can't be less than 1");
+            validator.ValidateAmount(Price, 1,"The price of the medicine can't be less than 1");
         }
 
         public override bool Equals(object? obj)
@@ -38,7 +43,7 @@ namespace StartUp.Domain
 
         protected bool Equals(Medicine other)
         {
-            return Id == other?.Id;
+            return Code == other?.Code;
         }
     }
 }

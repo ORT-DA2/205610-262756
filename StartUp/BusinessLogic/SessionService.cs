@@ -19,7 +19,7 @@ namespace StartUp.BusinessLogic
         private readonly IRepository<TokenAccess> _tokenAccessRepository;
         private Validator validator = new Validator();
         public User UserLogged { get; set; }
-        public string x { get; set; }
+
         public SessionService(IRepository<Session> sessionRepository, IRepository<User> userRepository,
                                          IRepository<TokenAccess> tokenRepository)
         {

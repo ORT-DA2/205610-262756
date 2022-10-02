@@ -40,6 +40,7 @@ namespace StartUp.DataAccess.Test
 
             var retrievedUsers = _repository.GetAllByExpression(expression);
             CollectionAssert.AreEquivalent(eligibleUsers, retrievedUsers.ToList());
+            
         }
 
         [TestMethod]

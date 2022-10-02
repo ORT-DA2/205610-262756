@@ -19,19 +19,66 @@ namespace StartUp.DomainTest
             petitionsList = new List<Petition>();
         }
 
-        [TestCleanup]
-        public void Cleanup()
-        {
-
-        }
-
         [TestMethod]
-        public void NewRequestTestOK()
+        public void NewRequestTest()
         {
-            Request request = new Request();
-            request.Petitions = new List<Petition>();
+           Request request = CreateRequest(1, petitionsList, true);
+           
+           request.isValidRequest();
+           
+           Assert.IsNotNull(request);
+        }
+        
+        [TestMethod]
+        [ExpectedException(typeof(Exceptions.InputException))]
+        public void NewRequestWithNoRequestsTest()
+        {
+            Request request = CreateRequest(1, null, true);
+           
+            request.isValidRequest();
+        }
+        
+        [TestMethod]
+        public void CompareTwoRequestsTest()
+        {
+            Request request = CreateRequest(1, petitionsList, true);
+            Request request1 = CreateRequest(1, petitionsList, true);
 
-            Assert.IsNotNull(request);
+            bool areEqual = request.Equals(request1);
+            
+            Assert.IsTrue(areEqual);
+        }
+        
+        [TestMethod]
+        public void CompareTwoDiferentRequestTest()
+        {
+            Request request = CreateRequest(1, petitionsList, true);
+            Request request1 = CreateRequest(2, petitionsList, true);
+
+            bool areEqual = request.Equals(request1);
+            
+            Assert.IsFalse(areEqual);
+        }
+        
+        [TestMethod]
+        public void CompareNullRequestTest()
+        {
+            Request request = CreateRequest(1, petitionsList, true);
+            Request request1 = null;
+
+            bool areEqual = request.Equals(request1);
+            
+            Assert.IsFalse(areEqual);
+        }
+        
+        private Request CreateRequest(int id, List<Petition> petit, bool state )
+        {
+            return new Request()
+            {
+                Id = id,
+                Petitions = petit,
+                State = state,
+            };
         }
     }
 }
