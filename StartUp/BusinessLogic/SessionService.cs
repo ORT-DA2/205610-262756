@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Primitives;
-using StartUp.DataAccess.Repositories;
-using StartUp.Domain;
+﻿using StartUp.Domain;
 using StartUp.Domain.Entities;
 using StartUp.Domain.SearchCriterias;
 using StartUp.Exceptions;

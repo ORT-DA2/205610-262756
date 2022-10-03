@@ -12,10 +12,11 @@ namespace StartUp.Domain
         public int Amount { get; set; }
 
         public InvoiceLine() { }
-        public void isValidInvoiceLine()
+        public void IsValidInvoiceLine()
         {
-            if (Medicine == null || string.IsNullOrEmpty(Amount.ToString()))
-                throw new InputException("Invoiceline empty");
+            Validator validator = new Validator();
+            validator.ValidateAmount(Amount, 1, "The Amount cant be less than 1");
+            validator.ValidateMedicineNotNull(Medicine, "The medicine cant be null");
         }
 
         public override bool Equals(object? obj)

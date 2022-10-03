@@ -49,6 +49,7 @@ namespace StartUp.DomainTest
         {
             Invitation inv = CreateInvitation(000000,1,"Admin","", pharmacy1, "Available" );
 
+
             inv.IsValidInvitation();
         }
         
@@ -76,7 +77,7 @@ namespace StartUp.DomainTest
         public void CompareDifferentInvitationTest()
         {
             Invitation inv = CreateInvitation(000000,1,"Admin","julia", pharmacy1, "Available");
-            Invitation inv2 = CreateInvitation(000000,1,"Admin","Juan", pharmacy1, "Available");
+            Invitation inv2 = CreateInvitation(000001,1,"Admin","Juan", pharmacy1, "Available");
 
             bool areSame = inv.Equals(inv2);
             

@@ -7,7 +7,6 @@ namespace StartUp.IBusinessLogic
 {
     public interface ISessionService
     {
-        User UserLogged { get; set; }
         List<Session> GetAllSession(SessionSearchCriteria searchCriteria);
         Session GetSpecificSession(string username);
         Session CreateOrRetrieveSession(SessionModel session);

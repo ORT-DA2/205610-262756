@@ -140,5 +140,13 @@ namespace StartUp.Domain
                 throw new InputException(message);
             }
         }
+
+        public void ValidateMedicineNotNull(Medicine med, string message)
+        {
+            if (med == null)
+            {
+                throw new InputException(message);
+            }
+        }
     }
 }
