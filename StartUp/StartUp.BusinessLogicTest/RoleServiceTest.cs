@@ -13,7 +13,6 @@ namespace StartUp.BusinessLogicTest
     [TestClass]
     public class RoleServiceTest
     {
-
         private Mock<IDataAccess.IRepository<Role>> _repoMock;
         private RoleService _service;
 
