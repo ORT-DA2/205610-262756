@@ -112,7 +112,13 @@ namespace BusinessLogic
 
         public void SaveToken(User user, string token)
         {
+            validator.ValidateUserNull(user, "User empty");
+            validator.ValidateString(token, "Token empty");
+            
             var userSalved = _userRepository.GetOneByExpression(u => u.Id == user.Id);
+            
+            validator.ValidateUserNull((userSalved), "User not exist in database");
+            
             userSalved.Token = token;
             _userRepository.Save();
         }
