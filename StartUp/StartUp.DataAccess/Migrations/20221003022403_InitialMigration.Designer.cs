@@ -12,8 +12,8 @@ using StartUp.DataAccess;
 namespace StartUp.DataAccess.Migrations
 {
     [DbContext(typeof(StartUpContext))]
-    [Migration("20221002204858_InitialMigrations")]
-    partial class InitialMigrations
+    [Migration("20221003022403_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

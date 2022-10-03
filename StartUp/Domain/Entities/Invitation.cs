@@ -15,8 +15,7 @@ namespace StartUp.Domain
         public Pharmacy Pharmacy { get; set; }
 
         public Invitation() { }
-
-
+        
         public override bool Equals(object? obj)
         {
             if (ReferenceEquals(null, obj)) return false;

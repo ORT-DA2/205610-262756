@@ -19,5 +19,12 @@ namespace StartUp.DataAccess.Repositories
         {
             return _context.Set<Invitation>().Include("Pharmacy").FirstOrDefault(expression);
         }
+
+        public override void InsertOne(Invitation elem)
+        {
+            _context.Entry(elem).State = (Microsoft.EntityFrameworkCore.EntityState)EntityState.Unchanged;
+            _context.Set<Invitation>().Add(elem);
+
+        }
     }
 }
