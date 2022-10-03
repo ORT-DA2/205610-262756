@@ -51,6 +51,7 @@ namespace StartUp.BusinessLogic
         public Pharmacy CreatePharmacy(Pharmacy pharmacy)
         {
             pharmacy.isValidPharmacy();
+            pharmacy.Requests = new List<Request>();
             NotExistInDataBase(pharmacy);
 
             _pharmacyRepository.InsertOne(pharmacy);

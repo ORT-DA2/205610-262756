@@ -55,6 +55,7 @@ namespace StartUp.BusinessLogic
         {
             invitation.IsValidInvitation();
             NotExistInDataBase(invitation);
+            ValidateInvitationRoles(invitation);
 
             invitation.State = "Available";
             invitation.Code = GenerateCode();
@@ -109,6 +110,15 @@ namespace StartUp.BusinessLogic
                 return GenerateCode();
             }
             return code;
+        }
+
+        private void ValidateInvitationRoles(Invitation invitation)
+        {
+            if (invitation.Rol.ToLower() == "owner" || invitation.Rol.ToLower() == "employee"
+                && invitation.Pharmacy == null)
+            {
+                throw new InputException("The owner and the employee roles need a pharmacy");
+            }
         }
     }
 }

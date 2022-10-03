@@ -28,7 +28,6 @@ namespace StartUp.Domain
             validator.ValidateString(Address, "Address can not be empty or all spaces");
             validator.ValidateLengthString(Name, "The name of the pharmacy must not exceed 50 characters", 50);
             validator.ValidateMedicineListNotNull(Stock, "The list of medicines must be created");
-            validator.ValidateRequestListNotNull(Requests, "The list of request must be created");
         }
 
         public override bool Equals(object? obj)
