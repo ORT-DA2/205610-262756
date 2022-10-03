@@ -3,7 +3,10 @@ using Moq;
 using StartUp.BusinessLogic;
 using StartUp.Domain;
 using StartUp.Domain.Entities;
+using StartUp.Domain.SearchCriterias;
 using StartUp.Exceptions;
+using StartUp.Models.Models.In;
+using StartUp.Models.Models.Out;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -68,7 +71,7 @@ namespace StartUp.BusinessLogicTest
         public void GetAllSessionTest()
         {
             List<Session> dummySession = GenerateDummySession();
-            _repoMock.Setup(repo => repo.GetAllByExpression(It.IsAny<Expression<Func<Session, bool>>>())).Returns(dummySession);
+            _repoSessionMock.Setup(repo => repo.GetAllByExpression(It.IsAny<Expression<Func<Session, bool>>>())).Returns(dummySession);
             SessionSearchCriteria searchCriteria = new SessionSearchCriteria();
 
             var retrievedSession = _service.GetAllSession(searchCriteria);
@@ -79,14 +82,14 @@ namespace StartUp.BusinessLogicTest
         [TestMethod]
         public void UpdateSessionTest()
         {
-            var session = CreateSession(1, petitions, true);
-            _repoMock.Setup(repo => repo.GetOneByExpression(It.IsAny<Expression<Func<Session, bool>>>())).Returns(session);
-            Session updateData = CreateSession(session.Id, petitions, false);
+            var session = CreateSession(1, userName, pass);
+            _repoSessionMock.Setup(repo => repo.GetOneByExpression(It.IsAny<Expression<Func<Session, bool>>>())).Returns(session);
+            Session updateData = CreateSession(session.Id, userName, pass);
 
-            _repoMock.Setup(repo => repo.UpdateOne(session));
-            _repoMock.Setup(repo => repo.Save());
+            _repoSessionMock.Setup(repo => repo.UpdateOne(session));
+            _repoSessionMock.Setup(repo => repo.Save());
 
-            Session updatedSession = _service.UpdateSession(session.Id, updateData);
+            Session updatedSession = _service.UpdateSession(session.Username, updateData);
 
             Assert.AreEqual(updatedSession, session);
         }
@@ -95,21 +98,21 @@ namespace StartUp.BusinessLogicTest
         [ExpectedException(typeof(ResourceNotFoundException))]
         public void DeleteNotExistingSessionTest()
         {
-            _repoMock.Setup(repo => repo.GetOneByExpression(It.IsAny<Expression<Func<Session, bool>>>())).Returns((Session)null);
+            _repoSessionMock.Setup(repo => repo.GetOneByExpression(It.IsAny<Expression<Func<Session, bool>>>())).Returns((Session)null);
 
-            _service.DeleteSession(1);
+            _service.DeleteSession("Ana Paula");
         }
 
         [TestMethod]
         [ExpectedException(typeof(ResourceNotFoundException))]
         public void DeleteSessionTest()
         {
-            var session = CreateSession(1, petitions, true);
-            _repoMock.SetupSequence(repo => repo.GetOneByExpression(It.IsAny<Expression<Func<Session, bool>>>())).Returns(session).Returns((Session)null);
-            _repoMock.Setup(repo => repo.DeleteOne(session));
-            _repoMock.Setup(repo => repo.Save());
+            var session = CreateSession(1, userName, pass);
+            _repoSessionMock.SetupSequence(repo => repo.GetOneByExpression(It.IsAny<Expression<Func<Session, bool>>>())).Returns(session).Returns((Session)null);
+            _repoSessionMock.Setup(repo => repo.DeleteOne(session));
+            _repoSessionMock.Setup(repo => repo.Save());
 
-            _service.DeleteSession(session.Id);
+            _service.DeleteSession(session.Username);
 
             _service.GetSpecificSession(session.Id);
         }
@@ -117,11 +120,11 @@ namespace StartUp.BusinessLogicTest
         [TestMethod]
         public void CreateSessionTest()
         {
-            var session = CreateSession(1, petitions, true);
-            _repoMock.Setup(repo => repo.InsertOne(session));
-            _repoMock.Setup(repo => repo.Save());
+            var session = CreateSession(1, userName, pass);
+            _repoSessionMock.Setup(repo => repo.InsertOne(session));
+            _repoSessionMock.Setup(repo => repo.Save());
 
-            Session newSession = _service.CreateSession(session);
+            Session newSession = _service.CreateOrRetrieveSession(new SessionModel(session));
 
             Assert.AreEqual(newSession, session);
         }
@@ -130,9 +133,9 @@ namespace StartUp.BusinessLogicTest
         [ExpectedException(typeof(Exceptions.InputException))]
         public void CreateInvalidSessionTest()
         {
-            var session = CreateSession(1, null, true);
+            var session = CreateSession(1, userName, pass);
 
-            _service.CreateSession(session);
+            _service.CreateOrRetrieveSession(new SessionModel(session));
         }
 
 

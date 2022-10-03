@@ -16,7 +16,7 @@ namespace StartUp.DataAccess.Repositories
 
         public override TokenAccess GetOneByExpression(Expression<Func<TokenAccess, bool>> expression)
         {
-            return _context.Set<TokenAccess>().Include(t=>t.User).Include("User").FirstOrDefault(expression);
+            return _context.Set<TokenAccess>().Include(t => t.User).FirstOrDefault(expression);
         }
     }
 }

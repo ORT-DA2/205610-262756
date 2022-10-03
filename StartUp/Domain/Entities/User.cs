@@ -16,6 +16,7 @@ namespace StartUp.Domain.Entities
         public DateTime RegisterDate { get; set; }
         public Invitation Invitation { get; set; }
         public Pharmacy Pharmacy { get; set; }
+        public string Token { get; set; }
 
         public Validator validator = new Validator();
 

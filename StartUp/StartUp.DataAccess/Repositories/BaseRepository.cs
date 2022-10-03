@@ -27,7 +27,7 @@ public class BaseRepository<T> : IRepository<T> where T : class
         return _context.Set<T>().FirstOrDefault(expression);
     }
 
-    public void InsertOne(T elem)
+    public virtual void InsertOne(T elem)
     {
         _context.Set<T>().Add(elem);
     }

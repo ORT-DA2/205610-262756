@@ -41,6 +41,7 @@ namespace StartUp.WebApi.Controllers
             var createdRequest = _requestService.CreateRequest(newRequest.ToEntity());
             var requestModel = new RequestDetailModel(createdRequest);
             return CreatedAtRoute("GetRequest", new { id = requestModel.Id }, requestModel);
+            return Ok();
         }
 
         [HttpPut("{id}")]

@@ -14,5 +14,6 @@ namespace IBusinessLogic
         User CreateUser(User user);
         User UpdateUser(int userId, User user);
         void DeleteUser(int userId);
+        void SaveToken(User user, string token);
     }
 }

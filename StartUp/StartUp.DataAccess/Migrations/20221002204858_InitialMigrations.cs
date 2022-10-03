@@ -141,7 +141,8 @@ namespace StartUp.DataAccess.Migrations
                     RolesId = table.Column<int>(type: "int", nullable: true),
                     RegisterDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     InvitationId = table.Column<int>(type: "int", nullable: true),
-                    PharmacyId = table.Column<int>(type: "int", nullable: true)
+                    PharmacyId = table.Column<int>(type: "int", nullable: true),
+                    Token = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {

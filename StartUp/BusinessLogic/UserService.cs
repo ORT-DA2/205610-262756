@@ -14,6 +14,7 @@ namespace BusinessLogic
     public class UserService : IUserService
     {
         private readonly IRepository<User> _userRepository;
+        private Validator validator = new Validator();
 
         public UserService(IRepository<User> userRepository)
         {
@@ -43,12 +44,12 @@ namespace BusinessLogic
 
         public User GetSpecificUser(int userId)
         {
-           User UserSaved = _userRepository.GetOneByExpression(u => u.Id == userId);
-            
-            if (UserSaved == null)
-            {
-                throw new ResourceNotFoundException($"The user {userId} not exist");
-            }
+            validator.ValidateString(userId.ToString(), "User empty");
+
+            User UserSaved = _userRepository.GetOneByExpression(u => u.Id == userId);
+
+            validator.ValidateUserNotNull(UserSaved, $"The user {userId} not exist");
+
             return UserSaved;
         }
 
@@ -67,9 +68,13 @@ namespace BusinessLogic
 
         public User UpdateUser(int userId, User updateduser)
         {
+            validator.ValidateUserNotNull(updateduser, "User empty");
+            validator.ValidateString(userId.ToString(), "UserId empty");
+
             updateduser.IsValidUser();
 
             var userStored = GetSpecificUser(userId);
+            validator.ValidateUserNotNull(userStored, "User not exist");
 
             userStored.Email = updateduser.Email;
             userStored.Password = updateduser.Password;
@@ -88,7 +93,9 @@ namespace BusinessLogic
 
         public void DeleteUser(int userId)
         {
+            validator.ValidateString(userId.ToString(), "UserID empty");
             var userStored = GetSpecificUser(userId);
+            validator.ValidateUserNotNull(userStored, "User not exist");
 
             _userRepository.DeleteOne(userStored);
             _userRepository.Save();
@@ -96,12 +103,18 @@ namespace BusinessLogic
 
         private void EmailNotExistInDataBase(User user)
         {
-            User UserSaved = _userRepository.GetOneByExpression(u => u.Email == user.Email);
+            validator.ValidateUserNotNull(user, "User empty");
 
-            if (UserSaved != null)
-            {
-                throw new ResourceNotFoundException($"There is already an User with { user.Email} email");
-            }
+            User userSaved = _userRepository.GetOneByExpression(u => u.Email == user.Email);
+
+            validator.ValidateUserNull(userSaved, $"There is already an User with {user.Email} email");
+        }
+
+        public void SaveToken(User user, string token)
+        {
+            var userSalved = _userRepository.GetOneByExpression(u => u.Id == user.Id);
+            userSalved.Token = token;
+            _userRepository.Save();
         }
 
     }

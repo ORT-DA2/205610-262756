@@ -77,6 +77,14 @@ namespace StartUp.Domain
             }
         }
 
+        public void ValidateUserNull(User user, string message)
+        {
+            if (user != null)
+            {
+                throw new InputException(message);
+            }
+        }
+
         public void ValidateInvitationNotNull(Invitation invitation, string message)
         {
             if (invitation == null)

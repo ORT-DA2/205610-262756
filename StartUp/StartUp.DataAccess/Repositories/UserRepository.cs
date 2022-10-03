@@ -20,5 +20,13 @@ namespace StartUp.DataAccess.Repositories
             return _context.Set<User>().Include("Invitation").Include("Roles").Include("Pharmacy").FirstOrDefault(expression);
         }
 
+        public override void InsertOne(User elem)
+        {
+            _context.Entry(elem.Pharmacy).State = EntityState.Unchanged;
+            _context.Entry(elem.Roles).State = EntityState.Unchanged;
+            _context.Entry(elem.Invitation).State = EntityState.Unchanged;
+            _context.Set<User>().Add(elem);
+        }
+
     }
 }

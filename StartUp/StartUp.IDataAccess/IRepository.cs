@@ -13,7 +13,6 @@ namespace StartUp.IDataAccess
         void DeleteOne(T elem);
         void UpdateOne(T elem);
         void Save();
-        
     }
 }
 

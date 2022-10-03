@@ -17,37 +17,36 @@ public class SessionController : ControllerBase
 {
     private readonly ISessionService _sessionService;
     private readonly ITokenAccessService _tokenAccessService;
+    private readonly IUserService _userService;
 
-    public SessionController(ISessionService sessionService, ITokenAccessService tokenService)
+    public SessionController(ISessionService sessionService, ITokenAccessService tokenService, IUserService userService)
     {
         _sessionService = sessionService;
         _tokenAccessService = tokenService;
+        _userService = userService;
     }
 
     [HttpPost]
     public ActionResult<Guid> Login([FromBody] SessionModel sessionModel)
     {
-        _sessionService.VerifySessionModel(sessionModel);
-
-        User user = _sessionService.GetSpecificUser(sessionModel.UserName);
+        User user = _sessionService.VerifySession(sessionModel);
 
         Session session = _sessionService.CreateOrRetrieveSession(sessionModel);
 
         try
         {
             var tokenExist = _tokenAccessService.GetSpecificTokenAccess(session);
-            _sessionService.UserLogged = tokenExist.User;
+            _userService.SaveToken(user, tokenExist.Token.ToString());
 
             return Created("Successful login", tokenExist);
         }
         catch (ResourceNotFoundException)
         {
             var newToken = _tokenAccessService.CreateTokenAccess(user);
-            _sessionService.UserLogged = newToken.User;
+            _userService.SaveToken(user, newToken.Token.ToString());
 
             return Created("Successful login", newToken);
         }
-
     }
 
 
@@ -60,8 +59,8 @@ public class SessionController : ControllerBase
         }
 
         Session session = _sessionService.GetSpecificSession(username);
-        _sessionService.VerifySession(session);
-        
+        _sessionService.VerifySession(new SessionModel(session));
+
         _tokenAccessService.DeleteTokenAccess(session);
 
         return Ok();

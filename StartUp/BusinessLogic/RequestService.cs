@@ -14,9 +14,7 @@ namespace StartUp.BusinessLogic
     {
         private readonly IRepository<Request> _requestRepository;
 
-        public RequestService(IRepository<Request> requestRepository)
-        {
-            _requestRepository = requestRepository;
+        public RequestService(IRepository<Request> requestRepository) { 
         }
 
         public List<Request> GetAllRequest(RequestSearchCriteria searchCriteria)
