@@ -18,7 +18,6 @@ namespace StartUp.WebApi.Controllers
             _saleService = service;
         }
 
-        // Index - Get all sale (/api/sale)
         [HttpGet]
         public IActionResult GetSale([FromQuery] SaleSearchCriteriaModel searchCriteria)
         {
@@ -26,7 +25,6 @@ namespace StartUp.WebApi.Controllers
             return Ok(retrievedSale.Select(s => new SaleBasicModel(s)));
         }
 
-        // Show - Get specific sale (/api/sale/{id})
         [HttpGet("{id}", Name = "GetSale")]
         public IActionResult GetSale(int id)
         {
@@ -34,7 +32,6 @@ namespace StartUp.WebApi.Controllers
             return Ok(new SaleDetailModel(retrievedSale));
         }
 
-        // Create - Create new sale (/api/sale)
         [HttpPost]
         public IActionResult CreateSale([FromBody] SaleModel newSale)
         {
@@ -43,7 +40,6 @@ namespace StartUp.WebApi.Controllers
             return CreatedAtRoute("GetSale", new { id = saleModel.Id }, saleModel);
         }
 
-        // Update - Update specific sale (/api/sale/{id})
         [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody] SaleModel updatedSale)
         {
@@ -51,7 +47,6 @@ namespace StartUp.WebApi.Controllers
             return Ok(new SaleDetailModel(retrievedSale));
         }
 
-        // Delete - Delete specific sale (/api/sale/{id})
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {

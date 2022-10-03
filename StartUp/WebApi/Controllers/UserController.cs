@@ -10,7 +10,7 @@ namespace StartUp.WebApi.Controllers
 
     [Route("api/user")]
     [ApiController]
-    [AdministratorFilter]
+    //[AdministratorFilter]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -20,7 +20,6 @@ namespace StartUp.WebApi.Controllers
             _userService = service;
         }
 
-        // Index - Get all user (/api/user)
         [HttpGet]
         public IActionResult GetUserByRol([FromQuery] UserSearchCriteriaModel searchCriteria)
         {
@@ -28,7 +27,6 @@ namespace StartUp.WebApi.Controllers
             return Ok(retrievedUser.Select(a => new UserBasicModel(a)));
         }
 
-        // Show - Get specific user (/api/user/{id})
         [HttpGet("{id}", Name = "GetUser")]
         public IActionResult GetUser(int id)
         {
@@ -36,7 +34,6 @@ namespace StartUp.WebApi.Controllers
             return Ok(new UserDetailModel(retrievedUser));
         }
 
-        // Create - Create new user (/api/user)
         [HttpPost]
         public IActionResult CreateUser([FromBody] UserModel newUser)
         {
@@ -45,7 +42,6 @@ namespace StartUp.WebApi.Controllers
             return CreatedAtRoute("GetUser", new { id = userModel.Id }, userModel);
         }
 
-        // Update - Update specific user (/api/user/{id})
         [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody] UserModel updatedUser)
         {
@@ -53,7 +49,6 @@ namespace StartUp.WebApi.Controllers
             return Ok(new UserDetailModel(retrievedUser));
         }
 
-        // Delete - Delete specific user (/api/user/{id})
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {

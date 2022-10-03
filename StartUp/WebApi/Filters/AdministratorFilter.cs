@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using StartUp.IBusinessLogic;
 using StartUp.Domain.Entities;
+using Microsoft.Extensions.Primitives;
 
 namespace StartUp.WebApi.Filters
 {
@@ -15,22 +16,24 @@ namespace StartUp.WebApi.Filters
             var authorizationHeader = context.HttpContext.Request.Headers["Authorization"];
             var sessionService = this.GetSessionService(context);
 
-            if (sessionService.UserLogged == null)
+            if (string.IsNullOrEmpty(authorizationHeader))
             {
-                context.Result = new ObjectResult(new { Message = "Authorization header is missing" })
+                context.Result = new ObjectResult(new { Message = "Login or enter a valid token to continue" })
                 {
                     StatusCode = 401
                 };
             }
             else
             {
-                TokenAccess token = sessionService.GetTokenUser();
+                if (authorizationHeader.ToString().Contains("Bearer "))
+                {
+                    authorizationHeader = CleanAuthorization(authorizationHeader);
+                }
+                User user = sessionService.GetTokenUser(authorizationHeader);
 
                 try
                 {
-                    sessionService.AuthenticateAndSaveUser(authorizationHeader);
-
-                    if (!token.User.HasPermissions(new string[] { $"administrator".ToLower() }))
+                    if (!user.HasPermissions(new string[] { $"administrator".ToLower() }))
                     {
                         context.Result = new ObjectResult(new { Message = "no tiene los permissssos", asdas = "asd" })
                         {
@@ -45,15 +48,25 @@ namespace StartUp.WebApi.Filters
                         StatusCode = 401
                     };
                 }
-            }
+        }
+    }
+
+        private string CleanAuthorization(string authorizationHeader)
+        {
+            string authorization = "";
+                for(int i = 7; i < authorizationHeader.Length; i++)
+                {
+                    authorization = authorization+ authorizationHeader[i];
+                }
+            return authorization;
         }
 
         protected ISessionService GetSessionService(AuthorizationFilterContext context)
-        {
-            var sessionManagerType = typeof(ISessionService);
-            object sessionManagerObject = context.HttpContext.RequestServices.GetService(sessionManagerType);
-            var sessionManager = (ISessionService)sessionManagerObject;
-            return sessionManager;
-        }
+    {
+        var sessionManagerType = typeof(ISessionService);
+        object sessionManagerObject = context.HttpContext.RequestServices.GetService(sessionManagerType);
+        var sessionManager = (ISessionService)sessionManagerObject;
+        return sessionManager;
     }
+}
 }

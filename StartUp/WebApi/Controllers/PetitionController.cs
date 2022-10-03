@@ -2,6 +2,7 @@
 using StartUp.IBusinessLogic;
 using StartUp.Models.Models.In;
 using StartUp.Models.Models.Out;
+using StartUp.WebApi.Filters;
 using System.Linq;
 
 namespace StartUp.WebApi.Controllers
@@ -17,24 +18,24 @@ namespace StartUp.WebApi.Controllers
             _petitionService = service;
         }
 
-        // Index - Get all petition (/api/petition)
         [HttpGet]
+        [OwnerFilter]
         public IActionResult GetPetition([FromQuery] PetitionSearchCriteriaModel searchCriteria)
         {
             var retrievedPetition = _petitionService.GetAllPetition(searchCriteria.ToEntity());
             return Ok(retrievedPetition.Select(p => new PetitionBasicModel(p)));
         }
 
-        // Show - Get specific petition (/api/petition/{id})
         [HttpGet("{id}", Name = "GetPetition")]
+        [OwnerFilter]
         public IActionResult GetPetition(int id)
         {
             var retrievedPetition = _petitionService.GetSpecificPetition(id);
             return Ok(new PetitionDetailModel(retrievedPetition));
         }
 
-        // Create - Create new petition (/api/petition)
         [HttpPost]
+        [EmployeeFilter]
         public IActionResult CreatePetition([FromBody] PetitionModel newPetition)
         {
             var createdPetition = _petitionService.CreatePetition(newPetition.ToEntity());
@@ -42,16 +43,16 @@ namespace StartUp.WebApi.Controllers
             return CreatedAtRoute("GetPetition", new { id = petitionModel.Id }, petitionModel);
         }
 
-        // Update - Update specific petition (/api/petition/{id})
         [HttpPut("{id}")]
+        [EmployeeFilter]
         public IActionResult Update(int id, [FromBody] PetitionModel updatedPetition)
         {
             var retrievedPetition = _petitionService.UpdatePetition(id, updatedPetition.ToEntity());
             return Ok(new PetitionDetailModel(retrievedPetition));
         }
 
-        // Delete - Delete specific petition (/api/petition/{id})
         [HttpDelete("{id}")]
+        [OwnerFilter]
         public IActionResult Delete(int id)
         {
             _petitionService.DeletePetition(id);

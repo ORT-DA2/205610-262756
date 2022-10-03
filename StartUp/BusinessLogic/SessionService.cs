@@ -1,5 +1,7 @@
 ﻿using StartUp.Domain;
 using StartUp.Domain.Entities;
+using StartUp.Domain.SearchCriterias;
+using StartUp.Exceptions;
 using StartUp.IBusinessLogic;
 using StartUp.IDataAccess;
 using StartUp.Models.Models.In;
@@ -25,10 +27,13 @@ namespace StartUp.BusinessLogic
             _tokenAccessRepository = tokenRepository;
         }
 
-        public List<User> GetAllUser()
+        public List<Session> GetAllSession(SessionSearchCriteria searchCriteria)
         {
-            Expression<Func<User, bool>> users = user => true;
-            return _userRepository.GetAllByExpression(users).ToList();
+            var usernameCriteria = searchCriteria.Username.ToLower() ?? string.Empty;
+
+            Expression<Func<Session, bool>> sessions = session =>
+            session.Username.ToString().ToLower().Contains(usernameCriteria);
+            return _sessionRepository.GetAllByExpression(sessions).ToList();
         }
 
         public User GetSpecificUser(string username)
@@ -36,28 +41,17 @@ namespace StartUp.BusinessLogic
             return _userRepository.GetOneByExpression(u => u.Invitation.UserName == username);
         }
 
-        public void VerifySessionModel(SessionModel sessionModel)
+        public User VerifySession(SessionModel session)
         {
-
-            validator.ValidateString(sessionModel.UserName, "Username empty");
-            validator.ValidateString(sessionModel.Password, "Password empty");
-
-            var userSalved = GetSpecificUser(sessionModel.UserName);
-
-            validator.ValidateUserNotNull(userSalved, "Username not exist in system");
-            validator.ValidateStringEquals(userSalved.Password, sessionModel.Password, "Password incorrect");
-        }
-
-        public void VerifySession(Session session)
-        {
-
-            validator.ValidateString(session.Username, "Username empty");
+            validator.ValidateString(session.UserName, "Username empty");
             validator.ValidateString(session.Password, "Password empty");
 
-            var userSalved = GetSpecificUser(session.Username);
+            var userSalved = GetSpecificUser(session.UserName);
 
             validator.ValidateUserNotNull(userSalved, "Username not exist in sistem");
             validator.ValidateStringEquals(userSalved.Password, session.Password, "Password incorrect");
+
+            return userSalved;
         }
 
         public User VerifyToken(string token)
@@ -72,19 +66,31 @@ namespace StartUp.BusinessLogic
 
         public Session CreateOrRetrieveSession(SessionModel session)
         {
-            var sessionSalved = SearchSession(session.UserName);
-
-            if (sessionSalved == null)
+            Session sessionSalved;
+            try
             {
-                sessionSalved = new Session();
-                sessionSalved.Username = session.UserName;
-                sessionSalved.Password = session.Password;
-
-                _sessionRepository.InsertOne(sessionSalved);
-                _sessionRepository.Save();
-
-                return sessionSalved;
+                sessionSalved = GetSpecificSession(session.UserName);
             }
+            catch(InputException e)
+            {
+                return CreateSession(session);
+            }
+            
+            return sessionSalved;
+        }
+
+        public Session CreateSession(SessionModel sessionM)
+        {
+            validator.ValidateString(sessionM.UserName, "Username empty");
+            validator.ValidateString(sessionM.Password, "Password empty");
+
+            Session sessionSalved = new Session();
+            sessionSalved.Username = sessionM.UserName;
+            sessionSalved.Password = sessionM.Password;
+
+            _sessionRepository.InsertOne(sessionSalved);
+            _sessionRepository.Save();
+
             return sessionSalved;
         }
 
@@ -94,15 +100,6 @@ namespace StartUp.BusinessLogic
 
             Session session = _sessionRepository.GetOneByExpression(s => s.Username == username);
             validator.ValidateSessionNotNull(session, "Username not exist");
-
-            return session;
-        }
-
-        public Session SearchSession(string username)
-        {
-            validator.ValidateString(username, "Username empty");
-
-            Session session = _sessionRepository.GetOneByExpression(s => s.Username == username);
 
             return session;
         }
@@ -125,17 +122,7 @@ namespace StartUp.BusinessLogic
             }
         }
 
-        public User GetUserToken(string token)
-        {
-            validator.ValidateString(token, "Token is empty");
-
-            var tokenSalved = _tokenAccessRepository.GetOneByExpression(t => t.Token.ToString() == token.ToString());
-            validator.ValidateTokenAccess(tokenSalved, "Token not exist in system");
-
-            return tokenSalved.User;
-        }
-
-        public void Delete(string username)
+        public void DeleteSession(string username)
         {
             validator.ValidateString(username, "Username empty");
 
@@ -145,15 +132,29 @@ namespace StartUp.BusinessLogic
             _sessionRepository.DeleteOne(session);
             _sessionRepository.Save();
         }
-        public void Update(Session updateSession)
+        public Session UpdateSession(string username, Session updateSession)
         {
             validator.ValidateString(updateSession.Username, "Username empty");
 
-            var session = _sessionRepository.GetOneByExpression(s => s.Username == updateSession.Username);
+            var session = GetSpecificSession(username);
             validator.ValidateSessionNotNull(session, "Username not exist");
 
             _sessionRepository.UpdateOne(session);
             _sessionRepository.Save();
+
+            return session;
+        }
+
+        public Session GetSpecificSession(int sessionId)
+        {
+            var sessionSaved = _sessionRepository.GetOneByExpression(s => s.Id == sessionId);
+
+            if (sessionSaved is null)
+            {
+                throw new ResourceNotFoundException($"Could not find specified session {sessionId}");
+            }
+
+            return sessionSaved;
         }
 
         public bool IsFormatValidOfAuthorizationHeader(string authorizationHeader)
@@ -165,26 +166,24 @@ namespace StartUp.BusinessLogic
             return true;
         }
 
-        public void AuthenticateAndSaveUser(string authorizationHeader)
+        public TokenAccess GetUserToken()
         {
-            TokenAccess token; 
+            var token = _tokenAccessRepository.GetOneByExpression(t => t.User.Invitation.UserName == UserLogged.Invitation.UserName);
+            validator.ValidateTokenAccess(token, "Token empty");
 
-            if (authorizationHeader.ToString().Contains("Bearer "))
-            {
-                token = _tokenAccessRepository.GetOneByExpression(t => "Bearer " + t.Token.ToString() == authorizationHeader);
-            }
-            else
-            {
-                token = _tokenAccessRepository.GetOneByExpression(t => t.Token.ToString() == authorizationHeader);
-            }
-            validator.ValidateTokenAccess(token, "Token not exist in the system");
-            UserLogged = token.User;
+            return token;
         }
 
-        public TokenAccess GetTokenUser()
+        public User GetTokenUser(string token)
         {
-            return _tokenAccessRepository.GetOneByExpression(t => t.User == UserLogged);
+            validator.ValidateString(token, "Token is empty");
+
+            var userSalved = _userRepository.GetOneByExpression(u => u.Token == token);
+            
+            validator.ValidateUserNotNull(userSalved, "Token not exist in system");
+
+            return userSalved;
         }
 
-        }
+    }
 }

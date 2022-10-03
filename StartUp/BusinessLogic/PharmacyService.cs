@@ -51,7 +51,7 @@ namespace StartUp.BusinessLogic
         public Pharmacy CreatePharmacy(Pharmacy pharmacy)
         {
             pharmacy.isValidPharmacy();
-            notExistInDataBase(pharmacy);
+            NotExistInDataBase(pharmacy);
 
             _pharmacyRepository.InsertOne(pharmacy);
             _pharmacyRepository.Save();
@@ -82,8 +82,7 @@ namespace StartUp.BusinessLogic
             _pharmacyRepository.Save();
         }
 
-        //metodos agregados despues de hacer la interfaz
-        public void notExistInDataBase(Pharmacy pharmacy)
+        public void NotExistInDataBase(Pharmacy pharmacy)
         {
             var pharmacySaved = _pharmacyRepository.GetOneByExpression(p => p == pharmacy);
 

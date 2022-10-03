@@ -22,23 +22,10 @@ namespace StartUp.BusinessLogic
         public List<Medicine> GetAllMedicine(MedicineSearchCriteria searchCriteria)
         {
             var nameCriteria = searchCriteria.Name?.ToLower() ?? string.Empty;
-            var amountCriteria = searchCriteria.Amount?.ToString().ToLower() ?? string.Empty;
-            var presentationCriteria = searchCriteria.Presentation?.ToLower() ?? string.Empty;
-            var priceCriteria = searchCriteria.Price?.ToString() ?? string.Empty;
-            var measureCriteria = searchCriteria.Measure?.ToLower() ?? string.Empty;
-            var codeCriteria = searchCriteria.Code?.ToLower() ?? string.Empty;
-            var prescriptionCriteria = searchCriteria.Prescription?.ToString() ?? string.Empty;
-            var stockCriteria = searchCriteria.Stock?.ToString() ?? string.Empty;
 
             Expression<Func<Medicine, bool>> medicineFilter = medicine =>
                 medicine.Name.ToLower().Contains(nameCriteria) &&
-                medicine.Amount.ToString().ToLower().Contains(amountCriteria) &&
-                medicine.Code.ToString().Contains(codeCriteria) &&
-                medicine.Measure.ToLower().Contains(measureCriteria) &&
-                medicine.Price.ToString().Contains(priceCriteria) &&
-                medicine.Prescription.ToString().Contains(prescriptionCriteria) &&
-                medicine.Presentation.ToLower().Contains(presentationCriteria) &&
-                medicine.Stock.ToString().Contains(stockCriteria);
+                medicine.Stock > 0;
 
             return _medicineRepository.GetAllByExpression(medicineFilter).ToList();
         }
