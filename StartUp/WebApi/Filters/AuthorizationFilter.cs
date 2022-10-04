@@ -6,8 +6,13 @@ using StartUp.Domain.Entities;
 
 namespace StartUp.WebApi.Filters
 {
-    public class EmployeeFilter : Attribute, IAuthorizationFilter
+    public class AuthorizationFilter : Attribute, IAuthorizationFilter
     {
+        private string _role;
+        public AuthorizationFilter(string role = "")
+        {
+            _role = role;
+        }
 
         public virtual void OnAuthorization(AuthorizationFilterContext context)
         {
@@ -32,13 +37,14 @@ namespace StartUp.WebApi.Filters
 
                 try
                 {
-                    if (!user.HasPermissions(new string[] { $"employee".ToLower() }))
+                    if (!user.HasPermissions(new string[] { $"{_role}" }))
                     {
-                        context.Result = new ObjectResult(new { Message = "no tiene los permissssos", asdas = "asd" })
+                        context.Result = new ObjectResult(new { Message = "You do not have the permissions to perform the action" })
                         {
                             StatusCode = 403
                         }; ;
                     }
+                    sessionService.UserLogged = user;
                 }
                 catch (Exception)
                 {
@@ -47,25 +53,25 @@ namespace StartUp.WebApi.Filters
                         StatusCode = 401
                     };
                 }
-            }
         }
+    }
 
         private string CleanAuthorization(string authorizationHeader)
         {
             string authorization = "";
-            for (int i = 7; i < authorizationHeader.Length; i++)
-            {
-                authorization = authorization + authorizationHeader[i];
-            }
+                for(int i = 7; i < authorizationHeader.Length; i++)
+                {
+                    authorization = authorization+ authorizationHeader[i];
+                }
             return authorization;
         }
 
         protected ISessionService GetSessionService(AuthorizationFilterContext context)
-        {
-            var sessionManagerType = typeof(ISessionService);
-            object sessionManagerObject = context.HttpContext.RequestServices.GetService(sessionManagerType);
-            var sessionManager = (ISessionService)sessionManagerObject;
-            return sessionManager;
-        }
+    {
+        var sessionManagerType = typeof(ISessionService);
+        object sessionManagerObject = context.HttpContext.RequestServices.GetService(sessionManagerType);
+        var sessionManager = (ISessionService)sessionManagerObject;
+        return sessionManager;
     }
+}
 }

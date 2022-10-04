@@ -9,7 +9,7 @@ namespace StartUp.Domain
 
 
         public Symptom() { }
-        public void isValidSymptom()
+        public void IsValidSymptom()
         {
             if (string.IsNullOrEmpty(SymptomDescription))
                 throw new InputException("Enter a symptom description");

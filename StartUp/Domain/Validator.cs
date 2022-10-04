@@ -25,7 +25,9 @@ namespace StartUp.Domain
 
         public void ValidateToken(Guid token, string message)
         {
-            if (string.IsNullOrEmpty(token.ToString()))
+            string guid = token.ToString();
+
+            if (string.IsNullOrEmpty(guid))
             {
                 throw new InputException(message);
             }
