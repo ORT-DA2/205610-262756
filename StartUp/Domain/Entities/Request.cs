@@ -9,14 +9,16 @@ namespace StartUp.Domain
     {
         public int Id { get; set; }
         public List<Petition> Petitions { get; set; }
-        public bool State { get; set; }
+        public string State { get; set; }
+        private Validator validator;
 
-
-        public Request() { }
+        public Request()
+        {
+            validator = new Validator();
+        }
         public void isValidRequest()
         {
-            if (Petitions == null)
-                throw new InputException("Petitions empty");
+            validator.ValidatePetitions(Petitions, "Petitions empty");
         }
 
         public override bool Equals(object? obj)

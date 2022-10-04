@@ -32,6 +32,7 @@ namespace StartUp.BusinessLogic
 
             return _medicineRepository.GetAllByExpression(medicineFilter).ToList();
         }
+
         public Medicine GetSpecificMedicine(int medicineId)
         {
             var medicineSaved = _medicineRepository.GetOneByExpression(i => i.Id == medicineId);
@@ -52,10 +53,7 @@ namespace StartUp.BusinessLogic
             IsMedicineRegistered(medicine);
 
             pharmacy.Stock.Add(medicine);
-            _pharmacyRepository.UpdateOne(pharmacy);
-            _pharmacyRepository.Save();
-            _medicineRepository.InsertOne(medicine);
-            _medicineRepository.Save();
+            ModifyRecords(pharmacy, medicine);
 
             return medicine;
         }
@@ -68,28 +66,17 @@ namespace StartUp.BusinessLogic
 
             var medicineStored = GetSpecificMedicine(medicineId);
 
-            if (pharmacy.Stock.Contains(medicineStored))
-            {
-
-                medicineStored.Measure = updatedMedicine.Measure;
-                medicineStored.Price = updatedMedicine.Price;
-                medicineStored.Code = updatedMedicine.Code;
-                medicineStored.Stock = updatedMedicine.Stock;
-                medicineStored.Amount = updatedMedicine.Amount;
-                medicineStored.Symptoms = updatedMedicine.Symptoms;
-                medicineStored.Prescription = updatedMedicine.Prescription;
-                medicineStored.Presentation = updatedMedicine.Presentation;
-                medicineStored.Name = updatedMedicine.Name;
-
-                _medicineRepository.UpdateOne(medicineStored);
-                _medicineRepository.Save();
-
-                return medicineStored;
-            }
-            else
+            if (!pharmacy.Stock.Contains(medicineStored))
             {
                 throw new InputException("The drug you want to modify does not belong to your pharmacy");
             }
+
+            SetValues(medicineStored, updatedMedicine);
+
+            _medicineRepository.UpdateOne(medicineStored);
+            _medicineRepository.Save();
+
+            return medicineStored;
         }
 
         public void DeleteMedicine(int medicineId)
@@ -101,10 +88,7 @@ namespace StartUp.BusinessLogic
             if (pharmacy.Stock.Contains(medicineStored))
             {
                 pharmacy.Stock.Remove(medicineStored);
-                _pharmacyRepository.UpdateOne(pharmacy);
-                _pharmacyRepository.Save();
-                _medicineRepository.DeleteOne(medicineStored);
-                _medicineRepository.Save();
+                ModifyRecords(pharmacy, medicineStored);
             }
             else
             {
@@ -112,16 +96,35 @@ namespace StartUp.BusinessLogic
             }
         }
 
+        private void SetValues(Medicine medicineStored, Medicine updatedMedicine)
+        {
+            medicineStored.Measure = updatedMedicine.Measure;
+            medicineStored.Price = updatedMedicine.Price;
+            medicineStored.Code = updatedMedicine.Code;
+            medicineStored.Stock = updatedMedicine.Stock;
+            medicineStored.Amount = updatedMedicine.Amount;
+            medicineStored.Symptoms = updatedMedicine.Symptoms;
+            medicineStored.Prescription = updatedMedicine.Prescription;
+            medicineStored.Presentation = updatedMedicine.Presentation;
+            medicineStored.Name = updatedMedicine.Name;
+        }
+
         private void IsMedicineRegistered(Medicine medicine)
         {
             Pharmacy pharmacy = _pharmacyRepository.GetOneByExpression(p => p.Equals(_sessionService.UserLogged.Pharmacy));
 
-            var med = _medicineRepository.GetOneByExpression(m => m.Code == medicine.Code);
-
-            if (pharmacy.Stock.Contains(med))
+            if (pharmacy.Stock.Contains(medicine))
             {
                 throw new InputException("The medicine with that code already exist");
             }
+        }
+
+        private void ModifyRecords(Pharmacy pharmacy, Medicine medicine)
+        {
+            _pharmacyRepository.UpdateOne(pharmacy);
+            _pharmacyRepository.Save();
+            _medicineRepository.DeleteOne(medicine);
+            _medicineRepository.Save();
         }
     }
 }

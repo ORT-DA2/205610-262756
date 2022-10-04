@@ -59,6 +59,7 @@ namespace BusinessLogic
             EmailNotExistInDataBase(user);
             user.VerifyInvitationStateIsAvailable();
             user.ChangeStatusInvitation();
+            user.RegisterDate = DateTime.Now;
 
             _userRepository.InsertOne(user);
             _userRepository.Save();

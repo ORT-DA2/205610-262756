@@ -58,24 +58,9 @@ namespace StartUp.BusinessLogic
             invitation.IsValidInvitation();
             NotExistInDataBase(invitation);
             ValidateInvitationRoles(invitation);
-
-            if (!invitation.Rol.Contains("administrator"))
-            {
-                var pharmacy = _pharmacyRepository.GetOneByExpression(p => p.Id == invitation.Id);
-
-                if (pharmacy != null)
-                {
-                    CreateAndSave(invitation);
-                }
-                else
-                {
-                    throw new ResourceNotFoundException($"The pharmacy for which an invitation is being created does not exist");
-                }
-            }
-            else
-            {
-                CreateAndSave(invitation);
-            }
+            ValidatePharmacyExist(invitation);
+            CreateAndSave(invitation);
+            
             return invitation;
         }
 
@@ -134,7 +119,7 @@ namespace StartUp.BusinessLogic
             }
         }
 
-        public void CreateAndSave(Invitation invitation)
+        private void CreateAndSave(Invitation invitation)
         {
             if (invitation == null)
             {
@@ -150,5 +135,18 @@ namespace StartUp.BusinessLogic
             }
         }
 
+        private void ValidatePharmacyExist(Invitation invitation)
+        {
+            if (!invitation.Rol.Contains("administrator"))
+            {
+                var pharmacy = _pharmacyRepository.GetOneByExpression(p => p.Id == invitation.Pharmacy.Id);
+
+                if (pharmacy == null)
+                {
+                    throw new ResourceNotFoundException($"The pharmacy for which an invitation is being created does not exist");
+                }
+
+            }
+        }
     }
 }
