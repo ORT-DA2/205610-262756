@@ -53,16 +53,26 @@ public class SessionController : ControllerBase
     [HttpDelete("{username}")]
     public ActionResult Logout([FromHeader] string authorization, string username)
     {
-        if (string.IsNullOrEmpty(authorization) || string.IsNullOrEmpty(username))
+        try
         {
-            return BadRequest();
+            Session session = _sessionService.GetSpecificSession(username);
+            User user = _sessionService.VerifySession(new SessionModel(session));
+
+            if (user.Token == authorization)
+            {
+                user.Token = "";
+                _userService.SaveToken(user, user.Token);
+
+                return Ok("Closed session");
+            }
+            else
+            {
+                return BadRequest("The authorization does not correspond to the session that you want to close");
+            }
         }
-
-        Session session = _sessionService.GetSpecificSession(username);
-        _sessionService.VerifySession(new SessionModel(session));
-
-        _tokenAccessService.DeleteTokenAccess(session);
-
-        return Ok();
+        catch (InputException)
+        {
+            return BadRequest("Login first");
+        }
     }
 }

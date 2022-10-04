@@ -18,8 +18,13 @@ namespace StartUp.Domain
 
         public List<Request> Requests { get; set; }
 
+        public List<Sale> Sales { get; set; }
 
-        public Pharmacy() { }
+
+        public Pharmacy()
+        {
+            Sales = new List<Sale>();
+        }
 
         public void isValidPharmacy()
         {
@@ -28,7 +33,6 @@ namespace StartUp.Domain
             validator.ValidateString(Address, "Address can not be empty or all spaces");
             validator.ValidateLengthString(Name, "The name of the pharmacy must not exceed 50 characters", 50);
             validator.ValidateMedicineListNotNull(Stock, "The list of medicines must be created");
-            validator.ValidateRequestListNotNull(Requests, "The list of request must be created");
         }
 
         public override bool Equals(object? obj)
@@ -42,6 +46,22 @@ namespace StartUp.Domain
         protected bool Equals(Pharmacy other)
         {
             return Name == other?.Name;
+        }
+
+        public void UpdateStock(Sale sale)
+        {
+            foreach(InvoiceLine line in sale.InvoiceLines)
+            {
+                Medicine medicine = line.Medicine;
+
+                foreach(Medicine medicinePharmacy in Stock)
+                {
+                    if(medicinePharmacy == medicine)
+                    {
+                        medicinePharmacy.Stock = medicinePharmacy.Stock - line.Amount;
+                    }
+                }
+            }
         }
     }
 

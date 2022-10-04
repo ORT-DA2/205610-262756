@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using StartUp.Exceptions;
 using StartUp.IBusinessLogic;
 using StartUp.Models.Models.In;
 using StartUp.Models.Models.Out;
+using StartUp.WebApi.Filters;
 using System.Linq;
 
 namespace StartUp.WebApi.Controllers
@@ -19,13 +19,15 @@ namespace StartUp.WebApi.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetSale([FromQuery] SaleSearchCriteriaModel searchCriteria)
+        [AuthorizationFilter("owner")]
+        public IActionResult GetSale()
         {
-            var retrievedSale = _saleService.GetAllSale(searchCriteria.ToEntity());
+            var retrievedSale = _saleService.GetAllSale();
             return Ok(retrievedSale.Select(s => new SaleBasicModel(s)));
         }
 
         [HttpGet("{id}", Name = "GetSale")]
+        [AuthorizationFilter("owner")]
         public IActionResult GetSale(int id)
         {
             var retrievedSale = _saleService.GetSpecificSale(id);
@@ -39,19 +41,6 @@ namespace StartUp.WebApi.Controllers
             var saleModel = new SaleDetailModel(createdSale);
             return CreatedAtRoute("GetSale", new { id = saleModel.Id }, saleModel);
         }
-
-        [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody] SaleModel updatedSale)
-        {
-            var retrievedSale = _saleService.UpdateSale(id, updatedSale.ToEntity());
-            return Ok(new SaleDetailModel(retrievedSale));
-        }
-
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
-        {
-            _saleService.DeleteSale(id);
-            return Ok();
-        }
+        
     }
 }

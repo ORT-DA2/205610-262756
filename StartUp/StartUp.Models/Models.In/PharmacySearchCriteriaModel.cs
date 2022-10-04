@@ -12,6 +12,7 @@ namespace StartUp.Models.Models.In
         public string? Address { get; set; }
         public List<Medicine>? Stock { get; set; }
         public List<Request>? Requests { get; set; }
+        public List<Sale>? Sales { get; set; }
 
         public PharmacySearchCriteria ToEntity()
         {
@@ -20,7 +21,8 @@ namespace StartUp.Models.Models.In
                 Name = this.Name,
                 Address = this.Address,
                 Stock = this.Stock,
-                Requests = this.Requests
+                Requests = this.Requests,
+                Sales = this.Sales,
             };
         }
     }

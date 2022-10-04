@@ -9,6 +9,7 @@ namespace StartUp.WebApi.Controllers
 {
     [Route("api/petition")]
     [ApiController]
+    [AuthorizationFilter("employee")]
     public class PetitionController : ControllerBase
     {
         private readonly IPetitionService _petitionService;
@@ -19,7 +20,6 @@ namespace StartUp.WebApi.Controllers
         }
 
         [HttpGet]
-        [OwnerFilter]
         public IActionResult GetPetition([FromQuery] PetitionSearchCriteriaModel searchCriteria)
         {
             var retrievedPetition = _petitionService.GetAllPetition(searchCriteria.ToEntity());
@@ -27,7 +27,6 @@ namespace StartUp.WebApi.Controllers
         }
 
         [HttpGet("{id}", Name = "GetPetition")]
-        [OwnerFilter]
         public IActionResult GetPetition(int id)
         {
             var retrievedPetition = _petitionService.GetSpecificPetition(id);
@@ -35,7 +34,6 @@ namespace StartUp.WebApi.Controllers
         }
 
         [HttpPost]
-        [EmployeeFilter]
         public IActionResult CreatePetition([FromBody] PetitionModel newPetition)
         {
             var createdPetition = _petitionService.CreatePetition(newPetition.ToEntity());
@@ -44,7 +42,6 @@ namespace StartUp.WebApi.Controllers
         }
 
         [HttpPut("{id}")]
-        [EmployeeFilter]
         public IActionResult Update(int id, [FromBody] PetitionModel updatedPetition)
         {
             var retrievedPetition = _petitionService.UpdatePetition(id, updatedPetition.ToEntity());
@@ -52,7 +49,6 @@ namespace StartUp.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        [OwnerFilter]
         public IActionResult Delete(int id)
         {
             _petitionService.DeletePetition(id);

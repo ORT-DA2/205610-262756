@@ -29,6 +29,20 @@ namespace StartUp.BusinessLogic
             return _tokenRepository.GetAllByExpression(tokenFilter).ToList();
         }
 
+        public TokenAccess GetSpecificTokenAccess(int tokenId)
+        {
+            validator.ValidateString(tokenId.ToString(), "Token empty");
+
+            var tokenSaved = _tokenRepository.GetOneByExpression(t => t.Id == tokenId);
+
+            if (tokenSaved is null)
+            {
+                throw new ResourceNotFoundException($"Could not find specified token for the {tokenId}");
+            }
+
+            return tokenSaved;
+        }
+
         public TokenAccess GetSpecificTokenAccess(Session session)
         {
             validator.ValidateSessionNotNull(session, "Session empty");

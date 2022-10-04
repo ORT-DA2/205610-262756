@@ -13,7 +13,6 @@ namespace StartUp.Models.Models.In
         public int Amount { get; set; }
         public string Measure { get; set; }
         public int Price { get; set; }
-        public int Stock { get; set; }
         public bool Prescription { get; set; }
         public List<Symptom> Symptoms { get; set; }
 
@@ -27,7 +26,6 @@ namespace StartUp.Models.Models.In
                 Amount = this.Amount,   
                 Measure = this.Measure, 
                 Price = this.Price,
-                Stock = this.Stock, 
                 Prescription = this.Prescription,
                 Symptoms = this.Symptoms
             };

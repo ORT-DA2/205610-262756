@@ -9,7 +9,7 @@ namespace StartUp.Models.Models.Out
     {
         public int Id { get; set; }
         public List<PetitionBasicModel> Petitions { get; set; }
-        public bool State { get; set; }
+        public string State { get; set; }
 
         public RequestDetailModel(Request request)
         {

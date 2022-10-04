@@ -1,4 +1,5 @@
 ﻿using StartUp.Domain;
+using StartUp.Domain.Entities;
 using StartUp.Domain.SearchCriterias;
 using StartUp.Exceptions;
 using StartUp.IBusinessLogic;
@@ -13,62 +14,140 @@ namespace StartUp.BusinessLogic
     public class RequestService : IRequestService
     {
         private readonly IRepository<Request> _requestRepository;
+        private readonly ISessionService _sessionService;
+        private readonly IRepository<Pharmacy> _pharmacyRepository;
+        private Validator validator;
 
-        public RequestService(IRepository<Request> requestRepository) { 
+        public RequestService(IRepository<Request> requestRepository, ISessionService sessionService,
+            IRepository<Pharmacy> pharmacyRepository)
+        {
+            _requestRepository = requestRepository;
+            _sessionService = sessionService;
+            _pharmacyRepository = pharmacyRepository;
+            validator = new Validator();
         }
 
         public List<Request> GetAllRequest(RequestSearchCriteria searchCriteria)
         {
-            var petitionsCriteria = searchCriteria.Petitions ?? null;
+            Pharmacy pharmacy = _pharmacyRepository.GetOneByExpression(p => p.Id == _sessionService.UserLogged.Pharmacy.Id);
+
             var stateCriteria = searchCriteria.State?.ToString().ToLower() ?? string.Empty;
 
-            Expression<Func<Request, bool>> requestFilter = request =>
-                request.State.ToString().ToLower().Contains(stateCriteria) &&
-                request.Petitions == petitionsCriteria;
+            List<Request> requests = new List<Request>();
 
-            return _requestRepository.GetAllByExpression(requestFilter).ToList();
+            if (string.IsNullOrEmpty(stateCriteria))
+            {
+                requests = pharmacy.Requests;
+            }
+            else
+            {
+                requests = FilteredRequest(pharmacy, searchCriteria.State, requests);
+            }
+            return requests;
         }
 
         public Request GetSpecificRequest(int requestId)
         {
-            var requestSaved = _requestRepository.GetOneByExpression(r => r.Id == requestId);
+            Pharmacy pharmacy = _pharmacyRepository.GetOneByExpression(p => p.Id == _sessionService.UserLogged.Pharmacy.Id);
 
-            if (requestSaved is null)
+            var requestSaved = _requestRepository.GetOneByExpression(r => r.Id == requestId);
+            validator.ValidateRequestNotNull(requestSaved, $"Could not find specified request {requestId}");
+
+            if (!pharmacy.Requests.Contains(requestSaved))
             {
-                throw new ResourceNotFoundException($"Could not find specified request {requestId}");
+                throw new ResourceNotFoundException($"The request {requestId} does not belong to your pharmacy");
             }
             return requestSaved;
         }
 
         public Request CreateRequest(Request request)
         {
-            request.isValidRequest();
+            Pharmacy pharmacy = _pharmacyRepository.GetOneByExpression(p => p.Id == _sessionService.UserLogged.Pharmacy.Id);
 
-            _requestRepository.InsertOne(request);
-            _requestRepository.Save();
+            request.isValidRequest();
+            request.State = "Pending";
+
+            pharmacy.Requests.Add(request);
+            ModifiedRecords(pharmacy, request);
 
             return request;
         }
 
         public Request UpdateRequest(int requestId, Request updatedRequest)
         {
+            Pharmacy pharmacy = _pharmacyRepository.GetOneByExpression(p => p.Id == _sessionService.UserLogged.Pharmacy.Id);
+            var request = GetSpecificRequest(requestId);
+
             updatedRequest.isValidRequest();
 
-            var requestStored = GetSpecificRequest(requestId);
+            if (request.State == "Pending")
+            {
+                request.State = updatedRequest.State;
 
-            requestStored.State = updatedRequest.State;
+                if (request.State == "Approved")
+                {
+                    pharmacy = UpdateStockInPharmacy(pharmacy, request);
+                    _pharmacyRepository.UpdateOne(pharmacy);
+                    _pharmacyRepository.Save();
+                }
 
-            _requestRepository.UpdateOne(requestStored);
-            _requestRepository.Save();
+                _requestRepository.UpdateOne(request);
+                _requestRepository.Save();
 
-            return requestStored;
+                return request;
+            }
+            else
+            {
+                throw new InputException("The request is no longer in pending authorization status");
+            }
+
+        }
+
+        private Pharmacy UpdateStockInPharmacy(Pharmacy pharmacy, Request request)
+        {
+            validator.ValidateRequestNotNull(request, "Request empty");
+            validator.ValidatePharmacyNotNull(pharmacy, "Pharmacy empty");
+
+            foreach (Petition pet in request.Petitions)
+            {
+                foreach (Medicine med in pharmacy.Stock)
+                {
+                    if (med.Code.Contains(pet.MedicineCode))
+                    {
+                        med.Stock = med.Stock + pet.Amount;
+                    }
+                }
+            }
+            return pharmacy;
         }
 
         public void DeleteRequest(int requestId)
         {
+            Pharmacy pharmacy = _pharmacyRepository.GetOneByExpression(p => p.Id == _sessionService.UserLogged.Pharmacy.Id);
+
             var requestStored = GetSpecificRequest(requestId);
 
-            _requestRepository.DeleteOne(requestStored);
+            pharmacy.Requests.Remove(requestStored);
+            ModifiedRecords(pharmacy, requestStored);
+        }
+
+        private List<Request> FilteredRequest(Pharmacy pharmacy, string state, List<Request> requests)
+        {
+            foreach (Request request in pharmacy.Requests)
+            {
+                if (request.State == state)
+                {
+                    requests.Add(request);
+                }
+            }
+            return requests;
+        }
+
+        private void ModifiedRecords(Pharmacy pharmacy, Request request)
+        {
+            _pharmacyRepository.UpdateOne(pharmacy);
+            _pharmacyRepository.Save();
+            _requestRepository.DeleteOne(request);
             _requestRepository.Save();
         }
 

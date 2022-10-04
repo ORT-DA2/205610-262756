@@ -8,7 +8,7 @@ namespace StartUp.Models.Models.Out
     public class RequestBasicModel
     {
         public int Id { get; set; }
-        public bool State { get; set; }
+        public string State { get; set; }
 
         public RequestBasicModel(Request request)
         {

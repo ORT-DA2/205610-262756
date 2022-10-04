@@ -26,7 +26,7 @@ namespace StartUp.Domain.Entities
         {
             validator.ValidateString(Email, "Email empty");
             validator.ValidateString(Address, "Address empty");
-            validator.ValidateString(Password, "Password empty");
+            validator.ValidatePasswordValid(Password, "Password invalid", 7);
             validator.ValidateString(RegisterDate.ToString(), "Register date empty");
             validator.ValidateInvitationNotNull(Invitation, "Invitation empty");
             validator.ValidateRoleIsNotNull(Roles, "Role empty");

@@ -10,5 +10,6 @@ namespace StartUp.Domain.SearchCriterias
         public string? Address { get; set; }
         public List<Medicine>? Stock { get; set; }
         public List<Request>? Requests { get; set; }
+        public List<Sale>? Sales { get; set; }
     }
 }

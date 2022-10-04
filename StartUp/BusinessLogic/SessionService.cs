@@ -54,16 +54,6 @@ namespace StartUp.BusinessLogic
             return userSalved;
         }
 
-        public User VerifyToken(string token)
-        {
-            validator.ValidateString(token, "Token is empty");
-
-            var tokenSalved = _tokenAccessRepository.GetOneByExpression(t => t.Token.ToString() == token);
-            validator.ValidateTokenAccess(tokenSalved, "Token not exist in system");
-
-            return tokenSalved.User;
-        }
-
         public Session CreateOrRetrieveSession(SessionModel session)
         {
             Session sessionSalved;
@@ -102,24 +92,6 @@ namespace StartUp.BusinessLogic
             validator.ValidateSessionNotNull(session, "Username not exist");
 
             return session;
-        }
-
-        public bool ValidateToken(string token)
-        {
-            if (string.IsNullOrEmpty(token))
-            {
-                return false;
-            }
-            else
-            {
-                var tokenSalved = _tokenAccessRepository.GetOneByExpression(t => t.Token.ToString() == token.ToString());
-
-                if (tokenSalved == null)
-                {
-                    return false;
-                }
-                return true;
-            }
         }
 
         public void DeleteSession(string username)
