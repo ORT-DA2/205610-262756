@@ -33,6 +33,32 @@ namespace StartUp.Domain
             }
         }
 
+        public void ValidatePasswordValid(string password, string message)
+        {
+            ValidateString(password, "Password empty");
+
+            if(password.Length < 8 || !ContainSpecialCharacters(password))
+            {
+                throw new InputException(message);
+            }
+        }
+
+        private bool ContainSpecialCharacters(string password)
+        {
+            ValidateString(password, "Password empty");
+
+            string stringsValid = "(?=.*[*?¡!#$%&])";
+            foreach (char c in password)
+            {
+                if (stringsValid.Contains(c))
+                {
+                    return true;
+                }
+            }
+            return false;
+
+        }
+
         public void ValidateContains(string roles, string permissions, string message)
         {
             string[] rolesArray = permissions.Split(",");

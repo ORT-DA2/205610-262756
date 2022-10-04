@@ -16,7 +16,7 @@ namespace StartUp.DataAccess.Repositories
 
         public override Pharmacy GetOneByExpression(Expression<Func<Pharmacy, bool>> expression)
         {
-            return _context.Set<Pharmacy>().Include("Stock").Include("Request").FirstOrDefault(expression);
+            return _context.Set<Pharmacy>().Include("Stock").Include("Request.Petition").FirstOrDefault(expression);
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using StartUp.Exceptions;
 using StartUp.IBusinessLogic;
 using StartUp.Models.Models.In;
 using StartUp.Models.Models.Out;
+using StartUp.WebApi.Filters;
 using System.Linq;
 
 namespace StartUp.WebApi.Controllers
@@ -19,6 +19,7 @@ namespace StartUp.WebApi.Controllers
         }
 
         [HttpGet]
+        [AuthorizationFilter("owner")]
         public IActionResult GetSale([FromQuery] SaleSearchCriteriaModel searchCriteria)
         {
             var retrievedSale = _saleService.GetAllSale(searchCriteria.ToEntity());
@@ -26,6 +27,7 @@ namespace StartUp.WebApi.Controllers
         }
 
         [HttpGet("{id}", Name = "GetSale")]
+        [AuthorizationFilter("owner")]
         public IActionResult GetSale(int id)
         {
             var retrievedSale = _saleService.GetSpecificSale(id);
@@ -41,6 +43,7 @@ namespace StartUp.WebApi.Controllers
         }
 
         [HttpPut("{id}")]
+        [AuthorizationFilter("owner")]
         public IActionResult Update(int id, [FromBody] SaleModel updatedSale)
         {
             var retrievedSale = _saleService.UpdateSale(id, updatedSale.ToEntity());
@@ -48,6 +51,7 @@ namespace StartUp.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
+        [AuthorizationFilter("owner")]
         public IActionResult Delete(int id)
         {
             _saleService.DeleteSale(id);
