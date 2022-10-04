@@ -48,7 +48,6 @@ namespace StartUp.WebApi.UnitTest
             return new Request()
             {
                 Petitions = new List<Petition>(),
-                State = true
             };
         }
     }

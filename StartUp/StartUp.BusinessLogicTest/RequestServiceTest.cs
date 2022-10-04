@@ -2,13 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Text;
 using Moq;
 using Nest;
 using StartUp.BusinessLogic;
-using StartUp.Domain;
+using StartUp.Domain.Entities;
 using StartUp.Domain.SearchCriterias;
 using StartUp.Exceptions;
+using StartUp.Domain;
 
 namespace StartUp.BusinessLogicTest
 {
@@ -17,6 +17,11 @@ namespace StartUp.BusinessLogicTest
     {
         
         private Mock<IDataAccess.IRepository<Request>> _repoMock;
+        private Mock<IDataAccess.IRepository<Pharmacy>> _repoPharmacyMock;
+        private Mock<IDataAccess.IRepository<TokenAccess>> _repoTokenMock;
+        private Mock<IDataAccess.IRepository<User>> _repoUserMock;
+        private Mock<IDataAccess.IRepository<Session>> _repoSessionMock;
+        private SessionService _sessionService;
         private RequestService _service;
         private List<Petition> petitions;
 
@@ -24,7 +29,12 @@ namespace StartUp.BusinessLogicTest
         public void SetUp()
         {
             _repoMock = new Mock<IDataAccess.IRepository<Request>>(MockBehavior.Strict);
-            _service = new RequestService(_repoMock.Object);
+            _repoPharmacyMock = new Mock<IDataAccess.IRepository<Pharmacy>>(MockBehavior.Strict);
+            _repoTokenMock = new Mock<IDataAccess.IRepository<TokenAccess>>(MockBehavior.Strict);
+            _repoUserMock = new Mock<IDataAccess.IRepository<User>>(MockBehavior.Strict);
+            _repoSessionMock = new Mock<IDataAccess.IRepository<Session>>(MockBehavior.Strict);
+            _sessionService = new SessionService(_repoSessionMock.Object, _repoUserMock.Object, _repoTokenMock.Object);
+            _service = new RequestService(_repoMock.Object, _sessionService, _repoPharmacyMock.Object);
             petitions = new List<Petition>();
         }
         
@@ -32,6 +42,10 @@ namespace StartUp.BusinessLogicTest
         public void Cleanup()
         {
             _repoMock.VerifyAll();
+            _repoPharmacyMock.VerifyAll();
+            _repoSessionMock.VerifyAll();
+            _repoTokenMock.VerifyAll();
+            _repoUserMock.VerifyAll();
         }
         
         [TestMethod]
@@ -130,8 +144,8 @@ namespace StartUp.BusinessLogicTest
 
         private List<Request> GenerateDummyRequest() => new List<Request>()
         {
-            new Request() { Id= 1, Petitions = petitions, State = true },
-            new Request() { Id= 2, Petitions = petitions, State = false}
+            new Request() { Id= 1, Petitions = petitions},
+            new Request() { Id= 2, Petitions = petitions}
         };
         
         private Request CreateRequest(int id, List<Petition> pet, bool state)
@@ -140,7 +154,6 @@ namespace StartUp.BusinessLogicTest
             {
                 Id = id,
                 Petitions = pet,
-                State = state,
             };
         }
     }

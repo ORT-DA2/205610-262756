@@ -9,6 +9,8 @@ using StartUp.Domain;
 using StartUp.Domain.SearchCriterias;
 using StartUp.Exceptions;
 using StartUp.IDataAccess;
+using StartUp.IBusinessLogic;
+using StartUp.Domain.Entities;
 
 namespace StartUp.BusinessLogicTest
 {
@@ -17,6 +19,11 @@ namespace StartUp.BusinessLogicTest
     {
         
         private Mock<IRepository<Medicine>> _repoMock;
+        private Mock<IRepository<TokenAccess>> _repoTokenMock;
+        private Mock<IRepository<User>> _repoUserMock;
+        private Mock<IRepository<Session>> _repoSessionMock;
+        private Mock<IRepository<Pharmacy>> _repoPharmacyMock;
+        private SessionService _sessionService;
         private MedicineService _service;
         private List<Symptom> symptoms;
         
@@ -24,7 +31,12 @@ namespace StartUp.BusinessLogicTest
         public void SetUp()
         {
             _repoMock = new Mock<IRepository<Medicine>>(MockBehavior.Strict);
-            _service = new MedicineService(_repoMock.Object);
+            _repoTokenMock = new Mock<IRepository<TokenAccess>>(MockBehavior.Strict);
+            _repoUserMock = new Mock<IRepository<User>>(MockBehavior.Strict);
+            _repoSessionMock = new Mock<IRepository<Session>>(MockBehavior.Strict);
+            _repoPharmacyMock = new Mock<IRepository<Pharmacy>>(MockBehavior.Strict);
+            _sessionService = new SessionService(_repoSessionMock.Object, _repoUserMock.Object, _repoTokenMock.Object);
+            _service = new MedicineService(_repoMock.Object, _sessionService, _repoPharmacyMock.Object);
             symptoms = new List<Symptom>();
         }
         
@@ -32,6 +44,10 @@ namespace StartUp.BusinessLogicTest
         public void Cleanup()
         {
             _repoMock.VerifyAll();
+            _repoTokenMock.VerifyAll();
+            _repoUserMock.VerifyAll();
+            _repoPharmacyMock.VerifyAll();
+            _repoSessionMock.VerifyAll();
         }
         
         [TestMethod]

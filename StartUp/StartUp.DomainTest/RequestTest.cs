@@ -77,7 +77,6 @@ namespace StartUp.DomainTest
             {
                 Id = id,
                 Petitions = petit,
-                State = state,
             };
         }
     }
