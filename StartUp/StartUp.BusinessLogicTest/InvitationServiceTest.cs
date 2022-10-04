@@ -17,6 +17,7 @@ namespace StartUp.BusinessLogicTest
         private Mock<IRepository<Invitation>> _repoMock;
         private Mock<IDataAccess.IRepository<Pharmacy>> _repoPharmacyMock;
         private InvitationService _service;
+        private Mock<IRepository<Pharmacy>> _pharmacyRepoMock;
             
         [TestInitialize]
         public void SetUp()

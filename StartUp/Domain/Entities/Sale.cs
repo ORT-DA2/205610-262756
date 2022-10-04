@@ -23,10 +23,10 @@ namespace StartUp.Domain
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != GetType()) return false;
-            return Equals((InvoiceLine)obj);
+            return Equals((Sale)obj);
         }
 
-        protected bool Equals(InvoiceLine other)
+        protected bool Equals(Sale other)
         {
             return Id == other?.Id;
         }

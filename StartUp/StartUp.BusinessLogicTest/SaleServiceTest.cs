@@ -8,7 +8,8 @@ using StartUp.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Text;
+using StartUp.Domain.Entities;
+using StartUp.IDataAccess;
 
 namespace StartUp.BusinessLogicTest
 {
@@ -20,13 +21,14 @@ namespace StartUp.BusinessLogicTest
         private Mock<IDataAccess.IRepository<TokenAccess>> _repoTokenMock;
         private Mock<IDataAccess.IRepository<User>> _repoUserMock;
         private Mock<IDataAccess.IRepository<Session>> _repoSessionMock;
-        private SessionService _sessionService;
         private SaleService _service;
+        private SessionService _sessionService;
         private List<InvoiceLine> invoiceLine;
 
         [TestInitialize]
         public void SetUp()
         {
+            
             _repoMock = new Mock<IDataAccess.IRepository<Sale>>(MockBehavior.Strict);
             _repoPharmacyMock = new Mock<IDataAccess.IRepository<Pharmacy>>(MockBehavior.Strict);
             _repoUserMock = new Mock<IDataAccess.IRepository<User>>(MockBehavior.Strict);

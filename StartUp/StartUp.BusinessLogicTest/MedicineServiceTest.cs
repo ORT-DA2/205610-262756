@@ -6,6 +6,7 @@ using System.Text;
 using Moq;
 using StartUp.BusinessLogic;
 using StartUp.Domain;
+using StartUp.Domain.Entities;
 using StartUp.Domain.SearchCriterias;
 using StartUp.Exceptions;
 using StartUp.IDataAccess;

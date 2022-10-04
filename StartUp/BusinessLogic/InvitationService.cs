@@ -38,7 +38,14 @@ namespace StartUp.BusinessLogic
                 invitation.State.Contains(isActiveCriteria) &&
                 invitation.Pharmacy == pharmacyCriteria;
 
-            return _invitationRepository.GetAllByExpression(invitationFilter).ToList();
+            List<Invitation> invitations = _invitationRepository.GetAllByExpression(invitationFilter).ToList();
+
+            if(invitations.Count == 0)
+            {
+                throw new ResourceNotFoundException("No invitations where found");
+            }
+
+            return invitations;
         }
 
         public Invitation GetSpecificInvitation(int invitationId)

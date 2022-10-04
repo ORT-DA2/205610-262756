@@ -5,8 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
+using StartUp.DataAccess.Contexts;
 
 namespace StartUp.DataAccess.Test
 {
@@ -19,7 +18,7 @@ namespace StartUp.DataAccess.Test
         [TestInitialize]
         public void SetUp()
         {
-            _context = ContextFactory.GetNewContext(ContextType.SQL);
+            _context = ContextFactory.GetNewContext(ContextType.SQLite);
             _context.Database.OpenConnection();
             _context.Database.EnsureCreated();
             _repository = new BaseRepository<Request>(_context);

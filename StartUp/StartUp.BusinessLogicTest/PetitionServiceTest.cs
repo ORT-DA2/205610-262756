@@ -18,8 +18,8 @@ namespace StartUp.BusinessLogicTest
         private Mock<IRepository<Petition>> _repoMock;
         private Mock<IRepository<Medicine>> _repoMedicineMock;
         private Mock<IRepository<Pharmacy>> _repoPharmacyMock;
-        private SessionService _sessionService;
         private PetitionService _service;
+        private SessionService _sessionService;
         
         [TestInitialize]
         public void SetUp()

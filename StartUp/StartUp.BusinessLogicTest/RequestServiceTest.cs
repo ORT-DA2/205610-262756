@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using Moq;
-using Nest;
 using StartUp.BusinessLogic;
 using StartUp.Domain.Entities;
 using StartUp.Domain.SearchCriterias;
@@ -21,8 +20,8 @@ namespace StartUp.BusinessLogicTest
         private Mock<IDataAccess.IRepository<TokenAccess>> _repoTokenMock;
         private Mock<IDataAccess.IRepository<User>> _repoUserMock;
         private Mock<IDataAccess.IRepository<Session>> _repoSessionMock;
-        private SessionService _sessionService;
         private RequestService _service;
+        private SessionService _sessionService;
         private List<Petition> petitions;
 
         [TestInitialize]
