@@ -16,13 +16,16 @@ namespace StartUp.BusinessLogicTest
     public class PetitionServiceTest
     {
         private Mock<IRepository<Petition>> _repoMock;
+        private Mock<IRepository<Pharmacy>> _pharmacyRepoMock;
+        private Mock<IRepository<Medicine>> _medicineRepoMock;
         private PetitionService _service;
+        private SessionService _sessionService;
         
         [TestInitialize]
         public void SetUp()
         {
             _repoMock = new Mock<IRepository<Petition>>(MockBehavior.Strict);
-            _service = new PetitionService(_repoMock.Object);
+            _service = new PetitionService(_repoMock.Object, _pharmacyRepoMock.Object, _sessionService, _medicineRepoMock.Object);
         }
         
         [TestCleanup]

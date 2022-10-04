@@ -104,7 +104,6 @@ namespace StartUp.WebApi.UnitTest
         {
             RequestModel requestModel = CreateRequestModel();
             Request request = CreateRequest();
-            requestModel.State = false;
             _serviceMock.Setup(server => server.UpdateRequest(request.Id, requestModel.ToEntity())).Returns(requestModel.ToEntity);
 
             var response = _controller.Update(request.Id, requestModel);
@@ -130,7 +129,6 @@ namespace StartUp.WebApi.UnitTest
             return new Request()
             {
                 Petitions = new List<Petition>(),
-                State = true
             };
         }
         
@@ -139,7 +137,6 @@ namespace StartUp.WebApi.UnitTest
             return new RequestModel()
             {
                 Petitions = new List<Petition>(),
-                State = true
             };
         }
     }

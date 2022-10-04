@@ -76,8 +76,7 @@ namespace StartUp.DomainTest
             return new Request()
             {
                 Id = id,
-                Petitions = petit,
-                State = state,
+                Petitions = petit
             };
         }
     }

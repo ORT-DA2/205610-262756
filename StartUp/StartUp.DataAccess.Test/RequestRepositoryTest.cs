@@ -49,8 +49,7 @@ namespace StartUp.DataAccess.Test
             LoadRequests(requests);
             var newRequest = new Request()
             {
-                Petitions = new List<Petition>(),
-                State = true
+                Petitions = new List<Petition>()
             };
 
             _repository.InsertOne(newRequest);
@@ -74,13 +73,11 @@ namespace StartUp.DataAccess.Test
         {
             new()
             {
-               Petitions = new List<Petition>(),
-                State = true
+               Petitions = new List<Petition>()
             },
             new()
             {
-                Petitions = new List<Petition>(),
-                State = true
+                Petitions = new List<Petition>()
             }
         };
         }

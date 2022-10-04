@@ -152,7 +152,6 @@ namespace StartUp.WebApi.UnitTest
                 Amount = 250,
                 Measure = "para fiebre",
                 Price = 300,
-                Stock = 100,
                 Symptoms = new List<Symptom>()
             };
         }
