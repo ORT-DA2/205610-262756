@@ -16,12 +16,14 @@ namespace StartUp.BusinessLogicTest
     {
         private Mock<IRepository<Invitation>> _repoMock;
         private InvitationService _service;
+        private Mock<IRepository<Pharmacy>> _pharmacyRepoMock;
             
         [TestInitialize]
         public void SetUp()
         {
             _repoMock = new Mock<IRepository<Invitation>>(MockBehavior.Strict);
-            _service = new InvitationService(_repoMock.Object);
+            _pharmacyRepoMock = new Mock<IRepository<Pharmacy>>(_pharmacyRepoMock.Object);
+            _service = new InvitationService(_repoMock.Object, _pharmacyRepoMock.Object);
         }
         
         [TestCleanup]

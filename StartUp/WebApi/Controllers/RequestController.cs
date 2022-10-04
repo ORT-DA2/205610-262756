@@ -20,7 +20,7 @@ namespace StartUp.WebApi.Controllers
 
         [HttpGet]
         [AuthorizationFilter("owner")]
-        public IActionResult GetRequest([FromQuery] RequestSearchCriteriaModels searchCriteria)
+        public IActionResult GetRequest([FromQuery] RequestSearchCriteriaModel searchCriteria)
         {
             var retrievedRequest = _requestService.GetAllRequest(searchCriteria.ToEntity());
             return Ok(retrievedRequest.Select(r => new RequestBasicModel(r)));

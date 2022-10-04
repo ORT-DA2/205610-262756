@@ -2,27 +2,37 @@
 using Moq;
 using StartUp.BusinessLogic;
 using StartUp.Domain;
-using StartUp.Domain.SearchCriterias;
 using StartUp.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Text;
+using StartUp.Domain.Entities;
+using StartUp.IDataAccess;
 
 namespace StartUp.BusinessLogicTest
 {
     [TestClass]
     public class SaleServiceTest
     {
-        private Mock<IDataAccess.IRepository<Sale>> _repoMock;
+        private Mock<IRepository<User>> _userRepoMock;
+        private Mock<IRepository<TokenAccess>> _tokenRepoMock;
+        private Mock<IRepository<Session>> _sessionRepoMock;
+        private Mock<IRepository<Pharmacy>> _pharmacyRepoMock;
+        private Mock<IRepository<Sale>> _repoMock;
         private SaleService _service;
+        private SessionService _sessionService;
         private List<InvoiceLine> invoiceLine;
 
         [TestInitialize]
         public void SetUp()
         {
+            _sessionRepoMock = new Mock<IRepository<Session>>(MockBehavior.Strict);
+            _userRepoMock = new Mock<IRepository<User>>(MockBehavior.Strict);
+            _tokenRepoMock = new Mock<IRepository<TokenAccess>>(MockBehavior.Strict);
             _repoMock = new Mock<IDataAccess.IRepository<Sale>>(MockBehavior.Strict);
-            _service = new SaleService(_repoMock.Object);
+            _pharmacyRepoMock = new Mock<IRepository<Pharmacy>>(MockBehavior.Strict);
+            _sessionService = new SessionService(_sessionRepoMock.Object,_userRepoMock.Object,_tokenRepoMock.Object);
+            _service = new SaleService(_repoMock.Object, _sessionService, _pharmacyRepoMock.Object);
             invoiceLine = new List<InvoiceLine>();
         }
 
@@ -59,49 +69,10 @@ namespace StartUp.BusinessLogicTest
         {
             List<Sale> dummySale = GenerateDummySale();
             _repoMock.Setup(repo => repo.GetAllByExpression(It.IsAny<Expression<Func<Sale, bool>>>())).Returns(dummySale);
-            SaleSearchCriteria searchCriteria = new SaleSearchCriteria();
 
-            var retrievedSale = _service.GetAllSale(searchCriteria);
+            var retrievedSale = _service.GetAllSale();
 
             CollectionAssert.AreEqual(dummySale, retrievedSale);
-        }
-
-        [TestMethod]
-        public void UpdateSaleTest()
-        {
-            var sale = CreateSale(1, invoiceLine);
-            _repoMock.Setup(repo => repo.GetOneByExpression(It.IsAny<Expression<Func<Sale, bool>>>())).Returns(sale);
-            Sale updateData = CreateSale(sale.Id, invoiceLine);
-
-            _repoMock.Setup(repo => repo.UpdateOne(sale));
-            _repoMock.Setup(repo => repo.Save());
-
-            Sale updatedSale = _service.UpdateSale(sale.Id, updateData);
-
-            Assert.AreEqual(updatedSale, sale);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ResourceNotFoundException))]
-        public void DeleteNotExistingSaleTest()
-        {
-            _repoMock.Setup(repo => repo.GetOneByExpression(It.IsAny<Expression<Func<Sale, bool>>>())).Returns((Sale)null);
-
-            _service.DeleteSale(1);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ResourceNotFoundException))]
-        public void DeleteSaleTest()
-        {
-            var sale = CreateSale(1, invoiceLine);
-            _repoMock.SetupSequence(repo => repo.GetOneByExpression(It.IsAny<Expression<Func<Sale, bool>>>())).Returns(sale).Returns((Sale)null);
-            _repoMock.Setup(repo => repo.DeleteOne(sale));
-            _repoMock.Setup(repo => repo.Save());
-
-            _service.DeleteSale(sale.Id);
-
-            _service.GetSpecificSale(sale.Id);
         }
 
         [TestMethod]

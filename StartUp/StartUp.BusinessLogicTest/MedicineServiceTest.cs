@@ -6,6 +6,7 @@ using System.Text;
 using Moq;
 using StartUp.BusinessLogic;
 using StartUp.Domain;
+using StartUp.Domain.Entities;
 using StartUp.Domain.SearchCriterias;
 using StartUp.Exceptions;
 using StartUp.IDataAccess;
@@ -17,6 +18,11 @@ namespace StartUp.BusinessLogicTest
     {
         
         private Mock<IRepository<Medicine>> _repoMock;
+        private Mock<IRepository<Pharmacy>> _pharmacyRepoMock;
+        private Mock<IRepository<Session>> _sessionRepoMock;
+        private Mock<IRepository<User>> _userRepoMock;
+        private Mock<IRepository<TokenAccess>> _tokenRepoMock;
+        private SessionService _sessionService;
         private MedicineService _service;
         private List<Symptom> symptoms;
         
@@ -24,7 +30,12 @@ namespace StartUp.BusinessLogicTest
         public void SetUp()
         {
             _repoMock = new Mock<IRepository<Medicine>>(MockBehavior.Strict);
-            _service = new MedicineService(_repoMock.Object);
+            _pharmacyRepoMock = new Mock<IRepository<Pharmacy>>(_pharmacyRepoMock.Object);
+            _sessionRepoMock = new Mock<IRepository<Session>>(_sessionRepoMock.Object);
+            _userRepoMock = new Mock<IRepository<User>>(_userRepoMock.Object);
+            _tokenRepoMock = new Mock<IRepository<TokenAccess>>(_tokenRepoMock.Object);
+            _sessionService = new SessionService(_sessionRepoMock.Object, _userRepoMock.Object, _tokenRepoMock.Object);
+            _service = new MedicineService(_repoMock.Object, _sessionService, _pharmacyRepoMock.Object);
             symptoms = new List<Symptom>();
         }
         
