@@ -6,7 +6,7 @@ using System.Text;
 
 namespace StartUp.Models.Models.In
 {
-    public class RequestSearchCriteriaModels
+    public class RequestSearchCriteriaModel
     {
         public List<Petition>? Petitions { get; set; }
         public bool? State { get; set; }

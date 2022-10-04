@@ -37,7 +37,9 @@ namespace StartUp.DataAccess
                     .Build();
 
                 var connectionString = configuration.GetConnectionString("StartUpDb");
-                optionsBuilder.UseSqlServer(connectionString);
+                optionsBuilder.UseSqlServer(connectionString, options=>options.EnableRetryOnFailure() );
+                
+
             }
         }
     }
