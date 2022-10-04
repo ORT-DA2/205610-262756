@@ -44,7 +44,7 @@ namespace StartUp.BusinessLogic
 
         public Symptom CreateSymptom(Symptom symptom)
         {
-            symptom.isValidSymptom();
+            symptom.IsValidSymptom();
 
             _symptomRepository.InsertOne(symptom);
             _symptomRepository.Save();
@@ -54,7 +54,7 @@ namespace StartUp.BusinessLogic
 
         public Symptom UpdateSymptom(int symptomId, Symptom updatedSymptom)
         {
-            updatedSymptom.isValidSymptom();
+            updatedSymptom.IsValidSymptom();
 
             var symptomStored = GetSpecificSymptom(symptomId);
 

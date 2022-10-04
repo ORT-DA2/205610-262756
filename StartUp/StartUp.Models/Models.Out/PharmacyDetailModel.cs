@@ -12,6 +12,7 @@ namespace StartUp.Models.Models.Out
         public string Address { get; set; }
         public List<MedicineBasicModel> Stock { get; set; }
         public List<RequestBasicModel> Requests { get; set; }
+        public List<SaleBasicModel> Sales { get; set; }
 
         public PharmacyDetailModel(Pharmacy pharmacy)
         {
@@ -26,6 +27,11 @@ namespace StartUp.Models.Models.Out
             foreach (var item in pharmacy.Requests)
             {
                 Requests.Add(new RequestBasicModel(item));
+            }
+            Sales = new List<SaleBasicModel>();
+            foreach (var item in pharmacy.Sales)
+            {
+                Sales.Add(new SaleBasicModel(item));
             }
         }
 

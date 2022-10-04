@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace StartUp.Domain
 {
-    public class Validator 
+    public class Validator
     {
         public void ValidateString(string value, string message)
         {
@@ -17,7 +17,15 @@ namespace StartUp.Domain
 
         public void ValidateRoleIsNotNull(Role role, string message)
         {
-            if(role == null)
+            if (role == null)
+            {
+                throw new InputException(message);
+            }
+        }
+
+        internal void ValidatePetitions(List<Petition> petitions, string message)
+        {
+            if (petitions == null)
             {
                 throw new InputException(message);
             }
@@ -25,10 +33,47 @@ namespace StartUp.Domain
 
         public void ValidateToken(Guid token, string message)
         {
-            if (string.IsNullOrEmpty(token.ToString()))
+            string guid = token.ToString();
+
+            if (string.IsNullOrEmpty(guid))
             {
                 throw new InputException(message);
             }
+        }
+
+        public void ValidatePasswordValid(string password, string message, int length)
+        {
+            ValidateString(password, "Password empty");
+            ValidateLengthString(password, "The password must have at least 8 characters", length);
+
+            if (!ContainSpecialCharacters(password))
+            {
+                throw new InputException(message);
+            }
+        }
+
+        public void ValidateSaleNotNull(Sale saleSaved, string message)
+        {
+            if (saleSaved == null)
+            {
+                throw new ResourceNotFoundException(message);
+            }
+        }
+
+        private bool ContainSpecialCharacters(string password)
+        {
+            ValidateString(password, "Password empty");
+
+            string stringsValid = "(?=.*[*?¡!#$%&])";
+            foreach (char c in password)
+            {
+                if (stringsValid.Contains(c))
+                {
+                    return true;
+                }
+            }
+            return false;
+
         }
 
         public void ValidateContains(string roles, string permissions, string message)
@@ -43,9 +88,17 @@ namespace StartUp.Domain
             }
         }
 
+        public void ValidatePetitionNotNull(Petition petitionSaved, string message)
+        {
+            if (petitionSaved != null)
+            {
+                throw new InputException(message);
+            }
+        }
+
         public void ValidateArray(string[] array, string message)
         {
-            if(array == null || array.Length == 0)
+            if (array == null || array.Length == 0)
             {
                 throw new InputException(message);
             }
@@ -59,11 +112,11 @@ namespace StartUp.Domain
             }
         }
 
-        
+
 
         public void ValidateLengthString(string value, string message, int length)
         {
-            if(value.Length > length)
+            if (value.Length > length)
             {
                 throw new InputException(message);
             }
@@ -80,6 +133,14 @@ namespace StartUp.Domain
         public void ValidateUserNull(User user, string message)
         {
             if (user != null)
+            {
+                throw new InputException(message);
+            }
+        }
+
+        public void ValidateListPharmacyNotNull(List<Pharmacy> list, string message)
+        {
+            if(list == null)
             {
                 throw new InputException(message);
             }
@@ -108,34 +169,50 @@ namespace StartUp.Domain
                 throw new InputException(message);
             }
         }
-        
+
         public void ValidateMedicineListNotNull(List<Medicine> value, string message)
         {
-            if(value == null)
+            if (value == null)
             {
                 throw new InputException(message);
             }
         }
-        
+
         public void ValidateRequestListNotNull(List<Request> value, string message)
         {
-            if(value == null)
+            if (value == null)
             {
                 throw new InputException(message);
             }
         }
-        
+
         public void ValidateSymptomsListNotNull(List<Symptom> value, string message)
         {
-            if(value == null)
+            if (value == null)
             {
                 throw new InputException(message);
             }
         }
-        
+
+        public void ValidatePharmacyNotNull(Pharmacy pharmacy, string message)
+        {
+            if (pharmacy == null)
+            {
+                throw new InputException(message);
+            }
+        }
+
+        public void ValidateRequestNotNull(Request request, string message)
+        {
+            if (request == null)
+            {
+                throw new InputException(message);
+            }
+        }
+
         public void ValidateAmount(int value, int min, string message)
         {
-            if(value < min)
+            if (value < min)
             {
                 throw new InputException(message);
             }

@@ -9,7 +9,7 @@ namespace StartUp.WebApi.Controllers
 {
     [Route("api/symptom")]
     [ApiController]
-    [EmployeeFilter]
+    [AuthorizationFilter("employee")]
     public class SymptomController : ControllerBase
     {
         private readonly ISymptomService _symptomService;

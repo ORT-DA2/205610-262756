@@ -20,7 +20,10 @@ namespace StartUp.Domain
         public bool Prescription { get; set; }
 
 
-        public Medicine() { }
+        public Medicine()
+        {
+            Stock = 0;
+        }
         public void IsValidMedicine()
         {
             Validator validator = new Validator();
@@ -30,7 +33,7 @@ namespace StartUp.Domain
             validator.ValidateString(Presentation, "The Name can't be empty or only white spaces");
             validator.ValidateSymptomsListNotNull(Symptoms, "The Symptoms list can't be null");
             validator.ValidateAmount(Amount, 1, "The amount of the medicine can't be less than 1");
-            validator.ValidateAmount(Price, 1,"The price of the medicine can't be less than 1");
+            validator.ValidateAmount(Price, 1, "The price of the medicine can't be less than 1");
         }
 
         public override bool Equals(object? obj)

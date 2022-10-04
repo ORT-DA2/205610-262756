@@ -7,14 +7,18 @@ namespace StartUp.IBusinessLogic
 {
     public interface ISessionService
     {
+        User UserLogged { get; set; }
         List<Session> GetAllSession(SessionSearchCriteria searchCriteria);
-        Session GetSpecificSession(string username);
+        User GetSpecificUser(string username);
+        User VerifySession(SessionModel session);
         Session CreateOrRetrieveSession(SessionModel session);
-        Session UpdateSession(string username, Session updateSession);
+        Session CreateSession(SessionModel sessionM);
+        Session GetSpecificSession(string username);
         void DeleteSession(string username);
-        User VerifySession(SessionModel sessionModel);
+        Session UpdateSession(string username, Session updateSession);
+        Session GetSpecificSession(int sessionId);
+        bool IsFormatValidOfAuthorizationHeader(string authorizationHeader);
         TokenAccess GetUserToken();
         User GetTokenUser(string token);
-        bool IsFormatValidOfAuthorizationHeader(string authorizationHeader);
     }
 }

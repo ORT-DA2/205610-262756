@@ -15,10 +15,12 @@ namespace StartUp.BusinessLogic
     {
 
         private readonly IRepository<Invitation> _invitationRepository;
+        private readonly IRepository<Pharmacy> _pharmacyRepository;
 
-        public InvitationService(IRepository<Invitation> invitationRepository)
+        public InvitationService(IRepository<Invitation> invitationRepository, IRepository<Pharmacy> pharmacyRepository)
         {
             _invitationRepository = invitationRepository;
+            _pharmacyRepository = pharmacyRepository;
         }
 
         public List<Invitation> GetAllInvitation(InvitationSearchCriteria searchCriteria)
@@ -63,13 +65,9 @@ namespace StartUp.BusinessLogic
             invitation.IsValidInvitation();
             NotExistInDataBase(invitation);
             ValidateInvitationRoles(invitation);
-
-            invitation.State = "Available";
-            invitation.Code = GenerateCode();
+            ValidatePharmacyExist(invitation);
+            CreateAndSave(invitation);
             
-            _invitationRepository.InsertOne(invitation);
-            _invitationRepository.Save();
-
             return invitation;
         }
 
@@ -106,7 +104,7 @@ namespace StartUp.BusinessLogic
                 throw new InputException($"An invitation already exists for that user {invitation.UserName}");
             }
         }
-        
+
         private int GenerateCode()
         {
             Random random = new Random();
@@ -121,10 +119,40 @@ namespace StartUp.BusinessLogic
 
         private void ValidateInvitationRoles(Invitation invitation)
         {
-            if (invitation.Rol.ToLower() == "owner" || invitation.Rol.ToLower() == "employee"
+            if ((invitation.Rol.ToLower() == "owner" || invitation.Rol.ToLower() == "employee")
                 && invitation.Pharmacy == null)
             {
                 throw new InputException("The owner and the employee roles need a pharmacy");
+            }
+        }
+
+        private void CreateAndSave(Invitation invitation)
+        {
+            if (invitation == null)
+            {
+                throw new InputException("The invitation is empty");
+            }
+            else
+            {
+                invitation.State = "Available";
+                invitation.Code = GenerateCode();
+
+                _invitationRepository.InsertOne(invitation);
+                _invitationRepository.Save();
+            }
+        }
+
+        private void ValidatePharmacyExist(Invitation invitation)
+        {
+            if (!invitation.Rol.Contains("administrator"))
+            {
+                var pharmacy = _pharmacyRepository.GetOneByExpression(p => p.Id == invitation.Pharmacy.Id);
+
+                if (pharmacy == null)
+                {
+                    throw new ResourceNotFoundException($"The pharmacy for which an invitation is being created does not exist");
+                }
+
             }
         }
     }

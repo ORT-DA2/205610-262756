@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using StartUp.Exceptions;
 using StartUp.IBusinessLogic;
 using StartUp.Models.Models.In;
 using StartUp.Models.Models.Out;
@@ -11,7 +10,7 @@ namespace StartUp.WebApi.Controllers
 
     [Route("api/invoiceLine")]
     [ApiController]
-    [AdministratorFilter]
+    [AuthorizationFilter("administrator")]
     public class InvoiceLineController : ControllerBase
     {
         private readonly IInvoiceLineService _invoiceLineService;
@@ -21,7 +20,6 @@ namespace StartUp.WebApi.Controllers
             _invoiceLineService = service;
         }
 
-        // Index - Get all invoiceLine (/api/invoiceLine)
         [HttpGet]
         public IActionResult GetInvoiceLine([FromQuery] InvoiceLineSearchCriteriaModel searchCriteria)
         {
@@ -29,7 +27,6 @@ namespace StartUp.WebApi.Controllers
             return Ok(retrievedInvoiceLine.Select(i => new InvoiceLineBasicModel(i)));
         }
 
-        // Show - Get specific invoiceLine (/api/invoiceLine/{id})
         [HttpGet("{id}", Name = "GetInvoiceLine")]
         public IActionResult GetInvoiceLine(int id)
         {
@@ -37,7 +34,6 @@ namespace StartUp.WebApi.Controllers
             return Ok(new InvoiceLineDetailModel(retrievedInvoiceLine));
         }
 
-        // Create - Create new invoiceLine (/api/invoiceLine)
         [HttpPost]
         public IActionResult CreateInvoiceLine([FromBody] InvoiceLineModel newInvoiceLine)
         {
@@ -46,7 +42,6 @@ namespace StartUp.WebApi.Controllers
             return CreatedAtRoute("GetInvoiceLine", new { id = invoiceLineModel.Id }, invoiceLineModel);
         }
 
-        // Update - Update specific invoiceLine (/api/invoiceLine/{id})
         [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody] InvoiceLineModel updatedInvoiceLine)
         {
@@ -54,7 +49,6 @@ namespace StartUp.WebApi.Controllers
             return Ok(new InvoiceLineDetailModel(retrievedInvoiceLine));
         }
 
-        // Delete - Delete specific invoiceLine (/api/invoiceLine/{id})
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {

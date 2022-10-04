@@ -10,7 +10,7 @@ namespace StartUp.WebApi.Controllers
 
     [Route("api/invitation")]
     [ApiController]
-    [AdministratorFilter]
+    [AuthorizationFilter("administrator")]
     public class InvitationController : ControllerBase
     {
         private readonly IInvitationService _invitationManager;
@@ -20,7 +20,6 @@ namespace StartUp.WebApi.Controllers
             _invitationManager = manager;
         }
 
-        // Index - Get all invitation (/api/invitation)
         [HttpGet]
         public IActionResult GetInvitation([FromQuery] InvitationSearchCriteriaModel searchCriteria)
         {
@@ -28,7 +27,6 @@ namespace StartUp.WebApi.Controllers
             return Ok(retrievedInvitations.Select(i => new InvitationBasicModel(i)));
         }
 
-        // Show - Get specific invitation (/api/invitation/{id})
         [HttpGet("{id}", Name = "GetInvitation")]
         public IActionResult GetInvitation(int id)
         {
@@ -36,7 +34,6 @@ namespace StartUp.WebApi.Controllers
             return Ok(new InvitationDetailModel(retrievedInvitation));
         }
 
-        // Create - Create new invitation (/api/invitation)
         [HttpPost]
         public IActionResult CreateInvitation([FromBody] InvitationModel newInvitation)
         {
@@ -45,7 +42,6 @@ namespace StartUp.WebApi.Controllers
             return CreatedAtRoute("GetInvitation", new { id = invitationModel.Id }, invitationModel);
         }
 
-        // Update - Update specific invitation (/api/invitation/{id})
         [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody] InvitationModel updatedInvitation)
         {
@@ -53,7 +49,6 @@ namespace StartUp.WebApi.Controllers
             return Ok(new InvitationDetailModel(retrievedInvitation));
         }
 
-        // Delete - Delete specific invitation (/api/invitation/{id})
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
