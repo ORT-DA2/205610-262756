@@ -15,7 +15,7 @@ namespace StartUp.Domain.Entities
             string rolesValid = "administrator, owner, employee";
 
             validator.ValidateString(Permission, "The user must have at least one role");
-            validator.ValidateContains(rolesValid, Permission, "You are trying to enter a role that does not exist");
+            validator.ValidateContainsRolesCorrect(rolesValid, Permission, "You are trying to enter a role that does not exist");
         }
     }
 }

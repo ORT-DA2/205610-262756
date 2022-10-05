@@ -17,8 +17,7 @@ namespace StartUp.Domain.Entities
         public void IsValidTokenAccess()
         {
             Validator validator = new Validator();
-
-            validator.ValidateToken(Token, "Token empty");
+            
             validator.ValidateUserNotNull(User, "User empty");
         }
 
