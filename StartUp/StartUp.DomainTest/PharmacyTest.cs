@@ -91,16 +91,19 @@ namespace StartUp.DomainTest
             Pharmacy pharmacy1 = CreatePharmacy("Una farmacia", "SolanoGarcia", null, requests);
 
             pharmacy1.isValidPharmacy();
+            
+            Assert.IsNotNull(pharmacy1);
         }
 
 
         [TestMethod]
-        [ExpectedException(typeof(Exceptions.InputException))]
         public void NewPharmacyWithoutRequestTest()
         {
             Pharmacy pharmacy1 = CreatePharmacy("Una farmacia", "SolanoGarcia", medicines, null);
 
             pharmacy1.isValidPharmacy();
+            
+            Assert.IsNotNull(pharmacy1);
         }
         
         [TestMethod]

@@ -30,18 +30,23 @@ namespace StartUp.BusinessLogicTest
         public void SetUp()
         {
             _repoMock = new Mock<IRepository<Medicine>>(MockBehavior.Strict);
-            _pharmacyRepoMock = new Mock<IRepository<Pharmacy>>(_pharmacyRepoMock.Object);
-            _sessionRepoMock = new Mock<IRepository<Session>>(_sessionRepoMock.Object);
-            _userRepoMock = new Mock<IRepository<User>>(_userRepoMock.Object);
-            _tokenRepoMock = new Mock<IRepository<TokenAccess>>(_tokenRepoMock.Object);
+            _pharmacyRepoMock = new Mock<IRepository<Pharmacy>>(MockBehavior.Strict);
+            _sessionRepoMock = new Mock<IRepository<Session>>(MockBehavior.Strict);
+            _userRepoMock = new Mock<IRepository<User>>(MockBehavior.Strict);
+            _tokenRepoMock = new Mock<IRepository<TokenAccess>>(MockBehavior.Strict);
             _sessionService = new SessionService(_sessionRepoMock.Object, _userRepoMock.Object, _tokenRepoMock.Object);
             _service = new MedicineService(_repoMock.Object, _sessionService, _pharmacyRepoMock.Object);
             symptoms = new List<Symptom>();
+            SetSession();
         }
         
         [TestCleanup]
         public void Cleanup()
         {
+            _pharmacyRepoMock.VerifyAll();
+            _sessionRepoMock.VerifyAll();
+            _userRepoMock.VerifyAll();
+            _tokenRepoMock.VerifyAll();
             _repoMock.VerifyAll();
         }
         
@@ -86,12 +91,23 @@ namespace StartUp.BusinessLogicTest
         {
             Medicine medicine = CreateMedicine(1, "AQHLO4564", "Clonapine", symptoms, 
                 "Gotitas", 500, "ml", 1000, 15, true);
+            _pharmacyRepoMock.SetupSequence(pRepo =>
+                    pRepo.GetOneByExpression(It.IsAny<Expression<Func<Pharmacy, bool>>>()))
+                .Returns(_sessionService.UserLogged.Pharmacy)
+                .Returns(_sessionService.UserLogged.Pharmacy)
+                .Returns(_sessionService.UserLogged.Pharmacy);
+            _pharmacyRepoMock.Setup(pRepo => pRepo.UpdateOne(_sessionService.UserLogged.Pharmacy));
+            _pharmacyRepoMock.Setup(pRepo => pRepo.Save());
+            _repoMock.Setup(repo => repo.InsertOne(medicine));
+            _repoMock.Setup(repo => repo.Save());
             _repoMock.Setup(repo => repo.GetOneByExpression(It.IsAny<Expression<Func<Medicine, bool>>>())).Returns(medicine);
             Medicine updateData = CreateMedicine(1, "AQHLO4564", "Clonapine", symptoms, 
                 "Pastillas", 500, "ml", 1000, 15, true);
             
             _repoMock.Setup(repo => repo.UpdateOne(medicine));
             _repoMock.Setup(repo => repo.Save());
+
+            _service.CreateMedicine(medicine);
             
             Medicine updatedMedicine = _service.UpdateMedicine(medicine.Id, updateData);
 
@@ -102,23 +118,35 @@ namespace StartUp.BusinessLogicTest
         [ExpectedException(typeof(ResourceNotFoundException))]
         public void DeleteNotExistingMedicineTest()
         {
+            _pharmacyRepoMock.Setup(pRepo => pRepo
+                    .GetOneByExpression(It.IsAny<Expression<Func<Pharmacy, bool>>>()))
+                .Returns(_sessionService.UserLogged.Pharmacy);
             _repoMock.Setup(repo => repo.GetOneByExpression(It.IsAny<Expression<Func<Medicine, bool>>>())).Returns((Medicine)null);
             
             _service.DeleteMedicine(1);
         }
         
         [TestMethod]
-        [ExpectedException(typeof(ResourceNotFoundException))]
         public void DeleteMedicineTest()
         {
             Medicine medicine = CreateMedicine(1, "AQHLO4564", "Clonapine", symptoms, 
                 "Gotitas", 500, "ml", 1000, 15, true);
-            _repoMock.SetupSequence(repo => 
-                repo.GetOneByExpression(It.IsAny<Expression<Func<Medicine, bool>>>()))
-                .Returns(medicine).Returns((Medicine)null);
+            _repoMock.Setup(repo =>
+                    repo.GetOneByExpression(It.IsAny<Expression<Func<Medicine, bool>>>()))
+                .Returns(medicine);
+            _pharmacyRepoMock.SetupSequence(pRepo =>
+                    pRepo.GetOneByExpression(It.IsAny<Expression<Func<Pharmacy, bool>>>()))
+                .Returns(_sessionService.UserLogged.Pharmacy)
+                .Returns(_sessionService.UserLogged.Pharmacy)
+                .Returns(_sessionService.UserLogged.Pharmacy);
+            _pharmacyRepoMock.Setup(pRepo => pRepo.UpdateOne(_sessionService.UserLogged.Pharmacy));
+            _pharmacyRepoMock.Setup(pRepo => pRepo.Save());
+            _repoMock.Setup(repo => repo.InsertOne(medicine));
+            _repoMock.Setup(repo => repo.Save());
             _repoMock.Setup(repo => repo.DeleteOne(medicine));
             _repoMock.Setup(repo => repo.Save());
             
+            _service.CreateMedicine(medicine);
             _service.DeleteMedicine(medicine.Id);
 
             _service.GetSpecificMedicine(medicine.Id);
@@ -129,9 +157,13 @@ namespace StartUp.BusinessLogicTest
         {
             Medicine medicine = CreateMedicine(1, "AQHLO4564", "Clonapine", symptoms, 
                 "Gotitas", 500, "ml", 1000, 15, true);
+            _pharmacyRepoMock.SetupSequence(pRepo => pRepo.GetOneByExpression(It.IsAny<Expression<Func<Pharmacy, bool>>>()))
+                .Returns(_sessionService.UserLogged.Pharmacy)
+                .Returns(_sessionService.UserLogged.Pharmacy);
+            _pharmacyRepoMock.Setup(pRepo => pRepo.UpdateOne(_sessionService.UserLogged.Pharmacy));
+            _pharmacyRepoMock.Setup(pRepo => pRepo.Save());
             _repoMock.Setup(repo => repo.InsertOne(medicine));
             _repoMock.Setup(repo => repo.Save());
-            _repoMock.Setup(repo => repo.GetOneByExpression(It.IsAny<Expression<Func<Medicine, bool>>>())).Returns((Medicine)null);
 
             Medicine newMedicine = _service.CreateMedicine(medicine);
             medicine.Code = newMedicine.Code;
@@ -145,9 +177,19 @@ namespace StartUp.BusinessLogicTest
         {
             Medicine medicine = CreateMedicine(1, "AQHLO4564", "Clonapine", symptoms, 
                 "Gotitas", 500, "ml", 1000, 15, true);
-            _repoMock.SetupSequence(repo => repo.GetOneByExpression(It.IsAny<Expression<Func<Medicine, bool>>>()))
-                .Returns(medicine);
-            
+            Medicine medicine2 = CreateMedicine(2, "AQHLO4564", "Clonapine", symptoms, 
+                "Gotitas", 500, "ml", 1000, 15, true);
+            _pharmacyRepoMock.SetupSequence(pRepo => pRepo.GetOneByExpression(It.IsAny<Expression<Func<Pharmacy, bool>>>()))
+                .Returns(_sessionService.UserLogged.Pharmacy)
+                .Returns(_sessionService.UserLogged.Pharmacy)
+                .Returns(_sessionService.UserLogged.Pharmacy)
+                .Returns(_sessionService.UserLogged.Pharmacy);
+            _pharmacyRepoMock.Setup(pRepo => pRepo.UpdateOne(_sessionService.UserLogged.Pharmacy));
+            _pharmacyRepoMock.Setup(pRepo => pRepo.Save());
+            _repoMock.Setup(repo => repo.InsertOne(medicine));
+            _repoMock.Setup(repo => repo.Save());
+
+            _service.CreateMedicine(medicine2);
             _service.CreateMedicine(medicine);
         }
         
@@ -159,6 +201,29 @@ namespace StartUp.BusinessLogicTest
                 Presentation = "Gotitas", Amount = 500, Measure = "ml", Price = 1000, Stock = 15, Prescription = true }
         };
 
+        private void SetSession()
+        {
+            Pharmacy pharmacy = new Pharmacy
+            {
+                Address = "hulahup",
+                Name = "Machado",
+                Sales = new List<Sale>(),
+                Stock = new List<Medicine>()
+            };
+            _sessionService.UserLogged = new User
+            {
+                Id = 1,
+                Address = "justicia",
+                Email = "something@gmail.com",
+                Invitation = new Invitation(),
+                Password = "12345678",
+                RegisterDate = DateTime.Today,
+                Pharmacy = pharmacy,
+                Roles = new Role(),
+                Token = new Guid().ToString()
+            };
+        }
+        
         private Medicine CreateMedicine(int id, string code, string name, List<Symptom> lsintoms, string presentation, int amount, string measure, int price, int stock, bool prescription)
         {
             return new Medicine()

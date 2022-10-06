@@ -25,7 +25,7 @@ namespace StartUp.Domain
 
         protected bool Equals(Symptom other)
         {
-            return Id == other?.Id;
+            return SymptomDescription == other?.SymptomDescription;
         }
     }
 }

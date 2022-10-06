@@ -22,7 +22,7 @@ namespace StartUp.BusinessLogicTest
         public void SetUp()
         {
             _repoMock = new Mock<IRepository<Invitation>>(MockBehavior.Strict);
-            _pharmacyRepoMock = new Mock<IRepository<Pharmacy>>(_pharmacyRepoMock.Object);
+            _pharmacyRepoMock = new Mock<IRepository<Pharmacy>>(MockBehavior.Strict);
             _service = new InvitationService(_repoMock.Object, _pharmacyRepoMock.Object);
         }
         
@@ -116,6 +116,7 @@ namespace StartUp.BusinessLogicTest
             _repoMock.Setup(repo => repo.InsertOne(dummyInvitation));
             _repoMock.Setup(repo => repo.Save());
             _repoMock.Setup(repo => repo.GetOneByExpression(It.IsAny<Expression<Func<Invitation, bool>>>())).Returns((Invitation)null);
+            _pharmacyRepoMock.Setup(fRepo => fRepo.GetOneByExpression(It.IsAny<Expression<Func<Pharmacy, bool>>>())).Returns(dummyInvitation.Pharmacy);
 
             Invitation newInvitation = _service.CreateInvitation(dummyInvitation);
             dummyInvitation.Code = newInvitation.Code;
@@ -133,6 +134,8 @@ namespace StartUp.BusinessLogicTest
                 .Returns((Invitation) null)
                 .Returns(dummyInvitation)
                 .Returns((Invitation) null);
+            _pharmacyRepoMock.Setup(fRepo => fRepo.GetOneByExpression(It.IsAny<Expression<Func<Pharmacy, bool>>>()))
+                .Returns(dummyInvitation.Pharmacy);
             
             Invitation newInvitation = _service.CreateInvitation(dummyInvitation);
             dummyInvitation.Code = newInvitation.Code;

@@ -52,11 +52,11 @@ namespace StartUp.DomainTest
         }
 
         [TestMethod]
-        public void CompareEqualIdSymptomTest()
+        public void CompareEqualDescriptionSymptomTest()
         {
             Symptom symptom = CreateSymptom(1, "fiebre");
 
-            Symptom symptom2 = CreateSymptom(2, "tos");
+            Symptom symptom2 = CreateSymptom(2, "fiebre");
 
             bool areEqual = symptom.Equals(symptom2);
 
@@ -72,14 +72,7 @@ namespace StartUp.DomainTest
 
             bool areEqual = symptom.Equals(symptom2);
 
-            Assert.IsTrue(areEqual);
-        }
-
-        public void NewSymptomTestOK()
-        {
-            Symptom symptom = new Symptom();
-
-            Assert.IsNotNull(symptom);
+            Assert.IsFalse(areEqual);
         }
 
         private Symptom CreateSymptom(int id, string description)

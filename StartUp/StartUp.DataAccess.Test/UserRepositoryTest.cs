@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using StartUp.DataAccess.Contexts;
+using StartUp.DataAccess.Repositories;
 
 namespace StartUp.DataAccess.Test
 {
@@ -15,6 +16,7 @@ namespace StartUp.DataAccess.Test
     {
         private BaseRepository<User> _repository;
         private StartUpContext _context;
+        private UserRepository _userRepository;
 
         [TestInitialize]
         public void SetUp()
@@ -23,6 +25,7 @@ namespace StartUp.DataAccess.Test
             _context.Database.OpenConnection();
             _context.Database.EnsureCreated();
             _repository = new BaseRepository<User>(_context);
+            _userRepository = new UserRepository(_context);
         }
 
         [TestCleanup]
@@ -32,34 +35,56 @@ namespace StartUp.DataAccess.Test
         }
 
         [TestMethod]
-        public void GetAllUserReturnsAsExpected()
+        public void GetOneByExpressionNotExistTest()
         {
-            Expression<Func<User, bool>> expression = o => o.Email.ToLower().Contains("paulaolivera1995@gmail.com");
-            var users = CreateUsers();
-            var eligibleUsers = users.Where(expression.Compile()).ToList();
-            LoadUsers(users);
+            Expression<Func<User, bool>> expression = i => i.Email.ToLower().Contains("Clonapine");
+            var user = CreateUser();
 
-            var retrievedUsers = _repository.GetAllByExpression(expression);
-            CollectionAssert.AreEquivalent(eligibleUsers, retrievedUsers.ToList());
+            var retrievedUser = _userRepository.GetOneByExpression(expression);
             
+            Assert.IsNull(retrievedUser);
+        }
+        
+        [TestMethod]
+        public void GetOneByExpressionTest()
+        {
+            User newUser = CreateUser();
+            Expression<Func<User, bool>> expression = m => m.Email.ToLower().Contains("paulaolivera2@gmail.com");
+            LoadUser(newUser);
+            
+            var retrievedUser = _userRepository.GetOneByExpression(expression);
+            
+            Assert.IsNotNull(retrievedUser);
         }
 
         [TestMethod]
         public void InsertNewUser()
         {
-            var users = CreateUsers();
-            LoadUsers(users);
+            var users = CreateUser();
+            LoadUser(users);
+            Invitation invitation = new Invitation
+            {
+                UserName = "Paula",
+                Pharmacy = null,
+                Code = 123456,
+                Rol = "Administrator"
+            };
             var newUser = new User()
             {
                 Email = "paulaolivera1995@gmail.com",
                 Address = "carlos maria ramirez",
-                Invitation = new Invitation(),
+                Invitation = invitation,
                 RegisterDate = DateTime.Now,
                 Password = "123ss",
+                Pharmacy = null,
+                Roles = new Role
+                {
+                    Permission = invitation.Rol,
+                }
             };
 
-            _repository.InsertOne(newUser);
-            _repository.Save();
+            _userRepository.InsertOne(newUser);
+            _userRepository.Save();
 
             // Voy directo al contexto a buscarla
             var userInDb = _context.Users.FirstOrDefault(o => o.Email.Equals(newUser.Email));
@@ -67,33 +92,22 @@ namespace StartUp.DataAccess.Test
         }
 
 
-        private void LoadUsers(List<User> users)
+        private void LoadUser(User user)
         {
-            users.ForEach(o => _context.Users.Add(o));
+            _context.Users.Add(user);
             _context.SaveChanges();
         }
 
-        private List<User> CreateUsers()
+        private User CreateUser()
         {
-            return new List<User>()
-        {
-            new()
+            return new()
             {
                 Email = "paulaolivera2@gmail.com",
                 Address = "de la vega",
                 Invitation = new Invitation(),
                 RegisterDate = DateTime.Now,
                 Password = "56899",
-            },
-            new()
-            {
-                Email = "paulaolivera3@gmail.com",
-                Address = "fernandez crespo",
-                Invitation = new Invitation(),
-                RegisterDate = DateTime.Now,
-                Password = "54s6dfadf",
-            }
-        };
+            };
         }
     }
 }
