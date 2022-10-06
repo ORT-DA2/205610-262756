@@ -9,7 +9,7 @@ namespace StartUp.WebApi.Controllers
 {
     [Route("api/role")]
     [ApiController]
-    [AuthorizationFilter("administrator")]
+    //[AuthorizationFilter("administrator")]
     public class RoleController : ControllerBase
     {
         private readonly IRoleService _roleService;

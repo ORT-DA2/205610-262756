@@ -19,7 +19,7 @@ namespace StartUp.WebApi.Controllers
         }
 
         [HttpGet]
-        [AuthorizationFilter("owner")]
+        //[AuthorizationFilter("owner")]
         public IActionResult GetRequest([FromQuery] RequestSearchCriteriaModel searchCriteria)
         {
             var retrievedRequest = _requestService.GetAllRequest(searchCriteria.ToEntity());
@@ -27,7 +27,7 @@ namespace StartUp.WebApi.Controllers
         }
 
         [HttpGet("{id}", Name = "GetRequest")]
-        [AuthorizationFilter("owner")]
+        //[AuthorizationFilter("owner")]
         public IActionResult GetRequest(int id)
         {
             var retrievedRequest = _requestService.GetSpecificRequest(id);
@@ -35,17 +35,16 @@ namespace StartUp.WebApi.Controllers
         }
 
         [HttpPost]
-        [AuthorizationFilter("employee")]
+        //[AuthorizationFilter("employee")]
         public IActionResult CreateRequest([FromBody] RequestModel newRequest)
         {
             var createdRequest = _requestService.CreateRequest(newRequest.ToEntity());
             var requestModel = new RequestDetailModel(createdRequest);
             return CreatedAtRoute("GetRequest", new { id = requestModel.Id }, requestModel);
-            return Ok();
         }
 
         [HttpPut("{id}")]
-        [AuthorizationFilter("owner")]
+        //[AuthorizationFilter("owner")]
         public IActionResult Update(int id, [FromBody] RequestModel updatedRequest)
         {
             var retrievedRequest = _requestService.UpdateRequest(id, updatedRequest.ToEntity());
@@ -53,7 +52,7 @@ namespace StartUp.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        [AuthorizationFilter("owner")]
+        //[AuthorizationFilter("owner")]
         public IActionResult Delete(int id)
         {
             _requestService.DeleteRequest(id);

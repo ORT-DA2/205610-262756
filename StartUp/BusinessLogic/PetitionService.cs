@@ -14,7 +14,7 @@ namespace StartUp.BusinessLogic
         private readonly IRepository<Pharmacy> _pharmacyRepository;
         private readonly IRepository<Medicine> _medicineRepository;
         private readonly ISessionService _sessionService;
-        private Validator validator;
+       
         public PetitionService(IRepository<Petition> petitionRepository, IRepository<Pharmacy> pharmacyRepository,
                                                     ISessionService sessionService, IRepository<Medicine> medicineRepository)
         {
@@ -22,7 +22,6 @@ namespace StartUp.BusinessLogic
             _pharmacyRepository = pharmacyRepository;
             _medicineRepository = medicineRepository;
             _sessionService = sessionService;
-            validator = new Validator();
         }
 
         public List<Petition> GetAllPetition(PetitionSearchCriteria searchCriteria)
@@ -48,6 +47,7 @@ namespace StartUp.BusinessLogic
 
         public Petition GetSpecificPetition(int petitionId)
         {
+            Validator validator = new Validator();
             Pharmacy pharmacy = _pharmacyRepository.GetOneByExpression(p => p.Id == _sessionService.UserLogged.Pharmacy.Id);
 
             var petitionSaved = _petitionRepository.GetOneByExpression(p => p.Id == petitionId);
@@ -66,13 +66,13 @@ namespace StartUp.BusinessLogic
 
         public Petition CreatePetition(Petition petition)
         {
-            Pharmacy pharmacy = _pharmacyRepository.GetOneByExpression(p => p.Id == _sessionService.UserLogged.Pharmacy.Id);
+            Pharmacy pharmacy = _pharmacyRepository.GetOneByExpression(p => p.Name == _sessionService.UserLogged.Pharmacy.Name);
 
             petition.IsValidPetition();
 
             if (!ExistCodeMedicineInPharmacy(petition.MedicineCode, pharmacy))
             {
-                throw new InvalidResourceException("The medicine code within the request does not match any code within the pharmacy to which it belongs");
+                throw new InvalidResourceException("The medicine code does not match any code within the pharmacy to which you belongs");
             }
             else
             {

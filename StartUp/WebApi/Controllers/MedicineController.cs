@@ -27,7 +27,7 @@ namespace StartUp.WebApi.Controllers
             return Ok(retrievedMedicines.Select(m => new MedicineBasicModel(m)));
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetMedicine")]
         public IActionResult GetMedicine(int id)
         {
             var retrievedMedicine = _medicineService.GetSpecificMedicine(id);
@@ -35,7 +35,7 @@ namespace StartUp.WebApi.Controllers
         }
 
         [HttpPost]
-        [AuthorizationFilter("employee")]
+        //[AuthorizationFilter("employee")]
         public IActionResult CreateMedicine([FromBody] MedicineModel newMedicine)
         {
             var createdMedicine = _medicineService.CreateMedicine(newMedicine.ToEntity());
@@ -44,7 +44,7 @@ namespace StartUp.WebApi.Controllers
         }
 
         [HttpPut("{id}")]
-        [AuthorizationFilter("owner")]
+        //[AuthorizationFilter("employee")]
         public IActionResult Update(int id, [FromBody] MedicineModel updatedMedicine)
         {
             var retrievedMedicine = _medicineService.UpdateMedicine(id, updatedMedicine.ToEntity());
@@ -52,11 +52,11 @@ namespace StartUp.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        [AuthorizationFilter("employee")]
+        //[AuthorizationFilter("employee")]
         public IActionResult Delete(int id)
         {
             _medicineService.DeleteMedicine(id);
-            return Ok();
+            return Ok($"Medicine {id} deleted");
         }
     }
 }

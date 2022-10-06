@@ -34,7 +34,10 @@ namespace StartUp.Domain
         public void ValidatePasswordValid(string password, string message, int length)
         {
             ValidateString(password, "Password empty");
-            ValidateLengthString(password, "The password must have at least 8 characters", length);
+            if (password.Length < length)
+            {
+                throw new InputException("The password must have at least 8 characters");
+            }
 
             if (!ContainSpecialCharacters(password))
             {
@@ -113,7 +116,7 @@ namespace StartUp.Domain
 
         public void ValidateUserNull(User user, string message)
         {
-            if (user != null)
+            if (user == null)
             {
                 throw new InputException(message);
             }

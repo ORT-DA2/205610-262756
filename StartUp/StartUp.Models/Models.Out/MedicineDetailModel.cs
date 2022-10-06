@@ -28,6 +28,7 @@ namespace StartUp.Models.Models.Out
             this.Name = medicine.Name;
             this.Measure = medicine.Measure;
             this.Symptoms = medicine.Symptoms;
+            this.Code = medicine.Code;
         }
 
         public override bool Equals(object? obj)

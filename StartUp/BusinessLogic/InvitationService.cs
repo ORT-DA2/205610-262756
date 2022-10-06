@@ -119,10 +119,15 @@ namespace StartUp.BusinessLogic
 
         private void ValidateInvitationRoles(Invitation invitation)
         {
+            string roles = "administrator, owner, employee";
             if ((invitation.Rol.ToLower() == "owner" || invitation.Rol.ToLower() == "employee")
                 && invitation.Pharmacy == null)
             {
                 throw new InputException("The owner and the employee roles need a pharmacy");
+            }
+            if (!roles.Contains(invitation.Rol))
+            {
+                throw new InputException("The role is not valid");
             }
         }
 
@@ -146,7 +151,7 @@ namespace StartUp.BusinessLogic
         {
             if (!invitation.Rol.Contains("administrator"))
             {
-                var pharmacy = _pharmacyRepository.GetOneByExpression(p => p.Id == invitation.Pharmacy.Id);
+                var pharmacy = _pharmacyRepository.GetOneByExpression(p => p.Name == invitation.Pharmacy.Name);
 
                 if (pharmacy == null)
                 {

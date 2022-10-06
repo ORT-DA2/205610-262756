@@ -1,4 +1,6 @@
-﻿using StartUp.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using StartUp.Domain;
+using StartUp.Domain.Entities;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
@@ -16,6 +18,11 @@ namespace StartUp.DataAccess.Repositories
         public override Role GetOneByExpression(Expression<Func<Role, bool>> expression)
         {
             return _context.Set<Role>().FirstOrDefault(expression);
+        }
+
+        public override void InsertOne(Role elem)
+        {
+            _context.Set<Role>().Add(elem);
         }
     }
 }

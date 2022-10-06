@@ -8,6 +8,7 @@ namespace StartUp.Models.Models.In
     public class SaleModel
     {
         public List<InvoiceLine> InvoiceLines { get; set; }
+
         public Sale ToEntity()
         {
             return new Sale()

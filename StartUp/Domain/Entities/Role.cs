@@ -7,11 +7,9 @@ namespace StartUp.Domain.Entities
         public int Id { get; set; }
         public string Permission { get; set; }
 
-
-        Validator validator = new Validator();
-
         public void IsValidRole()
         {
+            Validator validator = new Validator();
             string rolesValid = "administrator, owner, employee";
 
             validator.ValidateString(Permission, "The user must have at least one role");

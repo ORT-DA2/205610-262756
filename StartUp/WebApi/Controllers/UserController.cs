@@ -10,7 +10,7 @@ namespace StartUp.WebApi.Controllers
 
     [Route("api/user")]
     [ApiController]
-    [AuthorizationFilter("administrator")]
+    //[AuthorizationFilter("administrator")]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;

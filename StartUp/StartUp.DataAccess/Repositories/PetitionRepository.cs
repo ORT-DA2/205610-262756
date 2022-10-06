@@ -17,5 +17,10 @@ namespace StartUp.DataAccess.Repositories
         {
             return _context.Set<Petition>().FirstOrDefault(expression);
         }
+
+        public override void InsertOne(Petition elem)
+        {
+            _context.Set<Petition>().Add(elem);
+        }
     }
 }
