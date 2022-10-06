@@ -38,6 +38,8 @@ namespace StartUp.WebApi.UnitTest
         public void Cleanup()
         {
             _serviceMock.VerifyAll();
+            _tokenServiceMock.VerifyAll();
+            _userServiceMock.VerifyAll();
         }
 
         [TestMethod]
@@ -82,5 +84,36 @@ namespace StartUp.WebApi.UnitTest
             Assert.AreEqual((int)HttpStatusCode.Created, responseObj.StatusCode);
         }
         
+        [TestMethod]
+        public void LogOutTest()
+        {
+            TokenAccess token = new TokenAccess();
+            token.Token = new Guid();
+            
+            var user = new User();
+            user.Id = 1;
+            user.Password = "password12!";
+            user.Invitation = new Invitation
+            {
+                UserName = "Juan"
+            };
+            user.Token = token.ToString();
+            
+            var session = new Session();
+            session.Username = user.Invitation.UserName;
+            session.Password = user.Password;
+            session.Id = user.Id;
+
+            var expectedSession = new SessionModel(session);
+
+            _serviceMock.Setup(manager => manager.GetSpecificSession(user.Invitation.UserName)).Returns(session);
+            _serviceMock.Setup(manager => manager.VerifySession(expectedSession)).Returns(user);
+            _userServiceMock.Setup(uService => uService.SaveToken(user, token.Token.ToString()));
+            
+            var response = _controller.Logout(user.Token,expectedSession.UserName);
+            var responseObj = response as CreatedResult;
+
+            Assert.AreEqual((int)HttpStatusCode.OK, responseObj.StatusCode);
+        }
     }
 }

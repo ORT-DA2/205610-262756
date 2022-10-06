@@ -34,7 +34,7 @@ public class ContextFactory : IDesignTimeDbContextFactory<StartUpContext>
 
     private static DbContextOptions GetSqliteConfig(DbContextOptionsBuilder builder)
     {
-        builder.UseSqlite("Filename=:memory");
+        builder.UseSqlite("Filename=:memory:");
 
         return builder.Options;
     }

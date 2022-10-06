@@ -12,10 +12,12 @@ using StartUp.DataAccess.Contexts;
 
 namespace StartUp.DataAccess.Test
 {
+    [TestClass]
     public class PharmacyRepositoryTest
     {
         private BaseRepository<Pharmacy> _repository;
         private StartUpContext _context;
+        private PharmacyRepository _pharmacyRepository;
 
         [TestInitialize]
         public void SetUp()
@@ -24,6 +26,7 @@ namespace StartUp.DataAccess.Test
             _context.Database.OpenConnection();
             _context.Database.EnsureCreated();
             _repository = new BaseRepository<Pharmacy>(_context);
+            _pharmacyRepository = new PharmacyRepository(_context);
         }
 
         [TestCleanup]
@@ -33,22 +36,33 @@ namespace StartUp.DataAccess.Test
         }
 
         [TestMethod]
-        public void GetAllPharmacyReturnsAsExpected()
+        public void GetOneByExpressionNotExistTest()
         {
-            Expression<Func<Pharmacy, bool>> expression = p => p.Name.ToLower().Contains("el faro");
-            var pharmacies = CreatePharmacies();
-            var eligiblePharmacies = pharmacies.Where(expression.Compile()).ToList();
-            LoadPharmacies(pharmacies);
+            Expression<Func<Pharmacy, bool>> expression = i => i.Name.ToLower().Contains("Clonapine");
+            var pharmacy = CreatePharmacy();
 
-            var retrievedPharmacies = _repository.GetAllByExpression(expression);
-            CollectionAssert.AreEquivalent(eligiblePharmacies, retrievedPharmacies.ToList());
+            var retrievedPharmacy = _pharmacyRepository.GetOneByExpression(expression);
+            
+            Assert.IsNull(retrievedPharmacy);
+        }
+        
+        [TestMethod]
+        public void GetOneByExpressionTest()
+        {
+            Pharmacy newPharmacy = CreatePharmacy();
+            Expression<Func<Pharmacy, bool>> expression = ph => ph.Name.ToLower().Contains("el faro");
+            LoadPharmacy(newPharmacy);
+            
+            var retrievedPharmacy = _pharmacyRepository.GetOneByExpression(expression);
+            
+            Assert.IsNotNull(retrievedPharmacy);
         }
 
         [TestMethod]
         public void InsertNewPharmacy()
         {
-            var pharmacies = CreatePharmacies();
-            LoadPharmacies(pharmacies);
+            var pharmacies = CreatePharmacy();
+            LoadPharmacy(pharmacies);
             var newPharmacy = new Pharmacy()
             {
                 Name = "la isla",
@@ -66,31 +80,21 @@ namespace StartUp.DataAccess.Test
         }
 
 
-        private void LoadPharmacies(List<Pharmacy> pharmacies)
+        private void LoadPharmacy(Pharmacy pharmacy)
         {
-            pharmacies.ForEach(p => _context.Pharmacies.Add(p));
+            _context.Pharmacies.Add(pharmacy);
             _context.SaveChanges();
         }
 
-        private List<Pharmacy> CreatePharmacies()
+        private Pharmacy CreatePharmacy()
         {
-            return new List<Pharmacy>()
-        {
-            new()
+            return new()
             {
                 Name = "el faro",
                 Address = "18 de julio",
                 Stock = new List<Medicine>(),
                 Requests = new List<Request>()
-            },
-            new()
-            {
-                Name = "farmashop",
-                Address = "bv artigas",
-                Stock = new List<Medicine>(),
-                Requests = new List<Request>()
-            }
-        };
+            };
         }
     }
 }

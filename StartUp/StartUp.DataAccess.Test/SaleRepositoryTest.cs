@@ -8,6 +8,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using StartUp.DataAccess.Contexts;
+using StartUp.DataAccess.Repositories;
 
 namespace StartUp.DataAccess.Test
 {
@@ -16,6 +17,7 @@ namespace StartUp.DataAccess.Test
     {
         private BaseRepository<Sale> _repository;
         private StartUpContext _context;
+        private SaleRepository _saleRepository;
 
         [TestInitialize]
         public void SetUp()
@@ -24,6 +26,7 @@ namespace StartUp.DataAccess.Test
             _context.Database.OpenConnection();
             _context.Database.EnsureCreated();
             _repository = new BaseRepository<Sale>(_context);
+            _saleRepository = new SaleRepository(_context);
         }
 
         [TestCleanup]
@@ -33,22 +36,10 @@ namespace StartUp.DataAccess.Test
         }
 
         [TestMethod]
-        public void GetAllSaleReturnsAsExpected()
-        {
-            Expression<Func<Sale, bool>> expression = s => s.Id.ToString().Contains("1");
-            var sales = CreateSales();
-            var eligibleSales = sales.Where(expression.Compile()).ToList();
-            LoadSales(sales);
-
-            var retrievedSales = _repository.GetAllByExpression(expression);
-            CollectionAssert.AreEquivalent(eligibleSales, retrievedSales.ToList());
-        }
-
-        [TestMethod]
         public void InsertNewSale()
         {
-            var sales = CreateSales();
-            LoadSales(sales);
+            var sales = CreateSale();
+            LoadSale(sales);
             var newSale = new Sale()
             {
                 InvoiceLines = new List<InvoiceLine>()
@@ -61,27 +52,57 @@ namespace StartUp.DataAccess.Test
             var saleInDb = _context.Sales.FirstOrDefault(s => s.Id.Equals(newSale.Id));
             Assert.IsNotNull(saleInDb);
         }
-
-
-        private void LoadSales(List<Sale> sale)
+        
+        [TestMethod]
+        public void GetOneByExpressionNotExistTest()
         {
-            sale.ForEach(s => _context.Sales.Add(s));
+            InvoiceLine invoice = new InvoiceLine
+            {
+                  Amount = 1
+            };
+            Expression<Func<Sale, bool>> expression = s => s.InvoiceLines.Equals(invoice);
+
+            var retrievedSale = _saleRepository.GetOneByExpression(expression);
+            
+            Assert.IsNull(retrievedSale);
+        }
+        
+        [TestMethod]
+        public void GetOneByExpressionTest()
+        {
+            Sale newSale = CreateSale();
+            InvoiceLine invoice = new InvoiceLine
+            {
+                Amount = 4,
+                Medicine = new Medicine(),
+            };
+            Expression<Func<Sale, bool>> expression = s => s.InvoiceLines.Equals(invoice);
+            LoadSale(newSale);
+            
+            var retrievedSale = _saleRepository.GetOneByExpression(expression);
+            
+            Assert.IsNotNull(retrievedSale);
+        }
+
+
+        private void LoadSale(Sale sale)
+        {
+            _context.InvoiceLines.Add(sale.InvoiceLines[0]);
+            _context.Sales.Add(sale);
             _context.SaveChanges();
         }
 
-        private List<Sale> CreateSales()
+        private Sale CreateSale()
         {
-            return new List<Sale>()
-        {
-            new()
+            InvoiceLine invoice = new InvoiceLine
             {
-               InvoiceLines = new List<InvoiceLine>()
-            },
-            new()
-            {
-                InvoiceLines = new List<InvoiceLine>()
-            }
-        };
+                Amount = 4,
+                Medicine = new Medicine(),
+            };
+            Sale sale = new Sale();
+            sale.InvoiceLines = new List<InvoiceLine>();
+            sale.InvoiceLines.Add(invoice);
+            return sale;
         }
     }
 }

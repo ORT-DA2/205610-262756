@@ -69,14 +69,12 @@ namespace StartUp.DomainTest
         {
             Guid guid = Guid.NewGuid();
             Guid guid2 = Guid.NewGuid();
-
             TokenAccess token = CreateTokenAccess(1, guid, user);
-
             TokenAccess token2 = CreateTokenAccess(2, guid2, user);
 
             bool areEqual = token.Equals(token2);
 
-            Assert.IsTrue(areEqual);
+            Assert.IsFalse(areEqual);
         }
 
         private TokenAccess CreateTokenAccess(int id, Guid token, User user)

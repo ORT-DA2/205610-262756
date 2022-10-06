@@ -8,6 +8,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using StartUp.DataAccess.Contexts;
+using StartUp.DataAccess.Repositories;
 
 namespace StartUp.DataAccess.Test
 {
@@ -16,6 +17,7 @@ namespace StartUp.DataAccess.Test
     {
         private BaseRepository<Petition> _repository;
         private StartUpContext _context;
+        private PetitionRepository _petitionRepository;
 
         [TestInitialize]
         public void SetUp()
@@ -24,6 +26,7 @@ namespace StartUp.DataAccess.Test
             _context.Database.OpenConnection();
             _context.Database.EnsureCreated();
             _repository = new BaseRepository<Petition>(_context);
+            _petitionRepository = new PetitionRepository(_context);
         }
 
         [TestCleanup]
@@ -33,26 +36,37 @@ namespace StartUp.DataAccess.Test
         }
 
         [TestMethod]
-        public void GetAllPetitionReturnsAsExpected()
+        public void GetOneByExpressionNotExistTest()
         {
-            Expression<Func<Petition, bool>> expression = p => p.MedicineCode.ToLower().Contains("medicineCode");
-            var petitions = CreatePetitions();
-            var eligiblePetitions = petitions.Where(expression.Compile()).ToList();
-            LoadPetitions(petitions);
+            Expression<Func<Petition, bool>> expression = i => i.MedicineCode.ToLower().Contains("Clonapine");
+            var petition = CreatePetition();
 
-            var retrievedPetitions = _repository.GetAllByExpression(expression);
-            CollectionAssert.AreEquivalent(eligiblePetitions, retrievedPetitions.ToList());
+            var retrievedPetition = _petitionRepository.GetOneByExpression(expression);
+            
+            Assert.IsNull(retrievedPetition);
+        }
+        
+        [TestMethod]
+        public void GetOneByExpressionTest()
+        {
+            Petition newPetition = CreatePetition();
+            Expression<Func<Petition, bool>> expression = p => p.MedicineCode.ToLower().Contains("jhkjdh231");
+            LoadPetition(newPetition);
+            
+            var retrievedPetition = _petitionRepository.GetOneByExpression(expression);
+            
+            Assert.IsNotNull(retrievedPetition);
         }
 
         [TestMethod]
         public void InsertNewPetition()
         {
-            var petitions = CreatePetitions();
-            LoadPetitions(petitions);
+            var petitions = CreatePetition();
+            LoadPetition(petitions);
             var newPetition = new Petition()
             {
                 Amount = 0,
-                MedicineCode = "medicineCode"
+                MedicineCode = "petitionCode"
             };
 
             _repository.InsertOne(newPetition);
@@ -64,27 +78,19 @@ namespace StartUp.DataAccess.Test
         }
 
 
-        private void LoadPetitions(List<Petition> petitions)
+        private void LoadPetition(Petition petition)
         {
-            petitions.ForEach(p => _context.Petitions.Add(p));
+            _context.Petitions.Add(petition);
             _context.SaveChanges();
         }
 
-        private List<Petition> CreatePetitions()
+        private Petition CreatePetition()
         {
-            return new List<Petition>()
-        {
-            new()
+            return new()
             {
                 Amount = 0,
-                MedicineCode = "medicineCode"
-            },
-            new()
-            {
-                Amount = 0,
-                MedicineCode = "medicineCode"
-            }
-        };
+                MedicineCode = "jhkjdh231"
+            };
         }
     }
 }

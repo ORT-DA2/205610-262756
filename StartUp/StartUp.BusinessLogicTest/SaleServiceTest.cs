@@ -5,6 +5,7 @@ using StartUp.Domain;
 using StartUp.Exceptions;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using StartUp.Domain.Entities;
 using StartUp.IDataAccess;
@@ -21,7 +22,7 @@ namespace StartUp.BusinessLogicTest
         private Mock<IRepository<Sale>> _repoMock;
         private SaleService _service;
         private SessionService _sessionService;
-        private List<InvoiceLine> invoiceLine;
+        private List<InvoiceLine> _invoiceLine;
 
         [TestInitialize]
         public void SetUp()
@@ -33,21 +34,27 @@ namespace StartUp.BusinessLogicTest
             _pharmacyRepoMock = new Mock<IRepository<Pharmacy>>(MockBehavior.Strict);
             _sessionService = new SessionService(_sessionRepoMock.Object,_userRepoMock.Object,_tokenRepoMock.Object);
             _service = new SaleService(_repoMock.Object, _sessionService, _pharmacyRepoMock.Object);
-            invoiceLine = new List<InvoiceLine>();
+            _invoiceLine = new List<InvoiceLine>();
+            SetSession();
         }
 
         [TestCleanup]
         public void Cleanup()
         {
             _repoMock.VerifyAll();
+            _sessionRepoMock.VerifyAll();
+            _pharmacyRepoMock.VerifyAll();
+            _tokenRepoMock.VerifyAll();
+            _userRepoMock.VerifyAll();
         }
 
         [TestMethod]
         public void GetSpecificSaleTest()
         {
-            var sale = CreateSale(1, invoiceLine);
+            var sale = CreateSale(1, _invoiceLine);
+            _pharmacyRepoMock.Setup(repo => repo.GetOneByExpression(It.IsAny<Expression<Func<Pharmacy, bool>>>()))
+                .Returns(_sessionService.UserLogged.Pharmacy);
             _repoMock.Setup(repo => repo.GetOneByExpression(It.IsAny<Expression<Func<Sale, bool>>>())).Returns(sale);
-
             var retrievedSale = _service.GetSpecificSale(sale.Id);
 
             Assert.AreEqual(sale.Id, retrievedSale.Id);
@@ -57,7 +64,7 @@ namespace StartUp.BusinessLogicTest
         [ExpectedException(typeof(ResourceNotFoundException))]
         public void GetSpecificNullSaleTest()
         {
-            var sale = CreateSale(1, invoiceLine);
+            var sale = CreateSale(1, _invoiceLine);
 
             _repoMock.Setup(repo => repo.GetOneByExpression(It.IsAny<Expression<Func<Sale, bool>>>())).Returns((Sale)null);
 
@@ -78,7 +85,7 @@ namespace StartUp.BusinessLogicTest
         [TestMethod]
         public void CreateSaleTest()
         {
-            var sale = CreateSale(1, invoiceLine);
+            var sale = CreateSale(1, _invoiceLine);
             _repoMock.Setup(repo => repo.InsertOne(sale));
             _repoMock.Setup(repo => repo.Save());
 
@@ -95,21 +102,89 @@ namespace StartUp.BusinessLogicTest
 
             _service.CreateSale(sale);
         }
-
-
+        
         private List<Sale> GenerateDummySale() => new List<Sale>()
         {
-            new Sale() { Id= 1, InvoiceLines = invoiceLine},
-            new Sale() { Id= 2, InvoiceLines = invoiceLine}
+            new Sale() { Id= 1, InvoiceLines = _invoiceLine},
+            new Sale() { Id= 2, InvoiceLines = _invoiceLine}
         };
+
+        private void SetSession()
+        {
+            Medicine medicine = new Medicine
+            {
+                Name = "clonazepam",
+                Amount = 50,
+                Code = "ASW34",
+                Id = 1
+            };
+            Pharmacy pharmacy = new Pharmacy
+            {
+                Address = "hulahup",
+                Name = "Machado",
+                Sales = new List<Sale>(),
+                Stock = new List<Medicine>(),
+                Requests = new List<Request>()
+            };
+            pharmacy.Stock.Add(medicine);
+            _sessionService.UserLogged = new User
+            {
+                Id = 1,
+                Address = "justicia",
+                Email = "something@gmail.com",
+                Invitation = new Invitation(),
+                Password = "12345678",
+                RegisterDate = DateTime.Today,
+                Pharmacy = pharmacy,
+                Roles = new Role(),
+                Token = new Guid().ToString()
+            };
+        }
+
+        private InvoiceLine CreateInvoiceLine()
+        {
+            Medicine med = new Medicine
+            {
+                Amount = 6,
+                Code = "QW567",
+                Name = "Aspirina",
+                Stock = 60
+            };
+            
+            _sessionService.UserLogged.Pharmacy.Stock.Add(med);
+            
+            return new InvoiceLine
+            {
+                Amount = 3,
+                Id = 1,
+                Medicine = med
+            };
+        }
 
         private Sale CreateSale(int id, List<InvoiceLine> inv)
         {
-            return new Sale
+            inv.Add(CreateInvoiceLine());
+            
+            Sale sale = new Sale
             {
                 Id = id,
                 InvoiceLines = inv
             };
+            List<Pharmacy> pharmacies = new List<Pharmacy>();
+            pharmacies.Add(_sessionService.UserLogged.Pharmacy);
+            _pharmacyRepoMock.SetupSequence(pRepo => pRepo
+                    .GetAllByExpression(It.IsAny<Expression<Func<Pharmacy, bool>>>()))
+                .Returns(pharmacies)
+                .Returns(pharmacies);
+            _pharmacyRepoMock.Setup(pRepo => pRepo
+                .UpdateOne(_sessionService.UserLogged.Pharmacy));
+            _pharmacyRepoMock.Setup(pRepo => pRepo.Save());
+            _repoMock.Setup(repo => repo.InsertOne(sale));
+            _repoMock.Setup(repo => repo.Save());
+            _service.CreateSale(sale);
+            _sessionService.UserLogged.Pharmacy.Sales.Add(sale);
+
+            return sale;
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using BusinessLogic;
+﻿using StartUp.BusinessLogic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using StartUp.Domain;
@@ -8,6 +8,7 @@ using StartUp.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using BusinessLogic;
 
 namespace StartUp.BusinessLogicTest
 {

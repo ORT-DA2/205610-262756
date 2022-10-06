@@ -8,6 +8,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using StartUp.DataAccess.Contexts;
+using StartUp.DataAccess.Repositories;
 
 namespace StartUp.DataAccess.Test
 {
@@ -15,6 +16,7 @@ namespace StartUp.DataAccess.Test
     public class InvoiceLineRepositoryTest
     {
         private BaseRepository<InvoiceLine> _repository;
+        private InvoiceLineRepository _invoiceLineRepository;
         private StartUpContext _context;
 
         [TestInitialize]
@@ -24,6 +26,7 @@ namespace StartUp.DataAccess.Test
             _context.Database.OpenConnection();
             _context.Database.EnsureCreated();
             _repository = new BaseRepository<InvoiceLine>(_context);
+            _invoiceLineRepository = new InvoiceLineRepository(_context);
         }
 
         [TestCleanup]
@@ -33,15 +36,26 @@ namespace StartUp.DataAccess.Test
         }
 
         [TestMethod]
-        public void GetAllInvoiceLineReturnsAsExpected()
+        public void GetOneByExpressionNotExistTest()
         {
-            Expression<Func<InvoiceLine, bool>> expression = i => i.Medicine.Name.ToLower().Contains("perifar");
-            var invoiceLines = CreateInvoiceLines();
-            var eligibleInvoiceLines = invoiceLines.Where(expression.Compile()).ToList();
-            LoadInvoiceLines(invoiceLines);
+            Expression<Func<InvoiceLine, bool>> expression = i => i.Medicine.Name.ToLower().Contains("Clonapine");
+            var invoiceLine = CreateInvoiceLines();
 
-            var retrievedInvoiceLines = _repository.GetAllByExpression(expression);
-            CollectionAssert.AreEquivalent(eligibleInvoiceLines, retrievedInvoiceLines.ToList());
+            var retrievedInvoiceLines = _invoiceLineRepository.GetOneByExpression(expression);
+            
+            Assert.IsNull(retrievedInvoiceLines);
+        }
+        
+        [TestMethod]
+        public void GetOneByExpressionTest()
+        {
+            InvoiceLine newInvoiceLine = CreateInvoiceLines();
+            Expression<Func<InvoiceLine, bool>> expression = i => i.Medicine.Name.ToLower().Contains("perifar");
+            LoadInvoiceLines(newInvoiceLine);
+            
+            var retrievedInvoiceLines = _invoiceLineRepository.GetOneByExpression(expression);
+            
+            Assert.IsNotNull(retrievedInvoiceLines);
         }
 
         [TestMethod]
@@ -64,27 +78,22 @@ namespace StartUp.DataAccess.Test
         }
 
 
-        private void LoadInvoiceLines(List<InvoiceLine> invoiceLines)
+        private void LoadInvoiceLines(InvoiceLine invoiceLine)
         {
-            invoiceLines.ForEach(i => _context.InvoiceLines.Add(i));
+            _context.InvoiceLines.Add(invoiceLine);
             _context.SaveChanges();
         }
 
-        private List<InvoiceLine> CreateInvoiceLines()
+        private InvoiceLine CreateInvoiceLines()
         {
-            return new List<InvoiceLine>()
-        {
-            new()
-            {
-               Amount = 100,
-                Medicine = new Medicine()
-            },
-            new()
+            return new()
             {
                 Amount = 100,
-                Medicine = new Medicine()
-            }
-        };
+                Medicine = new Medicine
+                {
+                    Name = "Perifar"
+                }
+            };
         }
     }
 }
