@@ -21,7 +21,6 @@ namespace StartUp.DataAccess.Repositories
 
         public override void InsertOne(Sale elem)
         {
-            _context.Entry(elem.InvoiceLines).State = EntityState.Unchanged;
             _context.Set<Sale>().Add(elem);
         }
     }

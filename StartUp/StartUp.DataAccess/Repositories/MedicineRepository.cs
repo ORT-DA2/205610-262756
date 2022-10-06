@@ -21,7 +21,6 @@ namespace StartUp.DataAccess.Repositories
 
         public override void InsertOne(Medicine elem)
         {
-            _context.Entry(elem).State = EntityState.Unchanged;
             _context.Set<Medicine>().Add(elem);
         }
     }

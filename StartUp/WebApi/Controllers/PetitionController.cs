@@ -9,7 +9,7 @@ namespace StartUp.WebApi.Controllers
 {
     [Route("api/petition")]
     [ApiController]
-    //[AuthorizationFilter("employee")]
+    [AuthorizationFilter("employee")]
     public class PetitionController : ControllerBase
     {
         private readonly IPetitionService _petitionService;

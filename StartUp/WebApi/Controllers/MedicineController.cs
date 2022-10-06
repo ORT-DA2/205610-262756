@@ -35,7 +35,7 @@ namespace StartUp.WebApi.Controllers
         }
 
         [HttpPost]
-        //[AuthorizationFilter("employee")]
+        [AuthorizationFilter("employee")]
         public IActionResult CreateMedicine([FromBody] MedicineModel newMedicine)
         {
             var createdMedicine = _medicineService.CreateMedicine(newMedicine.ToEntity());
@@ -44,7 +44,7 @@ namespace StartUp.WebApi.Controllers
         }
 
         [HttpPut("{id}")]
-        //[AuthorizationFilter("employee")]
+        [AuthorizationFilter("employee")]
         public IActionResult Update(int id, [FromBody] MedicineModel updatedMedicine)
         {
             var retrievedMedicine = _medicineService.UpdateMedicine(id, updatedMedicine.ToEntity());
@@ -52,7 +52,7 @@ namespace StartUp.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        //[AuthorizationFilter("employee")]
+        [AuthorizationFilter("employee")]
         public IActionResult Delete(int id)
         {
             _medicineService.DeleteMedicine(id);

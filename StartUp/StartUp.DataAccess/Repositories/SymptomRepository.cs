@@ -21,7 +21,6 @@ namespace StartUp.DataAccess.Repositories
 
         public override void InsertOne(Symptom elem)
         {
-            _context.Entry(elem.SymptomDescription).State = EntityState.Unchanged;
             _context.Set<Symptom>().Add(elem);
         }
     }

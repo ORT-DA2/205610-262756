@@ -22,7 +22,6 @@ namespace StartUp.DataAccess.Repositories
 
         public override void InsertOne(TokenAccess elem)
         {
-            _context.Entry(elem.User).State = EntityState.Unchanged;
             _context.Set<TokenAccess>().Add(elem);
         }
     }

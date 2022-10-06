@@ -22,9 +22,6 @@ namespace StartUp.DataAccess.Repositories
 
         public virtual void InsertOne(Pharmacy elem)
         {
-            _context.Entry(elem.Sales).State = EntityState.Unchanged;
-            _context.Entry(elem.Stock).State = EntityState.Unchanged;
-            _context.Entry(elem.Requests).State = EntityState.Unchanged;
             _context.Set<Pharmacy>().Add(elem);
         }
     }

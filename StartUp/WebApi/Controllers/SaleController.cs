@@ -19,7 +19,7 @@ namespace StartUp.WebApi.Controllers
         }
 
         [HttpGet]
-        //[AuthorizationFilter("owner")]
+        [AuthorizationFilter("owner")]
         public IActionResult GetSale()
         {
             var retrievedSale = _saleService.GetAllSale();
@@ -27,7 +27,7 @@ namespace StartUp.WebApi.Controllers
         }
 
         [HttpGet("{id}", Name = "GetSale")]
-        //[AuthorizationFilter("owner")]
+        [AuthorizationFilter("owner")]
         public IActionResult GetSale(int id)
         {
             var retrievedSale = _saleService.GetSpecificSale(id);

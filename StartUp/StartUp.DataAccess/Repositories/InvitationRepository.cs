@@ -21,7 +21,6 @@ namespace StartUp.DataAccess.Repositories
 
         public override void InsertOne(Invitation elem)
         {
-            _context.Entry(elem).State = EntityState.Unchanged;
             _context.Set<Invitation>().Add(elem);
 
         }
