@@ -14,16 +14,14 @@ namespace StartUp.BusinessLogic
         private readonly IRepository<Request> _requestRepository;
         private readonly ISessionService _sessionService;
         private readonly IRepository<Pharmacy> _pharmacyRepository;
-        private readonly IRepository<Petition> _petitionRepository;
     
 
         public RequestService(IRepository<Request> requestRepository, ISessionService sessionService,
-            IRepository<Pharmacy> pharmacyRepository, IRepository<Petition> petitionRepository)
+            IRepository<Pharmacy> pharmacyRepository)
         {
             _requestRepository = requestRepository;
             _sessionService = sessionService;
-            _pharmacyRepository = pharmacyRepository;
-            _petitionRepository = petitionRepository;   
+            _pharmacyRepository = pharmacyRepository;  
             
         }
 
