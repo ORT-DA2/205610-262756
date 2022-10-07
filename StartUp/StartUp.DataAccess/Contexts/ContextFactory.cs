@@ -3,43 +3,43 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 
-namespace StartUp.DataAccess.Contexts;
+namespace StartUp.DataAccess;
 
-public enum ContextType { SQLite, SQLServer }
+public enum ContextType { Memory, SQL }
 
 public class ContextFactory : IDesignTimeDbContextFactory<StartUpContext>
 {
-   
+
     public StartUpContext CreateDbContext(string[] args)
     {
         return GetNewContext();
     }
 
-    public static StartUpContext GetNewContext(ContextType type = ContextType.SQLServer)
+    public static StartUpContext GetNewContext(ContextType type = ContextType.SQL)
     {
         var builder = new DbContextOptionsBuilder<StartUpContext>();
         DbContextOptions options = null;
 
-        if (type == ContextType.SQLite)
+        if (type == ContextType.Memory)
         {
-            options = GetSqliteConfig(builder);
+            options = GetMemoryConfig(builder);
         }
         else
         {
-            options = GetSqlServerConfig(builder);
+            options = GetSqlConfig(builder);
         }
 
         return new StartUpContext(options);
     }
 
-    private static DbContextOptions GetSqliteConfig(DbContextOptionsBuilder builder)
+    private static DbContextOptions GetMemoryConfig(DbContextOptionsBuilder builder)
     {
         builder.UseSqlite("Filename=:memory:");
 
         return builder.Options;
     }
 
-    private static DbContextOptions GetSqlServerConfig(DbContextOptionsBuilder builder)
+    private static DbContextOptions GetSqlConfig(DbContextOptionsBuilder builder)
     {
         //Gets directory from startup project being used, NOT this class's path 
         var directory = Directory.GetCurrentDirectory();

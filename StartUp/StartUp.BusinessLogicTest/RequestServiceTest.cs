@@ -5,10 +5,10 @@ using System.Linq;
 using System.Linq.Expressions;
 using Moq;
 using StartUp.BusinessLogic;
-using StartUp.Domain;
 using StartUp.Domain.Entities;
 using StartUp.Domain.SearchCriterias;
 using StartUp.Exceptions;
+using StartUp.Domain;
 using StartUp.IDataAccess;
 
 namespace StartUp.BusinessLogicTest
@@ -18,10 +18,10 @@ namespace StartUp.BusinessLogicTest
     {
         
         private Mock<IRepository<Request>> _repoMock;
-        private Mock<IRepository<User>> _userRepoMock;
-        private Mock<IRepository<TokenAccess>> _tokenRepoMock;
-        private Mock<IRepository<Session>> _sessionRepoMock;
         private Mock<IRepository<Pharmacy>> _pharmacyRepoMock;
+        private Mock<IRepository<TokenAccess>> _tokenRepoMock;
+        private Mock<IRepository<User>> _userRepoMock;
+        private Mock<IRepository<Session>> _sessionRepoMock;
         private RequestService _service;
         private SessionService _sessionService;
         private List<Petition> _petitions;

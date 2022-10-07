@@ -18,12 +18,11 @@ namespace StartUp.Domain.Entities
         public Pharmacy Pharmacy { get; set; }
         public string Token { get; set; }
 
-        public Validator validator = new Validator();
-
         public User() { }
 
         public void IsValidUser()
         {
+            Validator validator = new Validator();
             validator.ValidateString(Email, "Email empty");
             validator.ValidateString(Address, "Address empty");
             validator.ValidatePasswordValid(Password, "Password invalid", 7);

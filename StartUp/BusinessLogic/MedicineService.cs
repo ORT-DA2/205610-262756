@@ -52,8 +52,9 @@ namespace StartUp.BusinessLogic
             medicine.IsValidMedicine();
             IsMedicineRegistered(medicine);
 
+            medicine.Symptoms = new List<Symptom>();
             pharmacy.Stock.Add(medicine);
-            ModifyRecords(pharmacy, medicine);
+            ModifyRecords(pharmacy, medicine, true);
 
             return medicine;
         }
@@ -88,7 +89,7 @@ namespace StartUp.BusinessLogic
             if (pharmacy.Stock.Contains(medicineStored))
             {
                 pharmacy.Stock.Remove(medicineStored);
-                ModifyRecords(pharmacy, medicineStored);
+                ModifyRecords(pharmacy, medicineStored, false);
             }
             else
             {
@@ -119,12 +120,19 @@ namespace StartUp.BusinessLogic
             }
         }
 
-        private void ModifyRecords(Pharmacy pharmacy, Medicine medicine)
+        private void ModifyRecords(Pharmacy pharmacy, Medicine medicine, bool insert)
         {
+            if (!insert)
+            {
+                _medicineRepository.DeleteOne(medicine);
+            }
+            else
+            {
+                _medicineRepository.InsertOne(medicine);
+            }
+            _medicineRepository.Save();
             _pharmacyRepository.UpdateOne(pharmacy);
             _pharmacyRepository.Save();
-            _medicineRepository.DeleteOne(medicine);
-            _medicineRepository.Save();
         }
     }
 }

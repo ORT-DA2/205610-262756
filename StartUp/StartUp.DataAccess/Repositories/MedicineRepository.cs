@@ -1,6 +1,6 @@
 ﻿using StartUp.Domain;
+using Microsoft.EntityFrameworkCore;
 using System;
-using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 
@@ -17,6 +17,11 @@ namespace StartUp.DataAccess.Repositories
         public override Medicine GetOneByExpression(Expression<Func<Medicine, bool>> expression)
         {
             return _context.Set<Medicine>().Include("Symptoms").FirstOrDefault(expression);
+        }
+
+        public override void InsertOne(Medicine elem)
+        {
+            _context.Set<Medicine>().Add(elem);
         }
     }
 }

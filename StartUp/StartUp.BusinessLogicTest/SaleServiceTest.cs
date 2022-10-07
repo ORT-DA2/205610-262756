@@ -2,6 +2,8 @@
 using Moq;
 using StartUp.BusinessLogic;
 using StartUp.Domain;
+using StartUp.Domain.Entities;
+using StartUp.Domain.SearchCriterias;
 using StartUp.Exceptions;
 using System;
 using System.Collections.Generic;
@@ -15,11 +17,11 @@ namespace StartUp.BusinessLogicTest
     [TestClass]
     public class SaleServiceTest
     {
-        private Mock<IRepository<User>> _userRepoMock;
-        private Mock<IRepository<TokenAccess>> _tokenRepoMock;
-        private Mock<IRepository<Session>> _sessionRepoMock;
-        private Mock<IRepository<Pharmacy>> _pharmacyRepoMock;
-        private Mock<IRepository<Sale>> _repoMock;
+        private Mock<IDataAccess.IRepository<Sale>> _repoMock;
+        private Mock<IDataAccess.IRepository<Pharmacy>> _pharmacyRepoMock;
+        private Mock<IDataAccess.IRepository<TokenAccess>> _tokenRepoMock;
+        private Mock<IDataAccess.IRepository<User>> _userRepoMock;
+        private Mock<IDataAccess.IRepository<Session>> _sessionRepoMock;
         private SaleService _service;
         private SessionService _sessionService;
         private List<InvoiceLine> _invoiceLine;
@@ -27,9 +29,7 @@ namespace StartUp.BusinessLogicTest
         [TestInitialize]
         public void SetUp()
         {
-            _sessionRepoMock = new Mock<IRepository<Session>>(MockBehavior.Strict);
-            _userRepoMock = new Mock<IRepository<User>>(MockBehavior.Strict);
-            _tokenRepoMock = new Mock<IRepository<TokenAccess>>(MockBehavior.Strict);
+            
             _repoMock = new Mock<IDataAccess.IRepository<Sale>>(MockBehavior.Strict);
             _pharmacyRepoMock = new Mock<IRepository<Pharmacy>>(MockBehavior.Strict);
             _sessionService = new SessionService(_sessionRepoMock.Object,_userRepoMock.Object,_tokenRepoMock.Object);

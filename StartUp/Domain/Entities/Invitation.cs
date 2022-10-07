@@ -15,7 +15,13 @@ namespace StartUp.Domain
         public Pharmacy Pharmacy { get; set; }
 
         public Invitation() { }
-        
+
+        public void IsValidInvitation()
+        {
+            Validator validator = new Validator();
+            validator.ValidateString(UserName, "User name can not be empty or all spaces");
+            validator.ValidateString(Rol, "User rol can not be empty or all spaces");
+        }
         public override bool Equals(object? obj)
         {
             if (ReferenceEquals(null, obj)) return false;
@@ -28,12 +34,6 @@ namespace StartUp.Domain
         {
             return Code == other?.Code;
         
-        }
-        public void IsValidInvitation()
-        {
-            Validator validator = new Validator();
-            validator.ValidateString(UserName, "User name can not be empty or all spaces");
-            validator.ValidateString(Rol, "User rol can not be empty or all spaces");
         }
     }
 }

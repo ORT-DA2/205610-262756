@@ -10,6 +10,8 @@ using StartUp.Domain.Entities;
 using StartUp.Domain.SearchCriterias;
 using StartUp.Exceptions;
 using StartUp.IDataAccess;
+using StartUp.IBusinessLogic;
+using StartUp.Domain.Entities;
 
 namespace StartUp.BusinessLogicTest
 {
@@ -18,10 +20,10 @@ namespace StartUp.BusinessLogicTest
     {
         
         private Mock<IRepository<Medicine>> _repoMock;
-        private Mock<IRepository<Pharmacy>> _pharmacyRepoMock;
-        private Mock<IRepository<Session>> _sessionRepoMock;
-        private Mock<IRepository<User>> _userRepoMock;
         private Mock<IRepository<TokenAccess>> _tokenRepoMock;
+        private Mock<IRepository<User>> _userRepoMock;
+        private Mock<IRepository<Session>> _sessionRepoMock;
+        private Mock<IRepository<Pharmacy>> _pharmacyRepoMock;
         private SessionService _sessionService;
         private MedicineService _service;
         private List<Symptom> symptoms;
@@ -48,6 +50,7 @@ namespace StartUp.BusinessLogicTest
             _userRepoMock.VerifyAll();
             _tokenRepoMock.VerifyAll();
             _repoMock.VerifyAll();
+           
         }
         
         [TestMethod]

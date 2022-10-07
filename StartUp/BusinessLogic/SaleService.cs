@@ -15,14 +15,13 @@ namespace StartUp.BusinessLogic
         private readonly IRepository<Sale> _saleRepository;
         private readonly ISessionService _sessionService;
         private readonly IRepository<Pharmacy> _pharmacyRepository;
-        private readonly Validator validator;
+
 
         public SaleService(IRepository<Sale> saleRepository, ISessionService sessionService, IRepository<Pharmacy> pharmacyRepository)
         {
             _saleRepository = saleRepository;
             _sessionService = sessionService;
             _pharmacyRepository = pharmacyRepository;
-            validator = new Validator();
         }
 
         public List<Sale> GetAllSale()
@@ -34,6 +33,7 @@ namespace StartUp.BusinessLogic
 
         public Sale GetSpecificSale(int saleId)
         {
+            Validator validator = new Validator();
             Pharmacy pharmacy = _pharmacyRepository.GetOneByExpression(p => p.Id == _sessionService.UserLogged.Pharmacy.Id);
 
             var saleSaved = _saleRepository.GetOneByExpression(s => s.Id == saleId);
@@ -96,15 +96,20 @@ namespace StartUp.BusinessLogic
 
         private List<Pharmacy> AllMedicationsCorrespondToTheSamePharmacy(Sale sale)
         {
+            Validator validator = new Validator();
             var invoiceLineFirst = sale.InvoiceLines.FirstOrDefault();
             Medicine medicine = invoiceLineFirst.Medicine;
-            List<Pharmacy> list = _pharmacyRepository.GetAllByExpression(p => p.Stock.Contains(medicine)).ToList();
+
+            List <Pharmacy> list = _pharmacyRepository.GetAllByExpression(p=>p.Stock.Contains(medicine)).ToList();
             validator.ValidateListPharmacyNotNull(list, "No pharmacy has all those drugs");
 
             foreach (InvoiceLine item in sale.InvoiceLines)
             {
                 Medicine medicineItem = item.Medicine;
-                List<Pharmacy> listItem = _pharmacyRepository.GetAllByExpression(p => p.Stock.Contains(medicineItem)).ToList();
+                Expression<Func<Pharmacy, bool>> pharmacyFilter2 =
+                pharmacy => pharmacy.Stock.Contains(medicineItem);
+
+                List<Pharmacy> listItem = _pharmacyRepository.GetAllByExpression(pharmacyFilter2).ToList();
                 validator.ValidateListPharmacyNotNull(listItem, $"No pharmacy has this medicine {medicineItem.Name}");
 
                 if (list != listItem)

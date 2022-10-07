@@ -14,7 +14,6 @@ namespace BusinessLogic
     public class UserService : IUserService
     {
         private readonly IRepository<User> _userRepository;
-        private Validator validator = new Validator();
 
         public UserService(IRepository<User> userRepository)
         {
@@ -44,6 +43,7 @@ namespace BusinessLogic
 
         public User GetSpecificUser(int userId)
         {
+            Validator validator = new Validator();
             validator.ValidateString(userId.ToString(), "User empty");
 
             User UserSaved = _userRepository.GetOneByExpression(u => u.Id == userId);
@@ -69,6 +69,7 @@ namespace BusinessLogic
 
         public User UpdateUser(int userId, User updateduser)
         {
+            Validator validator = new Validator();
             validator.ValidateUserNotNull(updateduser, "User empty");
             validator.ValidateString(userId.ToString(), "UserId empty");
 
@@ -94,6 +95,7 @@ namespace BusinessLogic
 
         public void DeleteUser(int userId)
         {
+            Validator validator = new Validator();
             validator.ValidateString(userId.ToString(), "UserID empty");
             var userStored = GetSpecificUser(userId);
             validator.ValidateUserNotNull(userStored, "User not exist");
@@ -104,22 +106,26 @@ namespace BusinessLogic
 
         private void EmailNotExistInDataBase(User user)
         {
+            Validator validator = new Validator();
             validator.ValidateUserNotNull(user, "User empty");
 
             User userSaved = _userRepository.GetOneByExpression(u => u.Email == user.Email);
 
-            validator.ValidateUserNull(userSaved, $"There is already an User with {user.Email} email");
+            if (userSaved != null)
+            {
+                throw new InputException($"There is already an User with {user.Email} email");
+            }
         }
 
         public void SaveToken(User user, string token)
         {
-            validator.ValidateUserNull(user, "User empty");
+            Validator validator = new Validator();
             validator.ValidateString(token, "Token empty");
-            
+
             var userSalved = _userRepository.GetOneByExpression(u => u.Id == user.Id);
-            
+
             validator.ValidateUserNull((userSalved), "User not exist in database");
-            
+
             userSalved.Token = token;
             _userRepository.Save();
         }

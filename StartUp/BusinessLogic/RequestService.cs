@@ -4,10 +4,8 @@ using StartUp.Domain.SearchCriterias;
 using StartUp.Exceptions;
 using StartUp.IBusinessLogic;
 using StartUp.IDataAccess;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
+
 
 namespace StartUp.BusinessLogic
 {
@@ -16,20 +14,20 @@ namespace StartUp.BusinessLogic
         private readonly IRepository<Request> _requestRepository;
         private readonly ISessionService _sessionService;
         private readonly IRepository<Pharmacy> _pharmacyRepository;
-        private Validator validator;
+    
 
         public RequestService(IRepository<Request> requestRepository, ISessionService sessionService,
             IRepository<Pharmacy> pharmacyRepository)
         {
             _requestRepository = requestRepository;
             _sessionService = sessionService;
-            _pharmacyRepository = pharmacyRepository;
-            validator = new Validator();
+            _pharmacyRepository = pharmacyRepository;  
+            
         }
 
         public List<Request> GetAllRequest(RequestSearchCriteria searchCriteria)
         {
-            Pharmacy pharmacy = _pharmacyRepository.GetOneByExpression(p => p.Id == _sessionService.UserLogged.Pharmacy.Id);
+            Pharmacy pharmacy = _pharmacyRepository.GetOneByExpression(p => p.Name == _sessionService.UserLogged.Pharmacy.Name);
 
             var stateCriteria = searchCriteria.State?.ToString().ToLower() ?? string.Empty;
 
@@ -48,6 +46,7 @@ namespace StartUp.BusinessLogic
 
         public Request GetSpecificRequest(int requestId)
         {
+            Validator validator = new Validator();
             Pharmacy pharmacy = _pharmacyRepository.GetOneByExpression(p => p.Id == _sessionService.UserLogged.Pharmacy.Id);
 
             var requestSaved = _requestRepository.GetOneByExpression(r => r.Id == requestId);
@@ -62,29 +61,29 @@ namespace StartUp.BusinessLogic
 
         public Request CreateRequest(Request request)
         {
-            Pharmacy pharmacy = _pharmacyRepository.GetOneByExpression(p => p.Id == _sessionService.UserLogged.Pharmacy.Id);
+            Pharmacy pharmacy = _pharmacyRepository.GetOneByExpression(p => p.Name == _sessionService.UserLogged.Pharmacy.Name);
 
             request.isValidRequest();
             request.State = "Pending";
 
             pharmacy.Requests.Add(request);
-            ModifiedRecords(pharmacy, request);
+            ModifiedRecords(pharmacy, request, false);
 
             return request;
         }
 
         public Request UpdateRequest(int requestId, Request updatedRequest)
         {
-            Pharmacy pharmacy = _pharmacyRepository.GetOneByExpression(p => p.Id == _sessionService.UserLogged.Pharmacy.Id);
+            Pharmacy pharmacy = _pharmacyRepository.GetOneByExpression(p => p.Name == _sessionService.UserLogged.Pharmacy.Name);
             var request = GetSpecificRequest(requestId);
 
             updatedRequest.isValidRequest();
 
-            if (request.State == "Pending")
+            if (request.State.ToLower() == "pending")
             {
                 request.State = updatedRequest.State;
 
-                if (request.State == "Approved")
+                if (request.State.ToLower() == "approved")
                 {
                     pharmacy = UpdateStockInPharmacy(pharmacy, request);
                     _pharmacyRepository.UpdateOne(pharmacy);
@@ -105,6 +104,7 @@ namespace StartUp.BusinessLogic
 
         private Pharmacy UpdateStockInPharmacy(Pharmacy pharmacy, Request request)
         {
+            Validator validator = new Validator();
             validator.ValidateRequestNotNull(request, "Request empty");
             validator.ValidatePharmacyNotNull(pharmacy, "Pharmacy empty");
 
@@ -128,7 +128,7 @@ namespace StartUp.BusinessLogic
             var requestStored = GetSpecificRequest(requestId);
 
             pharmacy.Requests.Remove(requestStored);
-            ModifiedRecords(pharmacy, requestStored);
+            ModifiedRecords(pharmacy, requestStored, true);
         }
 
         private List<Request> FilteredRequest(Pharmacy pharmacy, string state, List<Request> requests)
@@ -143,12 +143,19 @@ namespace StartUp.BusinessLogic
             return requests;
         }
 
-        private void ModifiedRecords(Pharmacy pharmacy, Request request)
+        private void ModifiedRecords(Pharmacy pharmacy, Request request, bool delete)
         {
+            if (delete)
+            {
+                _requestRepository.DeleteOne(request);
+            }
+            else
+            {
+                _requestRepository.InsertOne(request);
+            }
+            _requestRepository.Save();
             _pharmacyRepository.UpdateOne(pharmacy);
             _pharmacyRepository.Save();
-            _requestRepository.DeleteOne(request);
-            _requestRepository.Save();
         }
 
     }

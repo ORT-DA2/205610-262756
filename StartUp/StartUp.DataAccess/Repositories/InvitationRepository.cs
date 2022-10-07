@@ -1,6 +1,6 @@
-﻿using StartUp.Domain;
+﻿using Microsoft.EntityFrameworkCore;
+using StartUp.Domain;
 using System;
-using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 
@@ -21,7 +21,6 @@ namespace StartUp.DataAccess.Repositories
 
         public override void InsertOne(Invitation elem)
         {
-            _context.Entry(elem).State = (Microsoft.EntityFrameworkCore.EntityState)EntityState.Unchanged;
             _context.Set<Invitation>().Add(elem);
 
         }

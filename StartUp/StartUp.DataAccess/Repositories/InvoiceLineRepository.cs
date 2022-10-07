@@ -1,6 +1,6 @@
-﻿using StartUp.Domain;
+﻿using Microsoft.EntityFrameworkCore;
+using StartUp.Domain;
 using System;
-using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 
@@ -17,6 +17,11 @@ namespace StartUp.DataAccess.Repositories
         public override InvoiceLine GetOneByExpression(Expression<Func<InvoiceLine, bool>> expression)
         {
             return _context.Set<InvoiceLine>().Include("Medicine").FirstOrDefault(expression);
+        }
+
+        public override void InsertOne(InvoiceLine elem)
+        {
+            _context.Set<InvoiceLine>().Add(elem);
         }
     }
 }

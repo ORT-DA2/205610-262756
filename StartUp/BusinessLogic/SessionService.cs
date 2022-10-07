@@ -17,7 +17,6 @@ namespace StartUp.BusinessLogic
         private readonly IRepository<Session> _sessionRepository;
         private readonly IRepository<User> _userRepository;
         private readonly IRepository<TokenAccess> _tokenAccessRepository;
-        private Validator validator = new Validator();
         public User UserLogged { get; set; }
         public SessionService(IRepository<Session> sessionRepository, IRepository<User> userRepository,
                                          IRepository<TokenAccess> tokenRepository)
@@ -43,6 +42,7 @@ namespace StartUp.BusinessLogic
 
         public User VerifySession(SessionModel session)
         {
+            Validator validator = new Validator();
             validator.ValidateString(session.UserName, "Username empty");
             validator.ValidateString(session.Password, "Password empty");
 
@@ -71,6 +71,7 @@ namespace StartUp.BusinessLogic
 
         public Session CreateSession(SessionModel sessionM)
         {
+            Validator validator = new Validator();
             validator.ValidateString(sessionM.UserName, "Username empty");
             validator.ValidateString(sessionM.Password, "Password empty");
 
@@ -86,6 +87,7 @@ namespace StartUp.BusinessLogic
 
         public Session GetSpecificSession(string username)
         {
+            Validator validator = new Validator();
             validator.ValidateString(username, "Username empty");
 
             Session session = _sessionRepository.GetOneByExpression(s => s.Username == username);
@@ -96,6 +98,7 @@ namespace StartUp.BusinessLogic
 
         public void DeleteSession(string username)
         {
+            Validator validator = new Validator();
             validator.ValidateString(username, "Username empty");
 
             var session = _sessionRepository.GetOneByExpression(s => s.Username == username);
@@ -106,6 +109,7 @@ namespace StartUp.BusinessLogic
         }
         public Session UpdateSession(string username, Session updateSession)
         {
+            Validator validator = new Validator();
             validator.ValidateString(updateSession.Username, "Username empty");
 
             var session = GetSpecificSession(username);
@@ -140,6 +144,7 @@ namespace StartUp.BusinessLogic
 
         public TokenAccess GetUserToken()
         {
+            Validator validator = new Validator();
             var token = _tokenAccessRepository.GetOneByExpression(t => t.User.Invitation.UserName == UserLogged.Invitation.UserName);
             validator.ValidateTokenAccess(token, "Token empty");
 
@@ -148,6 +153,7 @@ namespace StartUp.BusinessLogic
 
         public User GetTokenUser(string token)
         {
+            Validator validator = new Validator();
             validator.ValidateString(token, "Token is empty");
 
             var userSalved = _userRepository.GetOneByExpression(u => u.Token == token);
@@ -157,5 +163,9 @@ namespace StartUp.BusinessLogic
             return userSalved;
         }
 
+        public void SaveUserSession()
+        {
+            _sessionRepository.Save();
+        }
     }
 }

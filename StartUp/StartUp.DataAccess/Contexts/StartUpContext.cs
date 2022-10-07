@@ -42,5 +42,10 @@ namespace StartUp.DataAccess
 
             }
         }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Invitation>()
+             .HasOne(p => p.Pharmacy);
+        }
     }
 }

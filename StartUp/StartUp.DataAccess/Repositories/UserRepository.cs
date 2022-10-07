@@ -22,9 +22,6 @@ namespace StartUp.DataAccess.Repositories
 
         public override void InsertOne(User elem)
         {
-            _context.Entry(elem.Pharmacy).State = EntityState.Unchanged;
-            _context.Entry(elem.Roles).State = EntityState.Unchanged;
-            _context.Entry(elem.Invitation).State = EntityState.Unchanged;
             _context.Set<User>().Add(elem);
         }
 

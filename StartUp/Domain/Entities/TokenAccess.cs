@@ -1,9 +1,4 @@
-﻿using StartUp.Exceptions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 
 namespace StartUp.Domain.Entities
 {
@@ -17,8 +12,7 @@ namespace StartUp.Domain.Entities
         public void IsValidTokenAccess()
         {
             Validator validator = new Validator();
-
-            validator.ValidateToken(Token, "Token empty");
+            
             validator.ValidateUserNotNull(User, "User empty");
         }
 

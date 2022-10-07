@@ -15,7 +15,6 @@ namespace StartUp.BusinessLogic
     public class TokenAccessService : ITokenAccessService
     {
         private readonly IRepository<TokenAccess> _tokenRepository;
-        private Validator validator = new Validator();
 
         public TokenAccessService(IRepository<TokenAccess> tokenRepository)
         {
@@ -31,6 +30,7 @@ namespace StartUp.BusinessLogic
 
         public TokenAccess GetSpecificTokenAccess(int tokenId)
         {
+            Validator validator = new Validator();
             validator.ValidateString(tokenId.ToString(), "Token empty");
 
             var tokenSaved = _tokenRepository.GetOneByExpression(t => t.Id == tokenId);
@@ -45,6 +45,7 @@ namespace StartUp.BusinessLogic
 
         public TokenAccess GetSpecificTokenAccess(Session session)
         {
+            Validator validator = new Validator();
             validator.ValidateSessionNotNull(session, "Session empty");
 
             var tokenSaved = _tokenRepository.GetOneByExpression(t => t.User.Invitation.UserName == session.Username);
@@ -59,6 +60,7 @@ namespace StartUp.BusinessLogic
 
         public TokenAccess CreateTokenAccess(User user)
         {
+            Validator validator = new Validator();
             validator.ValidateUserNotNull(user, "User empty");
             var tokenAccess = new TokenAccess();
             tokenAccess.Token = Guid.NewGuid();
@@ -71,6 +73,7 @@ namespace StartUp.BusinessLogic
         }
         public TokenAccess UpdateTokenAccess(Session session, TokenAccess updateTokenAccess)
         {
+            Validator validator = new Validator();
             validator.ValidateSessionNotNull(session, "Session empty");
             validator.ValidateTokenAccess(updateTokenAccess, "Token for update is empty");
 
@@ -87,6 +90,7 @@ namespace StartUp.BusinessLogic
         }
         public void DeleteTokenAccess(Session session)
         {
+            Validator validator = new Validator();
             validator.ValidateSessionNotNull(session, "Session empty");
 
             var tokenStored = GetSpecificTokenAccess(session);

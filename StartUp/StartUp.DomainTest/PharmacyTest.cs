@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using StartUp.Domain;
+using System;
 using System.Collections.Generic;
 
 namespace StartUp.DomainTest
@@ -7,27 +8,36 @@ namespace StartUp.DomainTest
     [TestClass]
     public class PharmacyTest
     {
-        Medicine medicine;
+        Medicine medicineTest;
+        Medicine medicine2;
+        InvoiceLine line;
+        Pharmacy pharmacy;
+        Sale sale;
         List<Medicine> medicines;
-        Request request;
         List<Request> requests;
 
 
         [TestInitialize]
         public void Setup()
         {
-            medicine = new Medicine();
             medicines = new List<Medicine>();
-            medicines.Add(medicine);
-            request = new Request();
-            requests = new List<Request>();   
-            requests.Add(request);
-        }
-
-        [TestCleanup]
-        public void Cleanup()
-        {
-
+            requests = new List<Request>();
+            medicineTest = new Medicine();
+            medicineTest.Code = "AA123";
+            medicineTest.Stock = 10;
+            medicine2 = new Medicine();
+            medicine2.Code = "BB123";
+            medicine2.Stock = 15;
+            pharmacy = new Pharmacy();
+            pharmacy.Stock = medicines;
+            pharmacy.Stock.Add(medicineTest);
+            pharmacy.Stock.Add(medicine2);
+            sale = new Sale();
+            sale.InvoiceLines = new List<InvoiceLine>();
+            line = new InvoiceLine();
+            line.Medicine = medicineTest;
+            line.Amount = 5;
+            sale.InvoiceLines.Add(line);
         }
 
         [TestMethod]
@@ -128,6 +138,26 @@ namespace StartUp.DomainTest
             Assert.IsFalse(areSame);
         }
 
+        [TestMethod]
+        public void UpdateStockSecondTest()
+        {
+            Pharmacy pharmacy = CreatePharmacy("el tunel", "SolanoGarcia", medicines, requests);
+            line.Amount = 10;
+            pharmacy.UpdateStock(sale);
+
+            Assert.IsTrue(medicineTest.Stock == 0);
+        }
+        
+        [TestMethod]
+        public void UpdateStockTest()
+        {
+            Pharmacy pharmacy = CreatePharmacy("el tunel", "SolanoGarcia", medicines, requests);
+            
+            pharmacy.UpdateStock(sale);
+
+            Assert.IsTrue(medicineTest.Stock == 5);
+        }
+
         private Pharmacy CreatePharmacy(string name, string address, List<Medicine> stock, List<Request> request)
         {
             Pharmacy pharmacy1 = new Pharmacy
@@ -140,5 +170,6 @@ namespace StartUp.DomainTest
 
             return pharmacy1;
         }
+
     }
 }

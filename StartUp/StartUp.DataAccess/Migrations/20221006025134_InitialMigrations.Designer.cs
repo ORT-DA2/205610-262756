@@ -12,8 +12,8 @@ using StartUp.DataAccess;
 namespace StartUp.DataAccess.Migrations
 {
     [DbContext(typeof(StartUpContext))]
-    [Migration("20221003022403_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20221006025134_InitialMigrations")]
+    partial class InitialMigrations
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -275,8 +275,8 @@ namespace StartUp.DataAccess.Migrations
                     b.Property<int?>("PharmacyId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("State")
-                        .HasColumnType("bit");
+                    b.Property<string>("State")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -293,7 +293,12 @@ namespace StartUp.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int?>("PharmacyId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("PharmacyId");
 
                     b.ToTable("Sales");
                 });
@@ -392,6 +397,13 @@ namespace StartUp.DataAccess.Migrations
                         .HasForeignKey("PharmacyId");
                 });
 
+            modelBuilder.Entity("StartUp.Domain.Sale", b =>
+                {
+                    b.HasOne("StartUp.Domain.Pharmacy", null)
+                        .WithMany("Sales")
+                        .HasForeignKey("PharmacyId");
+                });
+
             modelBuilder.Entity("StartUp.Domain.Symptom", b =>
                 {
                     b.HasOne("StartUp.Domain.Medicine", null)
@@ -407,6 +419,8 @@ namespace StartUp.DataAccess.Migrations
             modelBuilder.Entity("StartUp.Domain.Pharmacy", b =>
                 {
                     b.Navigation("Requests");
+
+                    b.Navigation("Sales");
 
                     b.Navigation("Stock");
                 });

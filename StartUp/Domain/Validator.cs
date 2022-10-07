@@ -23,19 +23,9 @@ namespace StartUp.Domain
             }
         }
 
-        internal void ValidatePetitions(List<Petition> petitions, string message)
+        public void ValidatePetitions(List<Petition> petitions, string message)
         {
             if (petitions == null)
-            {
-                throw new InputException(message);
-            }
-        }
-
-        public void ValidateToken(Guid token, string message)
-        {
-            string guid = token.ToString();
-
-            if (string.IsNullOrEmpty(guid))
             {
                 throw new InputException(message);
             }
@@ -44,7 +34,10 @@ namespace StartUp.Domain
         public void ValidatePasswordValid(string password, string message, int length)
         {
             ValidateString(password, "Password empty");
-            ValidateLengthString(password, "The password must have at least 8 characters", length);
+            if (password.Length < length)
+            {
+                throw new InputException("The password must have at least 8 characters");
+            }
 
             if (!ContainSpecialCharacters(password))
             {
@@ -76,7 +69,7 @@ namespace StartUp.Domain
 
         }
 
-        public void ValidateContains(string roles, string permissions, string message)
+        public void ValidateContainsRolesCorrect(string roles, string permissions, string message)
         {
             string[] rolesArray = permissions.Split(",");
             foreach (var role in rolesArray)
@@ -90,15 +83,7 @@ namespace StartUp.Domain
 
         public void ValidatePetitionNotNull(Petition petitionSaved, string message)
         {
-            if (petitionSaved != null)
-            {
-                throw new InputException(message);
-            }
-        }
-
-        public void ValidateArray(string[] array, string message)
-        {
-            if (array == null || array.Length == 0)
+            if (petitionSaved == null)
             {
                 throw new InputException(message);
             }
@@ -111,7 +96,6 @@ namespace StartUp.Domain
                 throw new InputException(message);
             }
         }
-
 
 
         public void ValidateLengthString(string value, string message, int length)
@@ -132,7 +116,7 @@ namespace StartUp.Domain
 
         public void ValidateUserNull(User user, string message)
         {
-            if (user != null)
+            if (user == null)
             {
                 throw new InputException(message);
             }
@@ -171,14 +155,6 @@ namespace StartUp.Domain
         }
 
         public void ValidateMedicineListNotNull(List<Medicine> value, string message)
-        {
-            if (value == null)
-            {
-                throw new InputException(message);
-            }
-        }
-
-        public void ValidateRequestListNotNull(List<Request> value, string message)
         {
             if (value == null)
             {

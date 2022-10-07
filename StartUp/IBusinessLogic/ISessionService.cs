@@ -20,5 +20,6 @@ namespace StartUp.IBusinessLogic
         bool IsFormatValidOfAuthorizationHeader(string authorizationHeader);
         TokenAccess GetUserToken();
         User GetTokenUser(string token);
+        void SaveUserSession();
     }
 }

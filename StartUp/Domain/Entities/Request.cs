@@ -10,14 +10,12 @@ namespace StartUp.Domain
         public int Id { get; set; }
         public List<Petition> Petitions { get; set; }
         public string State { get; set; }
-        private Validator validator;
 
-        public Request()
-        {
-            validator = new Validator();
-        }
+        public Request() { }
         public void isValidRequest()
         {
+
+            Validator validator = new Validator();
             validator.ValidatePetitions(Petitions, "Petitions empty");
         }
 

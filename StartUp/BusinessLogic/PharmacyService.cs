@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 
 namespace StartUp.BusinessLogic
 {
@@ -23,15 +22,7 @@ namespace StartUp.BusinessLogic
 
         public List<Pharmacy> GetAllPharmacy(PharmacySearchCriteria searchCriteria)
         {
-            var nameCriteria = searchCriteria.Name?.ToLower() ?? string.Empty;
-            var addressCriteria = searchCriteria.Address?.ToLower() ?? string.Empty;
-            var stockCriteria = searchCriteria.Stock ?? null;
-            var requestCriteria = searchCriteria.Requests ?? null;
-
-            Expression<Func<Pharmacy, bool>> pharmacyFilter = pharmacy =>
-                pharmacy.Name.ToLower().Contains(nameCriteria) &&
-                pharmacy.Address.ToLower().Contains(addressCriteria) &&
-                pharmacy.Stock == stockCriteria && pharmacy.Requests == requestCriteria;
+            Expression<Func<Pharmacy, bool>> pharmacyFilter = pharmacy => true;
 
             return _pharmacyRepository.GetAllByExpression(pharmacyFilter).ToList();
         }
@@ -51,8 +42,10 @@ namespace StartUp.BusinessLogic
         public Pharmacy CreatePharmacy(Pharmacy pharmacy)
         {
             pharmacy.isValidPharmacy();
-            pharmacy.Requests = new List<Request>();
             NotExistInDataBase(pharmacy);
+            pharmacy.Stock = new List<Medicine>();
+            pharmacy.Sales = new List<Sale>();
+            pharmacy.Requests = new List<Request>();
 
             _pharmacyRepository.InsertOne(pharmacy);
             _pharmacyRepository.Save();
@@ -85,7 +78,7 @@ namespace StartUp.BusinessLogic
 
         public void NotExistInDataBase(Pharmacy pharmacy)
         {
-            var pharmacySaved = _pharmacyRepository.GetOneByExpression(p => p == pharmacy);
+            var pharmacySaved = _pharmacyRepository.GetOneByExpression(p => p.Name == pharmacy.Name);
 
             if (pharmacySaved != null)
             {
