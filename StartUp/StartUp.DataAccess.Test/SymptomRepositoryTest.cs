@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using StartUp.DataAccess.Contexts;
+using StartUp.DataAccess.Repositories;
 
 namespace StartUp.DataAccess.Test
 {
@@ -16,6 +17,7 @@ namespace StartUp.DataAccess.Test
     {
         private BaseRepository<Symptom> _repository;
         private StartUpContext _context;
+        private SymptomRepository _symptomRepository;
 
         [TestInitialize]
         public void SetUp()
@@ -24,6 +26,7 @@ namespace StartUp.DataAccess.Test
             _context.Database.OpenConnection();
             _context.Database.EnsureCreated();
             _repository = new BaseRepository<Symptom>(_context);
+            _symptomRepository = new SymptomRepository(_context);
         }
 
         [TestCleanup]
@@ -33,25 +36,36 @@ namespace StartUp.DataAccess.Test
         }
 
         [TestMethod]
-        public void GetAllSymptomReturnsAsExpected()
+        public void GetOneByExpressionNotExistTest()
         {
-            Expression<Func<Symptom, bool>> expression = s => s.Id.ToString().Contains("1");
-            var symptoms = CreateSymptoms();
-            var eligibleSymptoms = symptoms.Where(expression.Compile()).ToList();
-            LoadSymptoms(symptoms);
+            Expression<Func<Symptom, bool>> expression = i => i.SymptomDescription.ToLower().Contains("Clonapine");
+            var symptom = CreateSymptom();
 
-            var retrievedSymptoms = _repository.GetAllByExpression(expression);
-            CollectionAssert.AreEquivalent(eligibleSymptoms, retrievedSymptoms.ToList());
+            var retrievedSymptom = _symptomRepository.GetOneByExpression(expression);
+            
+            Assert.IsNull(retrievedSymptom);
+        }
+        
+        [TestMethod]
+        public void GetOneByExpressionTest()
+        {
+            Symptom newSymptom = CreateSymptom();
+            Expression<Func<Symptom, bool>> expression = m => m.SymptomDescription.ToLower().Contains("dolor");
+            LoadSymptom(newSymptom);
+            
+            var retrievedSymptom = _symptomRepository.GetOneByExpression(expression);
+            
+            Assert.IsNotNull(retrievedSymptom);
         }
 
         [TestMethod]
         public void InsertNewSymptom()
         {
-            var symptoms = CreateSymptoms();
-            LoadSymptoms(symptoms);
+            var symptoms = CreateSymptom();
+            LoadSymptom(symptoms);
             var newSymptom = new Symptom()
             {
-                SymptomDescription = "desc"
+                SymptomDescription = "dolor"
             };
 
             _repository.InsertOne(newSymptom);
@@ -63,25 +77,18 @@ namespace StartUp.DataAccess.Test
         }
 
 
-        private void LoadSymptoms(List<Symptom> symptoms)
+        private void LoadSymptom(Symptom symptom)
         {
-            symptoms.ForEach(s => _context.Symptoms.Add(s));
+            _context.Symptoms.Add(symptom);
             _context.SaveChanges();
         }
 
-        private List<Symptom> CreateSymptoms()
+        private Symptom CreateSymptom()
         {
-            return new List<Symptom>()
-        {
-            new()
+            return  new()
             {
-               SymptomDescription = "desc"
-            },
-            new()
-            {
-                SymptomDescription = "sdasf"
-            }
-        };
+               SymptomDescription = "dolor"
+            };
         }
     }
 }

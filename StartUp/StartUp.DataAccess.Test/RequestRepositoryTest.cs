@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using StartUp.DataAccess.Contexts;
+using StartUp.DataAccess.Repositories;
 
 namespace StartUp.DataAccess.Test
 {
@@ -14,6 +15,7 @@ namespace StartUp.DataAccess.Test
     {
         private BaseRepository<Request> _repository;
         private StartUpContext _context;
+        private RequestRepository _requestRepository;
 
         [TestInitialize]
         public void SetUp()
@@ -22,6 +24,7 @@ namespace StartUp.DataAccess.Test
             _context.Database.OpenConnection();
             _context.Database.EnsureCreated();
             _repository = new BaseRepository<Request>(_context);
+            _requestRepository = new RequestRepository(_context);
         }
 
         [TestCleanup]
@@ -29,24 +32,35 @@ namespace StartUp.DataAccess.Test
         {
             _context.Database.EnsureDeleted();
         }
-
+        
         [TestMethod]
-        public void GetAllRequestReturnsAsExpected()
+        public void GetOneByExpressionNotExistTest()
         {
-            Expression<Func<Request, bool>> expression = r => r.State.ToString().ToLower().Contains("true");
-            var requests = CreateRequests();
-            var eligibleRequests = requests.Where(expression.Compile()).ToList();
-            LoadRequests(requests);
+            Expression<Func<Request, bool>> expression = req => req.State.ToLower().Contains("Rejected");
+            var Request = CreateRequest();
 
-            var retrievedRequests = _repository.GetAllByExpression(expression);
-            CollectionAssert.AreEquivalent(eligibleRequests, retrievedRequests.ToList());
+            var retrievedRequest = _requestRepository.GetOneByExpression(expression);
+            
+            Assert.IsNull(retrievedRequest);
         }
-
+        
+        [TestMethod]
+        public void GetOneByExpressionTest()
+        {
+            Request newRequest = CreateRequest();
+            Expression<Func<Request, bool>> expression = req => req.State.ToLower().Contains("pending");
+            LoadRequest(newRequest);
+            
+            var retrievedRequest = _requestRepository.GetOneByExpression(expression);
+            
+            Assert.IsNotNull(retrievedRequest);
+        }
+        
         [TestMethod]
         public void InsertNewRequest()
         {
-            var requests = CreateRequests();
-            LoadRequests(requests);
+            var requests = CreateRequest();
+            LoadRequest(requests);
             var newRequest = new Request()
             {
                 Petitions = new List<Petition>()
@@ -61,25 +75,19 @@ namespace StartUp.DataAccess.Test
         }
 
 
-        private void LoadRequests(List<Request> requests)
+        private void LoadRequest(Request request)
         {
-            requests.ForEach(r => _context.Requests.Add(r));
+            _context.Requests.Add(request);
             _context.SaveChanges();
         }
 
-        private List<Request> CreateRequests()
+        private Request CreateRequest()
         {
-            return new List<Request>()
-        {
-            new()
-            {
-               Petitions = new List<Petition>(),
-            },
-            new()
-            {
-                Petitions = new List<Petition>(),
-            }
-        };
+            return new()
+            { 
+                State = "Pending",
+                Petitions = new List<Petition>()
+            };
         }
     }
 }
