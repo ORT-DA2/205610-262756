@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StartUp.Domain;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
@@ -14,6 +15,11 @@ namespace StartUp.DataAccess.Repositories
             _context = context; 
         }
 
+        public override IEnumerable<InvoiceLine> GetAllByExpression(Expression<Func<InvoiceLine, bool>> expression)
+        {
+            return _context.Set<InvoiceLine>().Where(expression).ToList();
+        }
+        
         public override InvoiceLine GetOneByExpression(Expression<Func<InvoiceLine, bool>> expression)
         {
             return _context.Set<InvoiceLine>().Include("Medicine").FirstOrDefault(expression);

@@ -1,5 +1,6 @@
 ﻿using StartUp.Domain;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
@@ -11,6 +12,11 @@ namespace StartUp.DataAccess.Repositories
         public PetitionRepository(StartUpContext context) : base(context)
         {
             _context = context;
+        }
+        
+        public override IEnumerable<Petition> GetAllByExpression(Expression<Func<Petition, bool>> expression)
+        {
+            return _context.Set<Petition>().Where(expression).ToList();
         }
 
         public override Petition GetOneByExpression(Expression<Func<Petition, bool>> expression)

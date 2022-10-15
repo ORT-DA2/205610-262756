@@ -1,5 +1,6 @@
 ﻿using StartUp.Domain.Entities;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
@@ -11,6 +12,10 @@ namespace StartUp.DataAccess.Repositories
         public SessionRepository(StartUpContext context) : base(context)
         {
             _context = context;
+        }
+        public override IEnumerable<Session> GetAllByExpression(Expression<Func<Session, bool>> expression)
+        {
+            return _context.Set<Session>().Where(expression).ToList();
         }
 
         public override Session GetOneByExpression(Expression<Func<Session, bool>> expression)

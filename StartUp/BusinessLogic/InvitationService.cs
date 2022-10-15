@@ -66,6 +66,8 @@ namespace StartUp.BusinessLogic
             NotExistInDataBase(invitation);
             ValidateInvitationRoles(invitation);
             ValidatePharmacyExist(invitation);
+            
+            invitation.Pharmacy = _pharmacyRepository.GetOneByExpression(p => p.Name == invitation.Pharmacy.Name);
             CreateAndSave(invitation);
             
             return invitation;

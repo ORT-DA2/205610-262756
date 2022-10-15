@@ -14,10 +14,12 @@ namespace StartUp.BusinessLogic
     public class InvoiceLineService : IInvoiceLineService
     {
         private readonly IRepository<InvoiceLine> _invoiceLineRepository;
+        private readonly IRepository<Medicine> _medicineRepository;
 
-        public InvoiceLineService(IRepository<InvoiceLine> invoiceLineRepository)
+        public InvoiceLineService(IRepository<InvoiceLine> invoiceLineRepository, IRepository<Medicine> medicineRepository)
         {
             _invoiceLineRepository = invoiceLineRepository;
+            _medicineRepository = medicineRepository;
         }
 
         public List<InvoiceLine> GetAllInvoiceLine(InvoiceLineSearchCriteria searchCriteria)
@@ -48,7 +50,8 @@ namespace StartUp.BusinessLogic
         public InvoiceLine CreateInvoiceLine(InvoiceLine invoiceLine)
         {
             invoiceLine.IsValidInvoiceLine();
-
+            invoiceLine.Medicine = _medicineRepository.GetOneByExpression(m => m.Code == invoiceLine.Medicine.Code);
+            
             _invoiceLineRepository.InsertOne(invoiceLine);
             _invoiceLineRepository.Save();
 
@@ -61,7 +64,7 @@ namespace StartUp.BusinessLogic
 
             var invoiceLineStored = GetSpecificInvoiceLine(invoiceLineId);
 
-            invoiceLineStored.Medicine = updatedInvoiceLine.Medicine;
+            invoiceLineStored.Medicine = _medicineRepository.GetOneByExpression(m => m.Code == updatedInvoiceLine.Medicine.Code);
             invoiceLineStored.Amount = updatedInvoiceLine.Amount;
 
             _invoiceLineRepository.UpdateOne(invoiceLineStored);
