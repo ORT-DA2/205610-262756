@@ -43,7 +43,7 @@ namespace StartUp.BusinessLogic
         public Role CreateRole(Role role)
         {
             role.IsValidRole();
-
+            
             _roleRepository.InsertOne(role);
             _roleRepository.Save();
 

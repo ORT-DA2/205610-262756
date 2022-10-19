@@ -12,8 +12,8 @@ using StartUp.DataAccess;
 namespace StartUp.DataAccess.Migrations
 {
     [DbContext(typeof(StartUpContext))]
-    [Migration("20221006025134_InitialMigrations")]
-    partial class InitialMigrations
+    [Migration("20221011153329_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,7 +24,7 @@ namespace StartUp.DataAccess.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("StartUp.Domain.Entities.Role", b =>
+            modelBuilder.Entity("StartUp.Domain.Entities.Rol", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -343,7 +343,7 @@ namespace StartUp.DataAccess.Migrations
                         .WithMany()
                         .HasForeignKey("PharmacyId");
 
-                    b.HasOne("StartUp.Domain.Entities.Role", "Roles")
+                    b.HasOne("StartUp.Domain.Entities.Rol", "Roles")
                         .WithMany()
                         .HasForeignKey("RolesId");
 

@@ -37,6 +37,7 @@ namespace StartUp.WebApi.Controllers
         [HttpPost]
         public IActionResult CreateUser([FromBody] UserModel newUser)
         {
+            newUser.Pharmacy = newUser.Invitation.Pharmacy;
             var createdUser = _userService.CreateUser(newUser.ToEntity());
             var userModel = new UserDetailModel(createdUser);
             return CreatedAtRoute("GetUser", new { id = userModel.Id }, userModel);

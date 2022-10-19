@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StartUp.Domain;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
@@ -12,6 +13,11 @@ namespace StartUp.DataAccess.Repositories
         public RequestRepository(StartUpContext context) : base(context)
         {
             _context = context;
+        }
+        
+        public override IEnumerable<Request> GetAllByExpression(Expression<Func<Request, bool>> expression)
+        {
+            return _context.Set<Request>().Where(expression).ToList();
         }
 
         public override Request GetOneByExpression(Expression<Func<Request, bool>> expression)

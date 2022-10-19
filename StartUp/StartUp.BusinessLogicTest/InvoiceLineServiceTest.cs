@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using Moq;
 using StartUp.BusinessLogic;
+using StartUp.DataAccess.Repositories;
 using StartUp.Domain;
 using StartUp.Domain.SearchCriterias;
 using StartUp.Exceptions;
@@ -16,13 +17,15 @@ namespace StartUp.BusinessLogicTest
     {
         private Mock<IRepository<InvoiceLine>> _repoMock;
         private InvoiceLineService _service;
+        private Mock<IRepository<Medicine>> _medicineRepo;
         private Medicine medicine;
             
         [TestInitialize]
         public void SetUp()
         {
             _repoMock = new Mock<IRepository<InvoiceLine>>(MockBehavior.Strict);
-            _service = new InvoiceLineService(_repoMock.Object);
+            _medicineRepo = new Mock<IRepository<Medicine>>(MockBehavior.Strict);
+            _service = new InvoiceLineService(_repoMock.Object, _medicineRepo.Object);
             medicine = new Medicine();
         }
         

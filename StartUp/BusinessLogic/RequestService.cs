@@ -65,7 +65,7 @@ namespace StartUp.BusinessLogic
 
             request.isValidRequest();
             request.State = "Pending";
-
+            
             pharmacy.Requests.Add(request);
             ModifiedRecords(pharmacy, request, false);
 

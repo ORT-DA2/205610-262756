@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StartUp.Domain;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
@@ -14,13 +15,18 @@ namespace StartUp.DataAccess.Repositories
         {
             _context = context;
         }
+        
+        public override IEnumerable<Pharmacy> GetAllByExpression(Expression<Func<Pharmacy, bool>> expression)
+        {
+            return _context.Set<Pharmacy>().Include("Stock").Include("Requests").Include("Sale").Where(expression).ToList();
+        }
 
         public override Pharmacy GetOneByExpression(Expression<Func<Pharmacy, bool>> expression)
         {
-            return _context.Set<Pharmacy>().Include("Stock").Include("Requests").Include("Sale").FirstOrDefault(expression);
+            return _context.Set<Pharmacy>().Include("Stock").Include("Requests").Include("Sales").FirstOrDefault(expression);
         }
 
-        public virtual void InsertOne(Pharmacy elem)
+        public override void InsertOne(Pharmacy elem)
         {
             _context.Set<Pharmacy>().Add(elem);
         }

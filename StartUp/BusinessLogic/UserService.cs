@@ -14,10 +14,14 @@ namespace BusinessLogic
     public class UserService : IUserService
     {
         private readonly IRepository<User> _userRepository;
+        private readonly IRepository<Role> _roleRepository;
+        private readonly IRepository<Pharmacy> _pharmacyRepository;
 
-        public UserService(IRepository<User> userRepository)
+        public UserService(IRepository<User> userRepository, IRepository<Role> roleRepository, IRepository<Pharmacy> pharmacyRepository)
         {
             _userRepository = userRepository;
+            _roleRepository = roleRepository;
+            _pharmacyRepository = pharmacyRepository;
         }
 
         public List<User> GetAllUser(UserSearchCriteria searchCriteria)
@@ -61,6 +65,11 @@ namespace BusinessLogic
             user.ChangeStatusInvitation();
             user.RegisterDate = DateTime.Now;
 
+            if (user.Pharmacy != null)
+            {
+                user.Pharmacy = _pharmacyRepository.GetOneByExpression(p => p.Name == user.Pharmacy.Name);
+            }
+            user.Roles = _roleRepository.GetOneByExpression(r=>r.Permission == user.Roles.Permission);
             _userRepository.InsertOne(user);
             _userRepository.Save();
 
@@ -83,9 +92,11 @@ namespace BusinessLogic
             userStored.Address = updateduser.Address;
             userStored.RegisterDate = updateduser.RegisterDate;
             userStored.Password = updateduser.Password;
-            userStored.Invitation = updateduser.Invitation;
-            userStored.Pharmacy = updateduser.Pharmacy;
-            userStored.Roles = updateduser.Roles;
+            if (updateduser.Pharmacy != null)
+            {
+                userStored.Pharmacy = _pharmacyRepository.GetOneByExpression(p => p.Name == updateduser.Pharmacy.Name);
+            }
+            userStored.Roles = _roleRepository.GetOneByExpression(r=>r.Permission == updateduser.Roles.Permission);
 
             _userRepository.UpdateOne(userStored);
             _userRepository.Save();

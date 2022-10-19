@@ -2,6 +2,7 @@
 using StartUp.Domain;
 using StartUp.Domain.Entities;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
@@ -13,6 +14,11 @@ namespace StartUp.DataAccess.Repositories
         public TokenRepository(StartUpContext context) : base(context)
         {
             _context = context;
+        }
+        
+        public override IEnumerable<TokenAccess> GetAllByExpression(Expression<Func<TokenAccess, bool>> expression)
+        {
+            return _context.Set<TokenAccess>().Where(expression).ToList();
         }
 
         public override TokenAccess GetOneByExpression(Expression<Func<TokenAccess, bool>> expression)

@@ -22,7 +22,7 @@ namespace StartUp.DataAccess.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("StartUp.Domain.Entities.Role", b =>
+            modelBuilder.Entity("StartUp.Domain.Entities.Rol", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -341,7 +341,7 @@ namespace StartUp.DataAccess.Migrations
                         .WithMany()
                         .HasForeignKey("PharmacyId");
 
-                    b.HasOne("StartUp.Domain.Entities.Role", "Roles")
+                    b.HasOne("StartUp.Domain.Entities.Rol", "Roles")
                         .WithMany()
                         .HasForeignKey("RolesId");
 

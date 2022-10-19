@@ -76,7 +76,7 @@ namespace StartUp.BusinessLogic
             _pharmacyRepository.Save();
         }
 
-        public void NotExistInDataBase(Pharmacy pharmacy)
+        private void NotExistInDataBase(Pharmacy pharmacy)
         {
             var pharmacySaved = _pharmacyRepository.GetOneByExpression(p => p.Name == pharmacy.Name);
 
