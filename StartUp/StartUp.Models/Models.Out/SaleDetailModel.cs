@@ -9,6 +9,7 @@ namespace StartUp.Models.Models.Out
     {
         public int Id { get; set; }
         public List<InvoiceLineBasicModel> InvoiceLines { get; set; }
+        public int Code { get; set; }
 
         public SaleDetailModel(Sale sale)
         {
@@ -18,6 +19,7 @@ namespace StartUp.Models.Models.Out
             {
                 InvoiceLines.Add(new InvoiceLineBasicModel(item));
             }
+            Code = sale.Code;
         }
 
         public override bool Equals(object? obj)

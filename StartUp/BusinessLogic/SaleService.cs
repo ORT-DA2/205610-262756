@@ -15,13 +15,16 @@ namespace StartUp.BusinessLogic
         private readonly IRepository<Sale> _saleRepository;
         private readonly ISessionService _sessionService;
         private readonly IRepository<Pharmacy> _pharmacyRepository;
+        private readonly IRepository<InvoiceLine> _invoiceLineRepository;
 
 
-        public SaleService(IRepository<Sale> saleRepository, ISessionService sessionService, IRepository<Pharmacy> pharmacyRepository)
+        public SaleService(IRepository<Sale> saleRepository, ISessionService sessionService,
+            IRepository<Pharmacy> pharmacyRepository, IRepository<InvoiceLine> invoiceLineRepository)
         {
             _saleRepository = saleRepository;
             _sessionService = sessionService;
             _pharmacyRepository = pharmacyRepository;
+            _invoiceLineRepository = invoiceLineRepository;
         }
 
         public List<Sale> GetAllSale()
@@ -53,95 +56,117 @@ namespace StartUp.BusinessLogic
         {
             sale.isValidSale();
 
-            List<Pharmacy> list = AllMedicationsCorrespondToTheSamePharmacy(sale);
+            List<Pharmacy> list = PharmaciesThatHaveTheDrugsAndQuantitiesRequested(sale, false);
+            list = PharmaciesThatHaveTheDrugsAndQuantitiesRequested(sale, true);
 
-            list = CheckDrugStock(list, sale);
-            if (list.Count == 0)
-            {
-                throw new InvalidResourceException("No pharmacy has such amounts of medicine stock");
-            }
+            AddSaleToPharmacies(list, sale);
+            sale.Code = GenerateCode();
 
-            Pharmacy pharmacy = list.FirstOrDefault();
-            pharmacy.Sales.Add(sale);
-            pharmacy.UpdateStock(sale);
-            _pharmacyRepository.UpdateOne(pharmacy);
-            _pharmacyRepository.Save();
             _saleRepository.InsertOne(sale);
             _saleRepository.Save();
 
             return sale;
         }
 
-        private List<Pharmacy> CheckDrugStock(List<Pharmacy> list, Sale sale)
+        public Sale UpdateSale(int saleId, Sale updatedSale)
+        {
+            updatedSale.isValidSale();
+
+            var saleStored = GetSpecificSale(saleId);
+
+            saleStored = updatedSale;
+
+            _saleRepository.UpdateOne(saleStored);
+            _saleRepository.Save();
+
+            return saleStored;
+        }
+
+        private void AddSaleToPharmacies(List<Pharmacy> list, Sale sale)
         {
             foreach (Pharmacy pharmacy in list)
             {
-                foreach (Medicine medicine in pharmacy.Stock)
-                {
-                    foreach (InvoiceLine line in sale.InvoiceLines)
-                    {
-                        if (line.Medicine == medicine)
-                        {
-                            if (line.Amount > medicine.Stock)
-                            {
-                                list.Remove(pharmacy);
-                            }
-                        }
-                    }
-
-                }
+                pharmacy.Sales.Add(sale);
+                _pharmacyRepository.UpdateOne(pharmacy);
+                _pharmacyRepository.Save();
             }
-            return list;
         }
 
-        private List<Pharmacy> AllMedicationsCorrespondToTheSamePharmacy(Sale sale)
+        private List<Pharmacy> PharmaciesThatHaveTheDrugsAndQuantitiesRequested(Sale sale, bool save)
         {
-            Validator validator = new Validator();
-            var invoiceLineFirst = sale.InvoiceLines.FirstOrDefault();
-            Medicine medicine = invoiceLineFirst.Medicine;
-
-            List <Pharmacy> list = _pharmacyRepository.GetAllByExpression(p=>p.Stock.Contains(medicine)).ToList();
-            validator.ValidateListPharmacyNotNull(list, "No pharmacy has all those drugs");
+            List<Pharmacy> list = new List<Pharmacy>();
 
             foreach (InvoiceLine item in sale.InvoiceLines)
             {
-                Medicine medicineItem = item.Medicine;
-                Expression<Func<Pharmacy, bool>> pharmacyFilter2 =
-                pharmacy => pharmacy.Stock.Contains(medicineItem);
-
-                List<Pharmacy> listItem = _pharmacyRepository.GetAllByExpression(pharmacyFilter2).ToList();
-                validator.ValidateListPharmacyNotNull(listItem, $"No pharmacy has this medicine {medicineItem.Name}");
-
-                if (list != listItem)
-                {
-                    list = GetPharmaciesInCommon(list, listItem);
-                }
+                list = AddOrRemovePharmacy(item, list, save);
             }
             return list;
         }
 
-        private List<Pharmacy> GetPharmaciesInCommon(List<Pharmacy> list, List<Pharmacy> listItem)
+        private List<Pharmacy> AddOrRemovePharmacy(InvoiceLine item, List<Pharmacy> list, bool save)
         {
-            List<Pharmacy> pharmacies = new List<Pharmacy>();
-
-            foreach (Pharmacy pharmacy in list)
+            List<Pharmacy> pharmacys = _pharmacyRepository.GetAllByExpression(p => p.Stock.Contains(item.Medicine)).ToList();
+            bool ThereIsNot = false;
+            while (!ThereIsNot && pharmacys.Count > 0)
             {
-                foreach (Pharmacy pharmacy2 in listItem)
+                Pharmacy p = pharmacys.FirstOrDefault();
+                Medicine medicine = p.Stock.Where(m => m.Name == item.Medicine.Name).FirstOrDefault();
+                if (medicine.Stock >= item.Amount)
                 {
-                    if (pharmacy == pharmacy2)
+                    list.Add(p);
+                    ThereIsNot = true;
+                    if (save)
                     {
-                        pharmacies.Add(pharmacy);
+                        SaveChangesInvoiceLine(item, p);
+                    }
+                }
+                else
+                {
+                    pharmacys.Remove(p);
+                }
+            }
+            if (!ThereIsNot)
+            {
+                throw new InvalidResourceException($"No pharmacy has {item.Amount} medicines {item.Medicine.Name}");
+            }
+            return list;
+        }
+
+        private void SaveChangesInvoiceLine(InvoiceLine item, Pharmacy p)
+        {
+            item.Pharmacy = p;
+            item.State = "pending";
+            _invoiceLineRepository.UpdateOne(item);
+            _invoiceLineRepository.Save();
+        }
+
+        private int GenerateCode()
+        {
+            Random random = new Random();
+            int code = random.Next(1000000, 9999999);
+            Sale sale = _saleRepository.GetOneByExpression(c => code == c.Code);
+            if (sale != null)
+            {
+                return GenerateCode();
+            }
+            return code;
+        }
+
+        public Sale FilterByPharmacy(Sale sale)
+        {
+            Pharmacy pharmacy = _pharmacyRepository.GetOneByExpression(p => p.Id == _sessionService.UserLogged.Pharmacy.Id);
+            
+            if (pharmacy != null)
+            {
+                foreach (var item in sale.InvoiceLines)
+                {
+                    if (item.Pharmacy != pharmacy)
+                    {
+                        sale.InvoiceLines.Remove(item);
                     }
                 }
             }
-            if (pharmacies.Count == 0)
-            {
-                throw new InvalidResourceException("Not all medications belong to the same pharmacy");
-            }
-            else
-            {
-                return pharmacies;
-            }
+            return sale;
         }
     }
 }

@@ -27,20 +27,29 @@ namespace StartUp.WebApi.Controllers
         }
 
         [HttpGet("{id}", Name = "GetSale")]
-        [AuthorizationFilter("owner")]
         public IActionResult GetSale(int id)
         {
             var retrievedSale = _saleService.GetSpecificSale(id);
+            retrievedSale = _saleService.FilterByPharmacy(retrievedSale);
             return Ok(new SaleDetailModel(retrievedSale));
         }
+
 
         [HttpPost]
         public IActionResult CreateSale([FromBody] SaleModel newSale)
         {
             var createdSale = _saleService.CreateSale(newSale.ToEntity());
             var saleModel = new SaleDetailModel(createdSale);
-            return CreatedAtRoute("GetSale", new { id = saleModel.Id }, saleModel);
+            return CreatedAtRoute("GetSale", new { id = saleModel.Id, code = saleModel.Code }, saleModel);
         }
-        
+
+        [HttpPut("{id}")]
+        [AuthorizationFilter("employee")]
+        public IActionResult UpdateSale(int id, [FromBody] SaleModel updateSale)
+        {
+            var retrievedSale = _saleService.UpdateSale(id, updateSale.ToEntity());
+            return Ok(new SaleDetailModel(retrievedSale));
+        }
+
     }
 }

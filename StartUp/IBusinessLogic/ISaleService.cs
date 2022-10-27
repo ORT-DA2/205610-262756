@@ -8,5 +8,7 @@ namespace StartUp.IBusinessLogic
         List<Sale> GetAllSale();
         Sale GetSpecificSale(int saleId);
         Sale CreateSale(Sale sale);
+        Sale UpdateSale(int id, Sale sale);
+        Sale FilterByPharmacy(Sale sale);
     }
 }

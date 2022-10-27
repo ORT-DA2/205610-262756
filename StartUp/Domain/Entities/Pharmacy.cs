@@ -43,21 +43,16 @@ namespace StartUp.Domain
             return Name == other?.Name;
         }
 
-        public void UpdateStock(Sale sale)
+        public void UpdateStock(Sale sale, InvoiceLine item)
         {
-            foreach(InvoiceLine line in sale.InvoiceLines)
+            foreach (InvoiceLine line in sale.InvoiceLines)
             {
-                Medicine medicine = line.Medicine;
-
-                foreach(Medicine medicinePharmacy in Stock)
+                if (line == item)
                 {
-                    if(medicinePharmacy == medicine)
-                    {
-                        medicinePharmacy.Stock = medicinePharmacy.Stock - line.Amount;
-                    }
+                    line.Amount = line.Amount - item.Amount;
                 }
             }
         }
     }
-
 }
+

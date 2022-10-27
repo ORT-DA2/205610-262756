@@ -9,6 +9,7 @@ namespace StartUp.Domain
     {
         public int Id { get; set; }
         public List<InvoiceLine> InvoiceLines { get; set; }
+        public int Code { get; set; }
 
 
         public Sale() { }

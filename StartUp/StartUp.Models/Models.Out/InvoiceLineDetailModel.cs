@@ -10,11 +10,15 @@ namespace StartUp.Models.Models.Out
         public int Id { get; set; }
         public MedicineBasicModel Medicine { get; set; }
         public int Amount { get; set; }
+        public string State { get; set; }
+        public Pharmacy Pharmacy { get; set; }
 
         public InvoiceLineDetailModel(InvoiceLine line)
         {
             Medicine = new MedicineBasicModel(line.Medicine);
             this.Amount = line.Amount;
+            this.State = line.State;
+            this.Pharmacy = line.Pharmacy;
         }
 
         public override bool Equals(object? obj)
