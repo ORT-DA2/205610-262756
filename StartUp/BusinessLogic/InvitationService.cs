@@ -79,9 +79,17 @@ namespace StartUp.BusinessLogic
 
             var invitationStored = GetSpecificInvitation(invitationId);
 
-            invitationStored.Rol = updatedInvitation.Rol;
-            invitationStored.UserName = updatedInvitation.UserName;
-            invitationStored.Pharmacy = updatedInvitation.Pharmacy;
+            if (invitationStored.State == "Available")
+            {
+                invitationStored.Rol = updatedInvitation.Rol;
+                invitationStored.UserName = updatedInvitation.UserName;
+                invitationStored.Pharmacy = updatedInvitation.Pharmacy;
+                invitationStored.Code = GenerateCode();
+            }
+            else
+            {
+                throw new InputException($"The invitation {invitationStored.UserName} has already been used");
+            }
 
             _invitationRepository.UpdateOne(invitationStored);
             _invitationRepository.Save();

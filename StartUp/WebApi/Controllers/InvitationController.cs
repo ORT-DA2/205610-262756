@@ -24,7 +24,7 @@ namespace StartUp.WebApi.Controllers
         public IActionResult GetInvitation([FromQuery] InvitationSearchCriteriaModel searchCriteria)
         {
             var retrievedInvitations = _invitationManager.GetAllInvitation(searchCriteria.ToEntity());
-            return Ok(retrievedInvitations.Select(i => new InvitationBasicModel(i)));
+            return Ok(retrievedInvitations.Select(i => new InvitationDetailModel(i)));
         }
 
         [HttpGet("{id}", Name = "GetInvitation")]
