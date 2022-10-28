@@ -32,7 +32,7 @@ namespace StartUp.WebApi.Controllers
             var retrievedInvitation = _invitationManager.GetSpecificInvitation(id);
             return Ok(new InvitationDetailModel(retrievedInvitation));
         }
-        
+
         [HttpGet("{userName}/{code}", Name = "SpecificInvitation")]
         public IActionResult GetInvitationByUserAndCode(string username, int code)
         {

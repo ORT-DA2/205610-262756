@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { ChildActivationStart } from '@angular/router';
+import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
 import { InvitationModel } from 'src/app/Models/invitationModel';
 import { PharmacyModel } from 'src/app/Models/pharmacyModel';
 import { RoleModel } from 'src/app/Models/roleModel';
@@ -19,12 +20,9 @@ export class RegisterComponent implements OnInit {
   public email: string = "";
   public password: string = "";
   public address: string = "";
-  public invitationObs: Observable<any> = new Observable<any>();
   public invitation: any;
+  public invitationObs: Observable<any> = new Observable<any>();
   public showRegister: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  private role: {} = {};
-  private pharmacy: PharmacyModel = new PharmacyModel;
-
 
   constructor(private invitationService: InvitationService, private userService: UserService) {
   }
@@ -33,14 +31,16 @@ export class RegisterComponent implements OnInit {
   }
 
   public register() {
+
     let userModel = new UserModel();
 
     userModel.email = this.email;
     userModel.password = this.password;
     userModel.address = this.address;
-    this.invitationObs.forEach(inv => userModel.invitation = inv);
-    this.invitationObs.forEach(inv => userModel.roles = inv.rol);
-    this.invitationObs.forEach(inv => userModel.pharmacy = inv.pharmacy);
+    userModel.invitation = this.invitation;
+    userModel.pharmacy = this.invitation.pharmacy;
+    userModel.roles = new RoleModel();
+    userModel.roles.permission = this.invitation.rol;
 
     this.userService.postUser(userModel);
   }
@@ -52,6 +52,7 @@ export class RegisterComponent implements OnInit {
     if (invitation != null) {
       this.showRegister.next(true);
       this.invitationObs = invitation;
+      this.invitationObs.subscribe(inv => this.invitation = inv);
 
     } else {
       this.showRegister.next(false);

@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { UserModel } from 'src/app/Models/userModel';
 import { environment } from 'src/environments/environment';
@@ -14,19 +14,12 @@ export class UserService {
 
   postUser(user: UserModel) {
 
-    console.log("user", user);
+    console.log("body:", user);
 
-    const body = {
-      email: user.email,
-      password: user.password,
-      roles: user.roles,
-      address: user.address,
-      invitation: user.invitation,
-      pharmacy: user.pharmacy,
-    };
+    let req = this.http.post<UserModel>(this.URL, user);
 
-    console.log("body", body);
+    req.forEach(usr => console.log(usr));
 
-    return this.http.post<UserModel>(this.URL, body)
+    return req;
   }
 }

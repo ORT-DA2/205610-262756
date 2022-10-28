@@ -16,12 +16,14 @@ namespace BusinessLogic
         private readonly IRepository<User> _userRepository;
         private readonly IRepository<Role> _roleRepository;
         private readonly IRepository<Pharmacy> _pharmacyRepository;
+        private readonly IRepository<Invitation> _invitationRepository;
 
-        public UserService(IRepository<User> userRepository, IRepository<Role> roleRepository, IRepository<Pharmacy> pharmacyRepository)
+        public UserService(IRepository<User> userRepository, IRepository<Role> roleRepository, IRepository<Pharmacy> pharmacyRepository, IRepository<Invitation> invitationRepository)
         {
             _userRepository = userRepository;
             _roleRepository = roleRepository;
             _pharmacyRepository = pharmacyRepository;
+            _invitationRepository = invitationRepository;
         }
 
         public List<User> GetAllUser(UserSearchCriteria searchCriteria)
@@ -61,6 +63,7 @@ namespace BusinessLogic
         {
             user.IsValidUser();
             EmailNotExistInDataBase(user);
+            user.Invitation = _invitationRepository.GetOneByExpression(i => i.UserName == user.Invitation.UserName);
             user.VerifyInvitationStateIsAvailable();
             user.ChangeStatusInvitation();
             user.RegisterDate = DateTime.Now;

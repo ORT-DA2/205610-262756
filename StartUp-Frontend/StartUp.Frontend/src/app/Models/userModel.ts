@@ -6,7 +6,7 @@ export class UserModel {
     email: string;
     password: string;
     address: string;
+    roles: RoleModel;
     invitation: InvitationModel;
     pharmacy: PharmacyModel;
-    roles: RoleModel;
 }
