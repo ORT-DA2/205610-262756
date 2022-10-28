@@ -25,18 +25,18 @@ namespace StartUp.BusinessLogic
 
         public List<Invitation> GetAllInvitation(InvitationSearchCriteria searchCriteria)
         {
-            var rolCriteria = searchCriteria.Rol?.ToLower() ?? string.Empty;
+            /*var rolCriteria = searchCriteria.Rol?.ToLower() ?? string.Empty;
             var userNameCriteria = searchCriteria.UserName?.ToLower() ?? string.Empty;
             var codeCriteria = searchCriteria.Code.ToString()?.ToLower() ?? string.Empty;
             var isActiveCriteria = searchCriteria.State ?? null;
-            var pharmacyCriteria = searchCriteria.Pharmacy ?? null;
+            var pharmacyCriteria = searchCriteria.Pharmacy ?? null;*/
 
-            Expression<Func<Invitation, bool>> invitationFilter = invitation =>
-                invitation.Rol.ToLower().Contains(rolCriteria) &&
+            Expression<Func<Invitation, bool>> invitationFilter = invitation => true;
+                /*invitation.Rol.ToLower().Contains(rolCriteria) &&
                 invitation.UserName.ToLower().Contains(userNameCriteria) &&
                 invitation.Code.ToString().Contains(codeCriteria) &&
                 invitation.State.Contains(isActiveCriteria) &&
-                invitation.Pharmacy == pharmacyCriteria;
+                invitation.Pharmacy == pharmacyCriteria;*/
 
             List<Invitation> invitations = _invitationRepository.GetAllByExpression(invitationFilter).ToList();
 
@@ -66,8 +66,11 @@ namespace StartUp.BusinessLogic
             NotExistInDataBase(invitation);
             ValidateInvitationRoles(invitation);
             ValidatePharmacyExist(invitation);
-            
-            invitation.Pharmacy = _pharmacyRepository.GetOneByExpression(p => p.Name == invitation.Pharmacy.Name);
+
+            if (invitation.Rol != "administrator")
+            {
+                invitation.Pharmacy = _pharmacyRepository.GetOneByExpression(p => p.Name == invitation.Pharmacy.Name);
+            }
             CreateAndSave(invitation);
             
             return invitation;

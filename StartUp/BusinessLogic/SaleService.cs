@@ -105,7 +105,8 @@ namespace StartUp.BusinessLogic
 
         private List<Pharmacy> AddOrRemovePharmacy(InvoiceLine item, List<Pharmacy> list, bool save)
         {
-            List<Pharmacy> pharmacys = _pharmacyRepository.GetAllByExpression(p => p.Stock.Contains(item.Medicine)).ToList();
+            List<Pharmacy> pharmacys = _pharmacyRepository.GetAllByExpression(p => p.Stock.Count > 0).ToList();
+            pharmacys = FilterPharmacy(pharmacys, item.Medicine.Name);
             bool ThereIsNot = false;
             while (!ThereIsNot && pharmacys.Count > 0)
             {
@@ -128,6 +129,23 @@ namespace StartUp.BusinessLogic
             if (!ThereIsNot)
             {
                 throw new InvalidResourceException($"No pharmacy has {item.Amount} medicines {item.Medicine.Name}");
+            }
+            return list;
+        }
+
+        private List<Pharmacy> FilterPharmacy(List<Pharmacy> pharmacys, string name)
+        {
+            List<Pharmacy> list = new List<Pharmacy>();
+
+           foreach (Pharmacy pharmacy in pharmacys)
+            {
+                foreach(Medicine medicine in pharmacy.Stock)
+                {
+                    if(medicine.Name == name)
+                    {
+                        list.Add(pharmacy);
+                    }
+                }
             }
             return list;
         }

@@ -22,7 +22,7 @@ namespace StartUp.DataAccess.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("StartUp.Domain.Entities.Rol", b =>
+            modelBuilder.Entity("StartUp.Domain.Entities.Role", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -165,12 +165,20 @@ namespace StartUp.DataAccess.Migrations
                     b.Property<int?>("MedicineId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("PharmacyId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("SaleId")
                         .HasColumnType("int");
+
+                    b.Property<string>("State")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("MedicineId");
+
+                    b.HasIndex("PharmacyId");
 
                     b.HasIndex("SaleId");
 
@@ -291,6 +299,9 @@ namespace StartUp.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int>("Code")
+                        .HasColumnType("int");
+
                     b.Property<int?>("PharmacyId")
                         .HasColumnType("int");
 
@@ -341,7 +352,7 @@ namespace StartUp.DataAccess.Migrations
                         .WithMany()
                         .HasForeignKey("PharmacyId");
 
-                    b.HasOne("StartUp.Domain.Entities.Rol", "Roles")
+                    b.HasOne("StartUp.Domain.Entities.Role", "Roles")
                         .WithMany()
                         .HasForeignKey("RolesId");
 
@@ -367,11 +378,17 @@ namespace StartUp.DataAccess.Migrations
                         .WithMany()
                         .HasForeignKey("MedicineId");
 
+                    b.HasOne("StartUp.Domain.Pharmacy", "Pharmacy")
+                        .WithMany()
+                        .HasForeignKey("PharmacyId");
+
                     b.HasOne("StartUp.Domain.Sale", null)
                         .WithMany("InvoiceLines")
                         .HasForeignKey("SaleId");
 
                     b.Navigation("Medicine");
+
+                    b.Navigation("Pharmacy");
                 });
 
             modelBuilder.Entity("StartUp.Domain.Medicine", b =>

@@ -6,6 +6,10 @@ using System.Linq;
 
 namespace StartUp.WebApi.Controllers
 {
+
+    [Route("api/exporter")]
+    [ApiController]
+    //[AuthorizationFilter("administrator")]
     public class ExportController : ControllerBase
     {
         private readonly IExporterService _exporterService;

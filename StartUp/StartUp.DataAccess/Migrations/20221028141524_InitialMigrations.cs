@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace StartUp.DataAccess.Migrations
 {
-    public partial class InitialMigration : Migration
+    public partial class InitialMigrations : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -123,6 +123,7 @@ namespace StartUp.DataAccess.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Code = table.Column<int>(type: "int", nullable: false),
                     PharmacyId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -217,6 +218,8 @@ namespace StartUp.DataAccess.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     MedicineId = table.Column<int>(type: "int", nullable: true),
                     Amount = table.Column<int>(type: "int", nullable: false),
+                    State = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PharmacyId = table.Column<int>(type: "int", nullable: true),
                     SaleId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -226,6 +229,11 @@ namespace StartUp.DataAccess.Migrations
                         name: "FK_InvoiceLines_Medicines_MedicineId",
                         column: x => x.MedicineId,
                         principalTable: "Medicines",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_InvoiceLines_Pharmacies_PharmacyId",
+                        column: x => x.PharmacyId,
+                        principalTable: "Pharmacies",
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_InvoiceLines_Sales_SaleId",
@@ -262,6 +270,11 @@ namespace StartUp.DataAccess.Migrations
                 name: "IX_InvoiceLines_MedicineId",
                 table: "InvoiceLines",
                 column: "MedicineId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_InvoiceLines_PharmacyId",
+                table: "InvoiceLines",
+                column: "PharmacyId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_InvoiceLines_SaleId",

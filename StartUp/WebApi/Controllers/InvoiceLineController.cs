@@ -10,7 +10,7 @@ namespace StartUp.WebApi.Controllers
 
     [Route("api/invoiceLine")]
     [ApiController]
-    [AuthorizationFilter("employee")]
+    //[AuthorizationFilter("employee")]
     public class InvoiceLineController : ControllerBase
     {
         private readonly IInvoiceLineService _invoiceLineService;

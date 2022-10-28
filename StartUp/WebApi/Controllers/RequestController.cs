@@ -19,7 +19,7 @@ namespace StartUp.WebApi.Controllers
         }
 
         [HttpGet]
-        [AuthorizationFilter("owner")]
+        //[AuthorizationFilter("owner")]
         public IActionResult GetRequest([FromQuery] RequestSearchCriteriaModel searchCriteria)
         {
             var retrievedRequest = _requestService.GetAllRequest(searchCriteria.ToEntity());
@@ -27,7 +27,7 @@ namespace StartUp.WebApi.Controllers
         }
 
         [HttpGet("{id}", Name = "GetRequest")]
-        [AuthorizationFilter("owner")]
+        //[AuthorizationFilter("owner")]
         public IActionResult GetRequest(int id)
         {
             var retrievedRequest = _requestService.GetSpecificRequest(id);
