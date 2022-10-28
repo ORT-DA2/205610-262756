@@ -9,7 +9,7 @@ namespace StartUp.Models.Models.In
     public class InvitationSearchCriteriaModel
     {
         public string? UserName { get; set; }
-        public string? Rol { get; set; }
+        public string? Code { get; set; }
 
 
         public InvitationSearchCriteria ToEntity()
@@ -17,7 +17,7 @@ namespace StartUp.Models.Models.In
             return new InvitationSearchCriteria()
             {
                 UserName = this.UserName,
-                Rol = this.Rol,
+                Rol = this.Code,
             };
         }
     }

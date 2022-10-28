@@ -59,6 +59,18 @@ namespace StartUp.BusinessLogic
 
             return invitationSaved;
         }
+        
+        public Invitation GetSpecificInvitationByUserAndPass(string username, int code)
+        {
+            var invitationSaved = _invitationRepository.GetOneByExpression(i =>i.UserName == username && i.Code == code);
+           
+            if (invitationSaved is null)
+            {
+                throw new ResourceNotFoundException($"Could not find specified invitation {username} and {code}");
+            }
+
+            return invitationSaved;
+        }
 
         public Invitation CreateInvitation(Invitation invitation)
         {
