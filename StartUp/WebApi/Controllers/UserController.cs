@@ -21,6 +21,7 @@ namespace StartUp.WebApi.Controllers
         }
 
         [HttpGet]
+        
         public IActionResult GetUserByRol([FromQuery] UserSearchCriteriaModel searchCriteria)
         {
             var retrievedUser = _userService.GetAllUser(searchCriteria.ToEntity());
@@ -28,6 +29,7 @@ namespace StartUp.WebApi.Controllers
         }
 
         [HttpGet("{id}", Name = "GetUser")]
+        [AuthorizationFilter("administrator")]
         public IActionResult GetUser(int id)
         {
             var retrievedUser = _userService.GetSpecificUser(id);
@@ -44,6 +46,7 @@ namespace StartUp.WebApi.Controllers
         }
 
         [HttpPut("{id}")]
+        [AuthorizationFilter("administrator")]
         public IActionResult Update(int id, [FromBody] UserModel updatedUser)
         {
             var retrievedUser = _userService.UpdateUser(id, updatedUser.ToEntity());
@@ -51,6 +54,7 @@ namespace StartUp.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
+        [AuthorizationFilter("administrator")]
         public IActionResult Delete(int id)
         {
             _userService.DeleteUser(id);

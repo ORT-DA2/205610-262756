@@ -42,17 +42,6 @@ namespace StartUp.Domain
         {
             return Name == other?.Name;
         }
-
-        public void UpdateStock(Sale sale, InvoiceLine item)
-        {
-            foreach (InvoiceLine line in sale.InvoiceLines)
-            {
-                if (line == item)
-                {
-                    line.Amount = line.Amount - item.Amount;
-                }
-            }
-        }
     }
 }
 

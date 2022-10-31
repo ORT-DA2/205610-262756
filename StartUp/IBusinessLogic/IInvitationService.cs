@@ -10,6 +10,7 @@ namespace StartUp.IBusinessLogic
     {
         List<Invitation> GetAllInvitation(InvitationSearchCriteria searchCriteria);
         Invitation GetSpecificInvitation(int invitationId);
+        Invitation GetSpecificInvitationByUserAndPass(string username, int code);
         Invitation CreateInvitation(Invitation invitation);
         Invitation UpdateInvitation(int invitationId, Invitation invitation);
         void DeleteInvitation(int invitationId);

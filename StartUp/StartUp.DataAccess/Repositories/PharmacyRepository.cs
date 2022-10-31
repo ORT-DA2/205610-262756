@@ -18,12 +18,12 @@ namespace StartUp.DataAccess.Repositories
         
         public override IEnumerable<Pharmacy> GetAllByExpression(Expression<Func<Pharmacy, bool>> expression)
         {
-            return _context.Set<Pharmacy>().Include("Stock").Include("Requests").Where(expression).ToList();
+            return _context.Set<Pharmacy>().Include("Stock").Include("Requests").Include("Sales").Where(expression).ToList();
         }
 
         public override Pharmacy GetOneByExpression(Expression<Func<Pharmacy, bool>> expression)
         {
-            return _context.Set<Pharmacy>().Include("Stock").Include("Requests").FirstOrDefault(expression);
+            return _context.Set<Pharmacy>().Include("Stock").Include("Requests").Include("Sales").FirstOrDefault(expression);
         }
 
         public override void InsertOne(Pharmacy elem)

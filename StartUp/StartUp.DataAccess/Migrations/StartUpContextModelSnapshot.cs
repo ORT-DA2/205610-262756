@@ -165,7 +165,7 @@ namespace StartUp.DataAccess.Migrations
                     b.Property<int?>("MedicineId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("PharmacyId")
+                    b.Property<int>("PharmacyId")
                         .HasColumnType("int");
 
                     b.Property<int?>("SaleId")
@@ -177,8 +177,6 @@ namespace StartUp.DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("MedicineId");
-
-                    b.HasIndex("PharmacyId");
 
                     b.HasIndex("SaleId");
 
@@ -378,17 +376,11 @@ namespace StartUp.DataAccess.Migrations
                         .WithMany()
                         .HasForeignKey("MedicineId");
 
-                    b.HasOne("StartUp.Domain.Pharmacy", "Pharmacy")
-                        .WithMany()
-                        .HasForeignKey("PharmacyId");
-
                     b.HasOne("StartUp.Domain.Sale", null)
                         .WithMany("InvoiceLines")
                         .HasForeignKey("SaleId");
 
                     b.Navigation("Medicine");
-
-                    b.Navigation("Pharmacy");
                 });
 
             modelBuilder.Entity("StartUp.Domain.Medicine", b =>

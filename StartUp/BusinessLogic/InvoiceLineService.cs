@@ -73,7 +73,7 @@ namespace StartUp.BusinessLogic
 
             Pharmacy pharmacy = _pharmacyRepository.GetOneByExpression(p => p.Equals(_sessionService.UserLogged.Pharmacy));
 
-            if (invoiceLineStored.Pharmacy == pharmacy)
+            if (invoiceLineStored.PharmacyId == pharmacy.Id)
             {
                 invoiceLineStored.Medicine = _medicineRepository.GetOneByExpression(m => m.Code == updatedInvoiceLine.Medicine.Code);
                 invoiceLineStored.Amount = updatedInvoiceLine.Amount;

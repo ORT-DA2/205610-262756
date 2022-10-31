@@ -1,24 +1,17 @@
 ﻿using StartUp.Domain;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace StartUp.Models.Models.Out
 {
     public class InvoiceLineDetailModel
     {
         public int Id { get; set; }
-        public MedicineBasicModel Medicine { get; set; }
-        public int Amount { get; set; }
+        public MedicineInvoiceLineModel Medicine { get; set; }
         public string State { get; set; }
-        public Pharmacy Pharmacy { get; set; }
 
         public InvoiceLineDetailModel(InvoiceLine line)
         {
-            Medicine = new MedicineBasicModel(line.Medicine);
-            this.Amount = line.Amount;
+            Medicine = new MedicineInvoiceLineModel(line.Medicine);
             this.State = line.State;
-            this.Pharmacy = line.Pharmacy;
         }
 
         public override bool Equals(object? obj)

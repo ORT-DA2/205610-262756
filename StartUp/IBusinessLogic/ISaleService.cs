@@ -10,5 +10,6 @@ namespace StartUp.IBusinessLogic
         Sale CreateSale(Sale sale);
         Sale UpdateSale(int id, Sale sale);
         Sale FilterByPharmacy(Sale sale);
+        Sale GetSpecificSaleForCode(string code);
     }
 }

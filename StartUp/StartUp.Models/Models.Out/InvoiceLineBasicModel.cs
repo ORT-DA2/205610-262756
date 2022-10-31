@@ -7,14 +7,14 @@ namespace StartUp.Models.Models.Out
         public int Id { get; set; }
         public int Amount { get; set; }
         public string State { get; set; }
-        public Pharmacy Pharmacy { get; set; }
+        public int PharmacyId { get; set; }
 
         public InvoiceLineBasicModel(InvoiceLine line)
         {
             Id = line.Id;
             this.Amount = line.Amount;
             this.State = line.State;
-            this.Pharmacy = line.Pharmacy;
+            this.PharmacyId = line.PharmacyId;
         }
 
 

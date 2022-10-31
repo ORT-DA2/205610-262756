@@ -34,7 +34,15 @@ namespace StartUp.WebApi.Controllers
             return Ok(new InvitationDetailModel(retrievedInvitation));
         }
 
+        [HttpGet("{userName}/{code}", Name = "SpecificInvitation")]
+        public IActionResult GetInvitationByUserAndCode(string username, int code)
+        {
+            var retrievedInvitation = _invitationManager.GetSpecificInvitationByUserAndPass(username, code);
+            return Ok(new InvitationDetailModel(retrievedInvitation));
+        }
+
         [HttpPost]
+        //[AuthorizationFilter("administrator")]
         public IActionResult CreateInvitation([FromBody] InvitationModel newInvitation)
         {
             var createdInvitation = _invitationManager.CreateInvitation(newInvitation.ToEntity());
@@ -43,6 +51,7 @@ namespace StartUp.WebApi.Controllers
         }
 
         [HttpPut("{id}")]
+        [AuthorizationFilter("administrator")]
         public IActionResult Update(int id, [FromBody] InvitationModel updatedInvitation)
         {
             var retrievedInvitation = _invitationManager.UpdateInvitation(id, updatedInvitation.ToEntity());
@@ -50,6 +59,7 @@ namespace StartUp.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
+        [AuthorizationFilter("administrator")]
         public IActionResult Delete(int id)
         {
             _invitationManager.DeleteInvitation(id);

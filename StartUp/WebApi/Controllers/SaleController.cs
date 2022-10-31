@@ -19,11 +19,11 @@ namespace StartUp.WebApi.Controllers
         }
 
         [HttpGet]
-        [AuthorizationFilter("owner")]
+        [AuthorizationFilter("owner,employee")]
         public IActionResult GetSale()
         {
             var retrievedSale = _saleService.GetAllSale();
-            return Ok(retrievedSale.Select(s => new SaleBasicModel(s)));
+            return Ok(retrievedSale.Select(s => new SaleDetailModel(s)));
         }
 
         [HttpGet("{id}", Name = "GetSale")]
@@ -34,7 +34,6 @@ namespace StartUp.WebApi.Controllers
             return Ok(new SaleDetailModel(retrievedSale));
         }
 
-
         [HttpPost]
         public IActionResult CreateSale([FromBody] SaleModel newSale)
         {
@@ -43,13 +42,20 @@ namespace StartUp.WebApi.Controllers
             return CreatedAtRoute("GetSale", new { id = saleModel.Id, code = saleModel.Code }, saleModel);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{code}")]
         [AuthorizationFilter("employee")]
-        public IActionResult UpdateSale(int id, [FromBody] SaleModel updateSale)
+        public IActionResult UpdateSale(int code, [FromBody] SaleModel updateSale)
         {
-            var retrievedSale = _saleService.UpdateSale(id, updateSale.ToEntity());
+            var retrievedSale = _saleService.UpdateSale(code, updateSale.ToEntity());
             return Ok(new SaleDetailModel(retrievedSale));
         }
 
+        
+        [HttpDelete("{code}")]
+        public IActionResult GetSaleForCode(string code)
+        {
+            var retrievedSale = _saleService.GetSpecificSaleForCode(code);
+            return Ok(new SaleDetailModel(retrievedSale));
+        }
     }
 }
