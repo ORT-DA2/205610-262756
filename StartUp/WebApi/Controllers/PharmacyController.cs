@@ -9,7 +9,7 @@ namespace StartUp.WebApi.Controllers
 {
     [Route("api/pharmacy")]
     [ApiController]
-    [AuthorizationFilter("administrator")]
+    //[AuthorizationFilter("administrator")]
     public class PharmacyController : ControllerBase
     {
         private readonly IPharmacyService _pharmacyService;

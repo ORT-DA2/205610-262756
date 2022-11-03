@@ -6,13 +6,13 @@ import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root'
 })
-export class RoleService {
+export class PharmacyService {
 
-  public URL: string = `${environment.API_URL}/role`;
+  public URL: string = `${environment.API_URL}/pharmacy`;
 
   constructor(private http: HttpClient) { }
 
-  getRoles(): Observable<any> {
+  getPharmacies(): Observable<any> {
     return this.http.get<any>(this.URL);
   };
 }
