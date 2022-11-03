@@ -33,7 +33,7 @@ namespace StartUp.BusinessLogicTest
             _repoMock = new Mock<IRepository<User>>(MockBehavior.Strict);
             _roleRepoMock = new Mock<IRepository<Role>>(MockBehavior.Strict);
             _pharmacyRepoMock = new Mock<IRepository<Pharmacy>>(MockBehavior.Strict);
-            _service = new UserService(_repoMock.Object, _roleRepoMock.Object, _pharmacyRepoMock.Object);
+            //_service = new UserService(_repoMock.Object, _roleRepoMock.Object, _pharmacyRepoMock.Object);
             pharmacy1 = new Pharmacy();
             invitation1 = new Invitation();
             pharmacy2 = new Pharmacy();

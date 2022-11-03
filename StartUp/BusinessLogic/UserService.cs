@@ -58,6 +58,18 @@ namespace BusinessLogic
 
             return UserSaved;
         }
+        
+        public User GetSpecificUserByUserName(string username)
+        {
+            Validator validator = new Validator();
+            validator.ValidateString(username.ToString(), "User empty");
+
+            User UserSaved = _userRepository.GetOneByExpression(u => u.Invitation.UserName == username);
+
+            validator.ValidateUserNotNull(UserSaved, $"The user {username} not exist");
+
+            return UserSaved;
+        }
 
         public User CreateUser(User user)
         {
@@ -133,14 +145,10 @@ namespace BusinessLogic
 
         public void SaveToken(User user, string token)
         {
-            Validator validator = new Validator();
-            validator.ValidateString(token, "Token empty");
-
-            var userSalved = _userRepository.GetOneByExpression(u => u.Id == user.Id);
-
-            validator.ValidateUserNull((userSalved), "User not exist in database");
-
+            var userSalved = _userRepository.GetOneByExpression(u => u.Invitation.UserName == user.Invitation.UserName);
+            
             userSalved.Token = token;
+            _userRepository.UpdateOne(userSalved);
             _userRepository.Save();
         }
 

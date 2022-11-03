@@ -34,7 +34,7 @@ namespace StartUp.BusinessLogicTest
             _userRepoMock = new Mock<IRepository<User>>(MockBehavior.Strict);
             _tokenRepoMock = new Mock<IRepository<TokenAccess>>(MockBehavior.Strict);
             _pharmacyRepoMock = new Mock<IRepository<Pharmacy>>(MockBehavior.Strict);
-            _sessionService = new SessionService(_sessionRepoMock.Object,_userRepoMock.Object,_tokenRepoMock.Object);
+            //_sessionService = new SessionService(_sessionRepoMock.Object,_userRepoMock.Object,_tokenRepoMock.Object);
             _service = new RequestService(_repoMock.Object, _sessionService,_pharmacyRepoMock.Object );
             _petitions = new List<Petition>();
             SetSession();

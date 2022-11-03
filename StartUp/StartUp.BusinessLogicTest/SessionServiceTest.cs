@@ -29,7 +29,7 @@ namespace StartUp.BusinessLogicTest
             _repoSessionMock = new Mock<IDataAccess.IRepository<Session>>(MockBehavior.Strict);
             _repoUserMock = new Mock<IDataAccess.IRepository<User>>(MockBehavior.Strict);
             _repoTokenMock = new Mock<IDataAccess.IRepository<TokenAccess>>(MockBehavior.Strict);
-            _service = new SessionService(_repoSessionMock.Object, _repoUserMock.Object, _repoTokenMock.Object);
+            //_service = new SessionService(_repoSessionMock.Object, _repoUserMock.Object, _repoTokenMock.Object);
             userName = "Ana Paula";
             pass = "123456";
             SetSession();

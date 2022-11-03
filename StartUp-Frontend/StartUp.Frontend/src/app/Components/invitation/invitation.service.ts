@@ -11,7 +11,7 @@ import { environment } from 'src/environments/environment';
 })
 export class InvitationService {
 
-  private URL: string = `${environment.API_URL}/invitation`;
+  public URL: string = `${environment.API_URL}/invitation`;
 
   constructor(private http: HttpClient) { }
 

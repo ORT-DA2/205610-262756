@@ -11,6 +11,7 @@ namespace IBusinessLogic
     {
         List<User> GetAllUser(UserSearchCriteria searchCriteria);
         User GetSpecificUser(int userId);
+        User GetSpecificUserByUserName(string username);
         User CreateUser(User user);
         User UpdateUser(int userId, User user);
         void DeleteUser(int userId);

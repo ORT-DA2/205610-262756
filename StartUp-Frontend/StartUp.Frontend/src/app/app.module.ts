@@ -12,6 +12,9 @@ import { RegisterComponent } from './Components/register/register.component';
 import { InvitationComponent } from './Components/invitation/invitation.component';
 import { FormsModule } from '@angular/forms';
 import { UserComponent } from './Components/user/user.component';
+import { AuthGuard } from './auth/auth.guard';
+import { AuthService } from './auth/auth.service';
+import { RoleComponent } from './Components/role/role.component';
 
 
 @NgModule({
@@ -23,7 +26,8 @@ import { UserComponent } from './Components/user/user.component';
     SessionComponent,
     RegisterComponent,
     InvitationComponent,
-    UserComponent
+    UserComponent,
+    RoleComponent
   ],
   imports: [
     BrowserModule,
@@ -31,7 +35,7 @@ import { UserComponent } from './Components/user/user.component';
     HttpClientModule,
     FormsModule
   ],
-  providers: [],
+  providers: [AuthService, AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

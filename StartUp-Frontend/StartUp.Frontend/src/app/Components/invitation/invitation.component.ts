@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { RoleService } from '../role/role.service';
 
 @Component({
   selector: 'app-invitation',
@@ -7,9 +9,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class InvitationComponent implements OnInit {
 
-  constructor() { }
+  Roles: Array<any> = [];
+
+  constructor(private roleService: RoleService) {
+    this.getAllRoles();
+  }
 
   ngOnInit(): void {
   }
 
+  private getAllRoles() {
+    this.roleService.getRoles().forEach(r => {
+      this.Roles.push(r);
+      console.log("role:", r[2].permission);
+    });
+  }
 }
