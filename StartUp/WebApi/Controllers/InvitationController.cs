@@ -10,7 +10,7 @@ namespace StartUp.WebApi.Controllers
 
     [Route("api/invitation")]
     [ApiController]
-    //[AuthorizationFilter("administrator")]
+    //[AuthorizationFilter("administrator")];
     public class InvitationController : ControllerBase
     {
         private readonly IInvitationService _invitationManager;
