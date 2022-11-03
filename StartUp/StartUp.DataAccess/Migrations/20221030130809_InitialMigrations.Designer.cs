@@ -12,8 +12,8 @@ using StartUp.DataAccess;
 namespace StartUp.DataAccess.Migrations
 {
     [DbContext(typeof(StartUpContext))]
-    [Migration("20221011153329_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20221030130809_InitialMigrations")]
+    partial class InitialMigrations
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,7 +24,7 @@ namespace StartUp.DataAccess.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("StartUp.Domain.Entities.Rol", b =>
+            modelBuilder.Entity("StartUp.Domain.Entities.Role", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -167,8 +167,14 @@ namespace StartUp.DataAccess.Migrations
                     b.Property<int?>("MedicineId")
                         .HasColumnType("int");
 
+                    b.Property<int>("PharmacyId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("SaleId")
                         .HasColumnType("int");
+
+                    b.Property<string>("State")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -293,6 +299,9 @@ namespace StartUp.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int>("Code")
+                        .HasColumnType("int");
+
                     b.Property<int?>("PharmacyId")
                         .HasColumnType("int");
 
@@ -343,7 +352,7 @@ namespace StartUp.DataAccess.Migrations
                         .WithMany()
                         .HasForeignKey("PharmacyId");
 
-                    b.HasOne("StartUp.Domain.Entities.Rol", "Roles")
+                    b.HasOne("StartUp.Domain.Entities.Role", "Roles")
                         .WithMany()
                         .HasForeignKey("RolesId");
 

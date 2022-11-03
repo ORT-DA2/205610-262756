@@ -10,6 +10,7 @@ namespace StartUp.WebApi.Controllers
 
     [Route("api/invitation")]
     [ApiController]
+    //[AuthorizationFilter("administrator")];
     public class InvitationController : ControllerBase
     {
         private readonly IInvitationService _invitationManager;
@@ -23,7 +24,7 @@ namespace StartUp.WebApi.Controllers
         public IActionResult GetInvitation([FromQuery] InvitationSearchCriteriaModel searchCriteria)
         {
             var retrievedInvitations = _invitationManager.GetAllInvitation(searchCriteria.ToEntity());
-            return Ok(retrievedInvitations.Select(i => new InvitationBasicModel(i)));
+            return Ok(retrievedInvitations.Select(i => new InvitationDetailModel(i)));
         }
 
         [HttpGet("{id}", Name = "GetInvitation")]
@@ -41,7 +42,7 @@ namespace StartUp.WebApi.Controllers
         }
 
         [HttpPost]
-        [AuthorizationFilter("administrator")]
+        //[AuthorizationFilter("administrator")]
         public IActionResult CreateInvitation([FromBody] InvitationModel newInvitation)
         {
             var createdInvitation = _invitationManager.CreateInvitation(newInvitation.ToEntity());

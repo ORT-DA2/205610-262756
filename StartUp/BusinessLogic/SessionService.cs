@@ -48,7 +48,7 @@ namespace StartUp.BusinessLogic
 
             var userSalved = GetSpecificUser(session.UserName);
 
-            validator.ValidateUserNotNull(userSalved, "Username not exist in sistem");
+            validator.ValidateUserNotNull(userSalved, "Username not exist in system");
             validator.ValidateStringEquals(userSalved.Password, session.Password, "Password incorrect");
 
             return userSalved;
