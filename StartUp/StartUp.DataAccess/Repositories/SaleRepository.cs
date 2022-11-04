@@ -17,12 +17,12 @@ namespace StartUp.DataAccess.Repositories
         
         public override IEnumerable<Sale> GetAllByExpression(Expression<Func<Sale, bool>> expression)
         {
-            return _context.Set<Sale>().Where(expression).ToList();
+            return _context.Set<Sale>().Include("InvoiceLines").Where(expression).ToList();
         }
 
         public override Sale GetOneByExpression(Expression<Func<Sale, bool>> expression)
         {
-            return _context.Set<Sale>().Include("InvoiceLines").FirstOrDefault(expression);
+            return _context.Set<Sale>().Include("InvoiceLines.Medicine").FirstOrDefault(expression);
         }
 
         public override void InsertOne(Sale elem)

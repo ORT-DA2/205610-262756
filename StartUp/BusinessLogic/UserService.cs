@@ -18,7 +18,8 @@ namespace BusinessLogic
         private readonly IRepository<Pharmacy> _pharmacyRepository;
         private readonly IRepository<Invitation> _invitationRepository;
 
-        public UserService(IRepository<User> userRepository, IRepository<Role> roleRepository, IRepository<Pharmacy> pharmacyRepository, IRepository<Invitation> invitationRepository)
+        public UserService(IRepository<User> userRepository, IRepository<Role> roleRepository, 
+            IRepository<Pharmacy> pharmacyRepository, IRepository<Invitation> invitationRepository)
         {
             _userRepository = userRepository;
             _roleRepository = roleRepository;

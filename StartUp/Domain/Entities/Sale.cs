@@ -1,7 +1,6 @@
 ﻿using StartUp.Exceptions;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace StartUp.Domain
 {
@@ -9,6 +8,7 @@ namespace StartUp.Domain
     {
         public int Id { get; set; }
         public List<InvoiceLine> InvoiceLines { get; set; }
+        public int Code { get; set; }
 
 
         public Sale() { }
@@ -29,6 +29,17 @@ namespace StartUp.Domain
         protected bool Equals(Sale other)
         {
             return Id == other?.Id;
+        }
+
+        public void ValidateState()
+        {
+           foreach (var line in InvoiceLines)
+            {
+                if(line.State != "approved" && line.State != "rejected" && line.State != "pending")
+                {
+                    throw new InputException("Sales can only be approved or rejected");
+                }
+            }
         }
     }
 }

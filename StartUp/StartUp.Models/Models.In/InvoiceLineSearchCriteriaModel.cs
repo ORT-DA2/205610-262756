@@ -1,8 +1,5 @@
 ﻿using StartUp.Domain;
 using StartUp.Domain.SearchCriterias;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace StartUp.Models.Models.In
 {

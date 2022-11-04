@@ -7,6 +7,8 @@ namespace StartUp.Domain
         public int Id { get; set; }
         public Medicine Medicine { get; set; }
         public int Amount { get; set; }
+        public string State { get; set; }
+        public int PharmacyId { get; set; }
 
         public InvoiceLine() { }
         public void IsValidInvoiceLine()

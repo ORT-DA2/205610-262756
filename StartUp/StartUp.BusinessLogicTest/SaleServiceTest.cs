@@ -14,11 +14,12 @@ namespace StartUp.BusinessLogicTest
     [TestClass]
     public class SaleServiceTest
     {
-        private Mock<IDataAccess.IRepository<Sale>> _repoMock;
-        private Mock<IDataAccess.IRepository<Pharmacy>> _pharmacyRepoMock;
-        private Mock<IDataAccess.IRepository<TokenAccess>> _tokenRepoMock;
-        private Mock<IDataAccess.IRepository<User>> _userRepoMock;
-        private Mock<IDataAccess.IRepository<Session>> _sessionRepoMock;
+        private Mock<IRepository<Sale>> _repoMock;
+        private Mock<IRepository<Pharmacy>> _pharmacyRepoMock;
+        private Mock<IRepository<TokenAccess>> _tokenRepoMock;
+        private Mock<IRepository<User>> _userRepoMock;
+        private Mock<IRepository<Session>> _sessionRepoMock;
+        private Mock<IRepository<InvoiceLine>> _invoiceLineRepo;
         private SaleService _service;
         private SessionService _sessionService;
         private List<InvoiceLine> _invoiceLine;
@@ -26,11 +27,11 @@ namespace StartUp.BusinessLogicTest
         [TestInitialize]
         public void SetUp()
         {
-            
-            _repoMock = new Mock<IDataAccess.IRepository<Sale>>(MockBehavior.Strict);
+
+            _repoMock = new Mock<IRepository<Sale>>(MockBehavior.Strict);
             _pharmacyRepoMock = new Mock<IRepository<Pharmacy>>(MockBehavior.Strict);
             //_sessionService = new SessionService(_sessionRepoMock.Object,_userRepoMock.Object,_tokenRepoMock.Object);
-            _service = new SaleService(_repoMock.Object, _sessionService, _pharmacyRepoMock.Object);
+            // _service = new SaleService(_repoMock.Object, _sessionService, _pharmacyRepoMock.Object);
             _invoiceLine = new List<InvoiceLine>();
             SetSession();
         }
@@ -99,7 +100,7 @@ namespace StartUp.BusinessLogicTest
 
             _service.CreateSale(sale);
         }
-        
+
         private List<Sale> GenerateDummySale() => new List<Sale>()
         {
             new Sale() { Id= 1, InvoiceLines = _invoiceLine},
@@ -147,9 +148,9 @@ namespace StartUp.BusinessLogicTest
                 Name = "Aspirina",
                 Stock = 60
             };
-            
+
             _sessionService.UserLogged.Pharmacy.Stock.Add(med);
-            
+
             return new InvoiceLine
             {
                 Amount = 3,
@@ -161,7 +162,7 @@ namespace StartUp.BusinessLogicTest
         private Sale CreateSale(int id, List<InvoiceLine> inv)
         {
             inv.Add(CreateInvoiceLine());
-            
+
             Sale sale = new Sale
             {
                 Id = id,

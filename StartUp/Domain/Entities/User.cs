@@ -47,8 +47,14 @@ namespace StartUp.Domain.Entities
 
         public bool HasPermissions(string[] permissions)
         {
-            string[] permList = this.Roles.Permission.Split(",");
-            var hasPermission = permList.ToList().Any(permission => permissions.Contains(permission));
+            bool hasPermission = false;
+            foreach (string permission in permissions)
+            {
+                if(permission.Contains(this.Roles.Permission))
+                {
+                    hasPermission = true;
+                }
+            }
 
             return hasPermission;
         }
