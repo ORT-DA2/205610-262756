@@ -29,21 +29,7 @@ namespace BusinessLogic
 
         public List<User> GetAllUser(UserSearchCriteria searchCriteria)
         {
-            var emailCriteria = searchCriteria.Email?.ToLower() ?? string.Empty;
-            var passwordCriteria = searchCriteria.Password?.ToLower() ?? string.Empty;
-            var addressCriteria = searchCriteria.Address?.ToLower() ?? string.Empty;
-            var invitationCriteria = searchCriteria.Invitation ?? null;
-            var registerDateCriteria = searchCriteria.RegisterDate?.ToString() ?? string.Empty;
-            var pharmacyCriteria = searchCriteria.Pharmacy ?? null;
-            var rolCriteria = searchCriteria.Roles ?? null;
-
-            Expression<Func<User, bool>> userFilter = user =>
-                user.Email.ToLower().Contains(emailCriteria) &&
-                user.Password.ToLower().Contains(passwordCriteria) &&
-                user.Address.ToLower().Contains(addressCriteria) &&
-                user.Invitation == invitationCriteria &&
-                user.RegisterDate.ToString().Contains(registerDateCriteria) &&
-                user.Pharmacy == pharmacyCriteria && user.Roles == rolCriteria;
+            Expression<Func<User, bool>> userFilter = user => true;
 
             return _userRepository.GetAllByExpression(userFilter).ToList();
         }
@@ -69,7 +55,7 @@ namespace BusinessLogic
             user.ChangeStatusInvitation();
             user.RegisterDate = DateTime.Now;
 
-            if (user.Pharmacy != null)
+            if (user.Pharmacy != null && user.Roles.Permission.Contains("administrador"));
             {
                 user.Pharmacy = _pharmacyRepository.GetOneByExpression(p => p.Name == user.Pharmacy.Name);
             }

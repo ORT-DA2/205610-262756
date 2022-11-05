@@ -93,9 +93,19 @@ namespace StartUp.BusinessLogic
             updatedInvitation.IsValidInvitation();
 
             var invitationStored = GetSpecificInvitation(invitationId);
+            Invitation inv = _invitationRepository.GetOneByExpression(i => i.UserName == updatedInvitation.UserName);
+            if (updatedInvitation.Pharmacy != null)
+            {
+                Pharmacy pharmacy = _pharmacyRepository.GetOneByExpression(p => p.Name == updatedInvitation.Pharmacy.Name);
+                if(pharmacy == null)
+                {
+                    throw new InputException("You cannot edit the pharmacy of the invitation for one that does not exist in the system, you must first add the pharmacy");
+                }
+            }
 
             if (invitationStored.State == "Available")
             {
+                VerifyDataInvitation(inv, updatedInvitation);
                 invitationStored.Rol = updatedInvitation.Rol;
                 invitationStored.UserName = updatedInvitation.UserName;
                 invitationStored.Pharmacy = updatedInvitation.Pharmacy;
@@ -183,6 +193,27 @@ namespace StartUp.BusinessLogic
                     throw new ResourceNotFoundException($"The pharmacy for which an invitation is being created does not exist");
                 }
 
+            }
+        }
+
+
+        private void VerifyDataInvitation(Invitation inv, Invitation updateInv)
+        {
+            if (inv != null)
+            {
+                throw new InputException("The username you want to assign to the invitation already exists in the system");
+            }
+            if(updateInv.Rol == "administrator" && updateInv.Pharmacy != null)
+            {
+                throw new InputException("An administrator cannot have an associated pharmacy");
+            }
+            if(updateInv.Rol != "administrator" && updateInv.Pharmacy == null)
+            {
+                throw new InputException("A pharmacy member must have an associated pharmacy");
+            }
+            if(updateInv.Rol.ToLower() != "administrator" && updateInv.Rol.ToLower() != "employee" && updateInv.Rol.ToLower() != "owner")
+            {
+                throw new InputException("Role invalid");
             }
         }
     }

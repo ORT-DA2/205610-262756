@@ -61,6 +61,10 @@ namespace StartUp.Domain.Entities
 
         public void VerifyInvitationStateIsAvailable()
         {
+            if(this.Invitation == null)
+            {
+                throw new InputException("It is not possible to create a user who does not have an invitation created");
+            }
             if (Invitation.State.ToLower() != "available")
             {
                 throw new InputException("The invitation has already been used");
