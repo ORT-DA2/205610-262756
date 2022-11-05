@@ -8,7 +8,7 @@ import { environment } from 'src/environments/environment';
 })
 export class UserService {
 
-  private URL: string = `${environment.API_URL}/user`;
+  public URL: string = `${environment.API_URL}/user`;
 
   constructor(private http: HttpClient) { }
 
@@ -19,6 +19,12 @@ export class UserService {
     let req = this.http.post<UserModel>(this.URL, user);
 
     req.forEach(usr => console.log(usr));
+
+    return req;
+  }
+
+  getUser(username: string): any {
+    let req = this.http.get(this.URL + `/${username}`);
 
     return req;
   }

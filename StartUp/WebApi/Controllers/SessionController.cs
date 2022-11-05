@@ -1,13 +1,12 @@
 ﻿using IBusinessLogic;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
-using StartUp.BusinessLogic;
 using StartUp.Domain.Entities;
 using StartUp.Exceptions;
 using StartUp.IBusinessLogic;
 using StartUp.Models.Models.In;
-using StartUp.WebApi.Filters;
 using System;
+using System.Collections.Generic;
+using StartUp.Models.Models.Out;
 
 namespace StartUp.WebApi.Controllers;
 
@@ -37,7 +36,7 @@ public class SessionController : ControllerBase
         {
             var tokenExist = _tokenAccessService.GetSpecificTokenAccess(session);
             _userService.SaveToken(user, tokenExist.Token.ToString());
-
+            
             return Created("Successful login", tokenExist);
         }
         catch (ResourceNotFoundException)
@@ -49,12 +48,16 @@ public class SessionController : ControllerBase
         }
     }
 
-
     [HttpDelete("{username}")]
     public ActionResult Logout([FromHeader] string authorization, string username)
     {
         try
         {
+            if (authorization.ToString().Contains("Bearer "))
+            {
+                authorization = _sessionService.CleanAuthorization(authorization);
+            }
+            
             Session session = _sessionService.GetSpecificSession(username);
             User user = _sessionService.VerifySession(new SessionModel(session));
 
@@ -62,6 +65,7 @@ public class SessionController : ControllerBase
             {
                 user.Token = "";
                 _userService.SaveToken(user, user.Token);
+                _sessionService.DeleteSession(username);
 
                 return Ok("Closed session");
             }

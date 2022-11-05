@@ -3,5 +3,5 @@ import { PharmacyModel } from "./pharmacyModel";
 export class InvitationModel {
     username: string;
     rol: string;
-    pharmacy?: PharmacyModel;
+    pharmacy: PharmacyModel | null;
 }

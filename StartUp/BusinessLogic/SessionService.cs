@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using StartUp.DataAccess.Repositories;
 
 namespace StartUp.BusinessLogic
 {
@@ -166,6 +167,16 @@ namespace StartUp.BusinessLogic
         public void SaveUserSession()
         {
             _sessionRepository.Save();
+        }
+        
+        public string CleanAuthorization(string authorizationHeader)
+        {
+            string authorization = "";
+            for (int i = 7; i < authorizationHeader.Length; i++)
+            {
+                authorization = authorization + authorizationHeader[i];
+            }
+            return authorization;
         }
     }
 }

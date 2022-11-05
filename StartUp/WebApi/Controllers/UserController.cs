@@ -21,18 +21,16 @@ namespace StartUp.WebApi.Controllers
         }
 
         [HttpGet]
-        
         public IActionResult GetUserByRol([FromQuery] UserSearchCriteriaModel searchCriteria)
         {
             var retrievedUser = _userService.GetAllUser(searchCriteria.ToEntity());
             return Ok(retrievedUser.Select(a => new UserBasicModel(a)));
         }
 
-        [HttpGet("{id}", Name = "GetUser")]
-        [AuthorizationFilter("administrator")]
-        public IActionResult GetUser(int id)
+        [HttpGet("{username}", Name = "GetUser")]
+        public IActionResult GetUser(string username)
         {
-            var retrievedUser = _userService.GetSpecificUser(id);
+            var retrievedUser = _userService.GetSpecificUserByUserName(username);
             return Ok(new UserDetailModel(retrievedUser));
         }
 
