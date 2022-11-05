@@ -63,7 +63,11 @@ namespace BusinessLogic
             user.IsValidUser();
             EmailNotExistInDataBase(user);
             user.Invitation = _invitationRepository.GetOneByExpression(i => i.UserName == user.Invitation.UserName);
-            user.VerifyInvitationStateIsAvailable();
+            user.VerifyInvitationExist();
+            user.VerifyInvitationState();
+            user.VerifyInvitationRoles();
+            user.VerifyInvitationPharmacy();
+            user.VerifyRolesAndPharmacy();
             user.ChangeStatusInvitation();
             user.RegisterDate = DateTime.Now;
 
@@ -80,26 +84,33 @@ namespace BusinessLogic
 
         public User UpdateUser(int userId, User updateduser)
         {
-            Validator validator = new Validator();
-            validator.ValidateUserNotNull(updateduser, "User empty");
-            validator.ValidateString(userId.ToString(), "UserId empty");
-
             updateduser.IsValidUser();
-
+            
             var userStored = GetSpecificUser(userId);
-            validator.ValidateUserNotNull(userStored, "User not exist");
+            if(userStored == null)
+            {
+                throw new InputException("User not exist");
+            }
+
+            updateduser.Invitation = _invitationRepository.GetOneByExpression(i => i.UserName == updateduser.Invitation.UserName);
+            updateduser.VerifyInvitationExist();
+            updateduser.VerifyInvitationState();
+            updateduser.VerifyInvitationRoles();
+            updateduser.VerifyInvitationPharmacy();
+            updateduser.VerifyRolesAndPharmacy();
 
             userStored.Email = updateduser.Email;
-            userStored.Password = updateduser.Password;
             userStored.Address = updateduser.Address;
             userStored.RegisterDate = updateduser.RegisterDate;
             userStored.Password = updateduser.Password;
+            userStored.Invitation = updateduser.Invitation;
+            userStored.Roles = _roleRepository.GetOneByExpression(r => r.Permission == updateduser.Roles.Permission);
+
             if (updateduser.Pharmacy != null)
             {
                 userStored.Pharmacy = _pharmacyRepository.GetOneByExpression(p => p.Name == updateduser.Pharmacy.Name);
             }
-            userStored.Roles = _roleRepository.GetOneByExpression(r=>r.Permission == updateduser.Roles.Permission);
-
+            
             _userRepository.UpdateOne(userStored);
             _userRepository.Save();
 

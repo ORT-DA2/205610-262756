@@ -25,18 +25,7 @@ namespace StartUp.BusinessLogic
 
         public List<Invitation> GetAllInvitation(InvitationSearchCriteria searchCriteria)
         {
-            /*var rolCriteria = searchCriteria.Rol?.ToLower() ?? string.Empty;
-            var userNameCriteria = searchCriteria.UserName?.ToLower() ?? string.Empty;
-            var codeCriteria = searchCriteria.Code.ToString()?.ToLower() ?? string.Empty;
-            var isActiveCriteria = searchCriteria.State ?? null;
-            var pharmacyCriteria = searchCriteria.Pharmacy ?? null;*/
-
             Expression<Func<Invitation, bool>> invitationFilter = invitation => true;
-                /*invitation.Rol.ToLower().Contains(rolCriteria) &&
-                invitation.UserName.ToLower().Contains(userNameCriteria) &&
-                invitation.Code.ToString().Contains(codeCriteria) &&
-                invitation.State.Contains(isActiveCriteria) &&
-                invitation.Pharmacy == pharmacyCriteria;*/
 
             List<Invitation> invitations = _invitationRepository.GetAllByExpression(invitationFilter).ToList();
 
@@ -75,13 +64,14 @@ namespace StartUp.BusinessLogic
         public Invitation CreateInvitation(Invitation invitation)
         {
             invitation.IsValidInvitation();
-            NotExistInDataBase(invitation);
+            UsernameNotExistInDataBase(invitation);
             ValidateInvitationRoles(invitation);
             ValidatePharmacyExist(invitation);
 
             if (invitation.Rol != "administrator")
             {
                 invitation.Pharmacy = _pharmacyRepository.GetOneByExpression(p => p.Name == invitation.Pharmacy.Name);
+            
             }
             CreateAndSave(invitation);
             
@@ -91,21 +81,19 @@ namespace StartUp.BusinessLogic
         public Invitation UpdateInvitation(int invitationId, Invitation updatedInvitation)
         {
             updatedInvitation.IsValidInvitation();
+            UsernameNotExistInDataBase(updatedInvitation);
+            ValidateInvitationRoles(updatedInvitation);
+            ValidatePharmacyExist(updatedInvitation);
 
             var invitationStored = GetSpecificInvitation(invitationId);
-            Invitation inv = _invitationRepository.GetOneByExpression(i => i.UserName == updatedInvitation.UserName);
+            
             if (updatedInvitation.Pharmacy != null)
             {
-                Pharmacy pharmacy = _pharmacyRepository.GetOneByExpression(p => p.Name == updatedInvitation.Pharmacy.Name);
-                if(pharmacy == null)
-                {
-                    throw new InputException("You cannot edit the pharmacy of the invitation for one that does not exist in the system, you must first add the pharmacy");
-                }
+                updatedInvitation.Pharmacy = _pharmacyRepository.GetOneByExpression(p => p.Name == updatedInvitation.Pharmacy.Name);
             }
 
             if (invitationStored.State == "Available")
             {
-                VerifyDataInvitation(inv, updatedInvitation);
                 invitationStored.Rol = updatedInvitation.Rol;
                 invitationStored.UserName = updatedInvitation.UserName;
                 invitationStored.Pharmacy = updatedInvitation.Pharmacy;
@@ -130,7 +118,7 @@ namespace StartUp.BusinessLogic
             _invitationRepository.Save();
         }
 
-        private void NotExistInDataBase(Invitation invitation)
+        private void UsernameNotExistInDataBase(Invitation invitation)
         {
             var invitationSaved = _invitationRepository.GetOneByExpression(i => i.UserName == invitation.UserName);
 
@@ -157,6 +145,10 @@ namespace StartUp.BusinessLogic
             string roles = "administrator, owner, employee";
             if ((invitation.Rol.ToLower() == "owner" || invitation.Rol.ToLower() == "employee")
                 && invitation.Pharmacy == null)
+            {
+                throw new InputException("The owner and the employee roles need a pharmacy");
+            }
+            if (invitation.Rol.ToLower() == "administrator" && invitation.Pharmacy != null)
             {
                 throw new InputException("The owner and the employee roles need a pharmacy");
             }
@@ -196,25 +188,5 @@ namespace StartUp.BusinessLogic
             }
         }
 
-
-        private void VerifyDataInvitation(Invitation inv, Invitation updateInv)
-        {
-            if (inv != null)
-            {
-                throw new InputException("The username you want to assign to the invitation already exists in the system");
-            }
-            if(updateInv.Rol == "administrator" && updateInv.Pharmacy != null)
-            {
-                throw new InputException("An administrator cannot have an associated pharmacy");
-            }
-            if(updateInv.Rol != "administrator" && updateInv.Pharmacy == null)
-            {
-                throw new InputException("A pharmacy member must have an associated pharmacy");
-            }
-            if(updateInv.Rol.ToLower() != "administrator" && updateInv.Rol.ToLower() != "employee" && updateInv.Rol.ToLower() != "owner")
-            {
-                throw new InputException("Role invalid");
-            }
-        }
     }
 }

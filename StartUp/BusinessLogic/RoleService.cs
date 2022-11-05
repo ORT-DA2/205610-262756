@@ -42,6 +42,10 @@ namespace StartUp.BusinessLogic
         public Role CreateRole(Role role)
         {
             role.IsValidRole();
+            if(_roleRepository.GetOneByExpression(r=>r.Permission == role.Permission) != null)
+            {
+                throw new InputException("The Role already exist");
+            }
             
             _roleRepository.InsertOne(role);
             _roleRepository.Save();
