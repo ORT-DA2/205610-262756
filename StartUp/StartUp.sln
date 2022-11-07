@@ -43,7 +43,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JSONExporter.cs", "JSONExpo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XMLExporter", "XMLExporter\XMLExporter.csproj", "{785D1555-F864-494F-AECF-762397CDA580}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StartUp.IExporterInterface", "IExporter\StartUp.IExporterInterface.csproj", "{D985A0A9-81D6-4ABC-97F0-20667A078806}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StartUp.IExporterInterface", "IExporter\StartUp.IExporterInterface.csproj", "{D985A0A9-81D6-4ABC-97F0-20667A078806}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StartUp.ModelsExporter", "StartUp.ModelsExporter\StartUp.ModelsExporter.csproj", "{20C40EC8-2587-4AFE-990B-74394186E443}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -119,6 +121,10 @@ Global
 		{D985A0A9-81D6-4ABC-97F0-20667A078806}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D985A0A9-81D6-4ABC-97F0-20667A078806}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D985A0A9-81D6-4ABC-97F0-20667A078806}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20C40EC8-2587-4AFE-990B-74394186E443}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20C40EC8-2587-4AFE-990B-74394186E443}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20C40EC8-2587-4AFE-990B-74394186E443}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20C40EC8-2587-4AFE-990B-74394186E443}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

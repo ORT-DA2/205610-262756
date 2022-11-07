@@ -8,8 +8,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Domain\StartUp.Domain.csproj" />
-    <ProjectReference Include="..\IExporter\StartUp.IExporterInterface.csproj" />
-    <ProjectReference Include="..\StartUp.IDataAccess\StartUp.IDataAccess.csproj" />
   </ItemGroup>
 
 </Project>

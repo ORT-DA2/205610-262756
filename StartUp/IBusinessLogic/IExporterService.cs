@@ -6,6 +6,6 @@ namespace StartUp.IBusinessLogic
     public interface IExporterService
     {
         List<string> GetAllExporters();
-        List<Medicine> ExportMedicines(string exporterName);
+        void ExportMedicines(string routeName);
     }
 }

@@ -27,10 +27,11 @@ namespace StartUp.WebApi.Controllers
         }
 
         [HttpPost("export")]
-        public IActionResult ExportMedicines([FromBody] string exporterName)
+        public IActionResult ExportMedicines([FromBody] string routeName)
         {
-            List<MedicineBasicModel> exportedMedicine = _exporterService.ExportMedicines(exporterName).Select(pet => new MedicineBasicModel(pet)).ToList();
-            return Ok(exportedMedicine);
+
+            _exporterService.ExportMedicines(routeName);
+            return Ok();
         }
     }
 }
