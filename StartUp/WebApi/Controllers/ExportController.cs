@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StartUp.IBusinessLogic;
-using StartUp.Models.Models.Out;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace StartUp.WebApi.Controllers
 {
@@ -19,18 +17,18 @@ namespace StartUp.WebApi.Controllers
             _exporterService = exporterService;
         }
 
-        [HttpGet("exporters")]
+        [HttpGet]
         public IActionResult GetExporters()
         {
             List<string> retrievedExporters = _exporterService.GetAllExporters();
             return Ok(retrievedExporters);
         }
 
-        [HttpPost("export")]
-        public IActionResult ExportMedicines([FromBody] string routeName)
+        [HttpPost]
+        public IActionResult ExportMedicines([FromBody] string routeName, string format)
         {
 
-            _exporterService.ExportMedicines(routeName);
+            _exporterService.ExportMedicines(routeName, format);
             return Ok();
         }
     }

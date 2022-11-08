@@ -39,8 +39,8 @@ namespace StartUp.BusinessLogic
                 throw new ResourceNotFoundException("No se pudo encontrar el importador solicitado");
 
             Pharmacy pharmacy = _pharmacyRepository.GetOneByExpression(p => p.Name == _sessionService.UserLogged.Pharmacy.Name);
-            List<MedicineModelExport> medicines = pharmacy.Stock.Select(m => new MedicineModelExport(m));
-            desiredImplementation.ExportMedicines(routeName);
+            List<MedicineModelExport> medicines = pharmacy.Stock.Select(m => new MedicineModelExport(m)).ToList();
+            desiredImplementation.ExportMedicines(routeName, format);
         }
 
         private List<IExporter> GetExporterImplementations()
@@ -48,9 +48,12 @@ namespace StartUp.BusinessLogic
             List<IExporter> availableExporters = new List<IExporter>();
             // Va a estar adentro de WebApi, ya que mira relativo de donde se ejecuta el programa
             string exportersPath = "./Exporters";
-            string[] filePaths = Directory.GetFiles(exportersPath);
+            string dirs = @"D:Escritorio\ORT\5to\DA2\Obligatorio 2\205610-262756";
+            string[] filePaths = Directory.GetFiles(dirs);
 
             foreach (string filePath in filePaths)
+
+                foreach (string file in filePaths)
             {
                 if (filePath.EndsWith(".dll"))
                 {
