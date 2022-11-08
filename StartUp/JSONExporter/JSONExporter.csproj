@@ -7,9 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Domain\StartUp.Domain.csproj" />
     <ProjectReference Include="..\IExporter\StartUp.IExporterInterface.csproj" />
-    <ProjectReference Include="..\StartUp.IDataAccess\StartUp.IDataAccess.csproj" />
+    <ProjectReference Include="..\StartUp.ModelsExporter\StartUp.ModelsExporter.csproj" />
   </ItemGroup>
 
 </Project>

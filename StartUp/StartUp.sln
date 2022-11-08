@@ -39,13 +39,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StartUp.Migrations", "Start
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "StartUp.Exporters", "StartUp.Exporters", "{07C7D36F-9CC4-4F08-A915-D61E5D12853E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JSONExporter.cs", "JSONExporter.cs\JSONExporter.cs.csproj", "{7C68E185-7FC6-465B-80D6-28E98721736B}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XMLExporter", "XMLExporter\XMLExporter.csproj", "{785D1555-F864-494F-AECF-762397CDA580}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StartUp.IExporterInterface", "IExporter\StartUp.IExporterInterface.csproj", "{D985A0A9-81D6-4ABC-97F0-20667A078806}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StartUp.ModelsExporter", "StartUp.ModelsExporter\StartUp.ModelsExporter.csproj", "{20C40EC8-2587-4AFE-990B-74394186E443}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StartUp.ModelsExporter", "StartUp.ModelsExporter\StartUp.ModelsExporter.csproj", "{20C40EC8-2587-4AFE-990B-74394186E443}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JSONExporter", "JSONExporter\JSONExporter.csproj", "{C1C62551-D6FF-4CCB-92D2-D7C14F53FC27}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -109,10 +109,6 @@ Global
 		{F5E2C627-3576-437B-B6F1-E4C9A533D5D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F5E2C627-3576-437B-B6F1-E4C9A533D5D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F5E2C627-3576-437B-B6F1-E4C9A533D5D2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7C68E185-7FC6-465B-80D6-28E98721736B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7C68E185-7FC6-465B-80D6-28E98721736B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7C68E185-7FC6-465B-80D6-28E98721736B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7C68E185-7FC6-465B-80D6-28E98721736B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{785D1555-F864-494F-AECF-762397CDA580}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{785D1555-F864-494F-AECF-762397CDA580}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{785D1555-F864-494F-AECF-762397CDA580}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -125,13 +121,17 @@ Global
 		{20C40EC8-2587-4AFE-990B-74394186E443}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{20C40EC8-2587-4AFE-990B-74394186E443}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{20C40EC8-2587-4AFE-990B-74394186E443}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1C62551-D6FF-4CCB-92D2-D7C14F53FC27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1C62551-D6FF-4CCB-92D2-D7C14F53FC27}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1C62551-D6FF-4CCB-92D2-D7C14F53FC27}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1C62551-D6FF-4CCB-92D2-D7C14F53FC27}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{7C68E185-7FC6-465B-80D6-28E98721736B} = {07C7D36F-9CC4-4F08-A915-D61E5D12853E}
 		{785D1555-F864-494F-AECF-762397CDA580} = {07C7D36F-9CC4-4F08-A915-D61E5D12853E}
+		{C1C62551-D6FF-4CCB-92D2-D7C14F53FC27} = {07C7D36F-9CC4-4F08-A915-D61E5D12853E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C747C0E9-805A-49E5-878E-01BBFC7AF8B9}

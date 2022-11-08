@@ -40,7 +40,7 @@ namespace StartUp.BusinessLogic
 
             Pharmacy pharmacy = _pharmacyRepository.GetOneByExpression(p => p.Name == _sessionService.UserLogged.Pharmacy.Name);
             List<MedicineModelExport> medicines = pharmacy.Stock.Select(m => new MedicineModelExport(m)).ToList();
-            desiredImplementation.ExportMedicines(routeName, format);
+            desiredImplementation.ExportMedicines(routeName, format, medicines);
         }
 
         private List<IExporter> GetExporterImplementations()
@@ -48,29 +48,28 @@ namespace StartUp.BusinessLogic
             List<IExporter> availableExporters = new List<IExporter>();
             // Va a estar adentro de WebApi, ya que mira relativo de donde se ejecuta el programa
             string exportersPath = "./Exporters";
-            string dirs = @"D:Escritorio\ORT\5to\DA2\Obligatorio 2\205610-262756";
-            string[] filePaths = Directory.GetFiles(dirs);
+            string[] filePaths = Directory.GetFiles(exportersPath);
 
             foreach (string filePath in filePaths)
 
                 foreach (string file in filePaths)
-            {
-                if (filePath.EndsWith(".dll"))
                 {
-                    FileInfo fileInfo = new FileInfo(filePath);
-                    Assembly assembly = Assembly.LoadFile(fileInfo.FullName);
-
-                    foreach (Type type in assembly.GetTypes())
+                    if (filePath.EndsWith(".dll"))
                     {
-                        if (typeof(IExporter).IsAssignableFrom(type) && !type.IsInterface && !type.IsAbstract)
+                        FileInfo fileInfo = new FileInfo(filePath);
+                        Assembly assembly = Assembly.LoadFile(fileInfo.FullName);
+
+                        foreach (Type type in assembly.GetTypes())
                         {
-                            IExporter exporter = (IExporter)Activator.CreateInstance(type);
-                            if (exporter != null)
-                                availableExporters.Add(exporter);
+                            if (typeof(IExporter).IsAssignableFrom(type) && !type.IsInterface && !type.IsAbstract)
+                            {
+                                IExporter exporter = (IExporter)Activator.CreateInstance(type);
+                                if (exporter != null)
+                                    availableExporters.Add(exporter);
+                            }
                         }
                     }
                 }
-            }
 
             return availableExporters;
         }

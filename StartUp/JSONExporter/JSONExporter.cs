@@ -1,23 +1,28 @@
 ﻿using StartUp.IExporterInterface;
 using StartUp.ModelsExporter;
+using System.Text.Json;
 
 namespace StartUp.WebApi.Exporters
 {
-    public class XMLExporter : IExporter
+    public class JSONExporter : IExporter
     {
         public string GetName()
         {
-            return "XML Exporter";
+            return "JSON Exporter";
         }
 
         public void ExportMedicines(string routeName, string format, List<MedicineModelExport> medicines)
         {
             foreach (MedicineModelExport medicine in medicines)
             {
-                string fileName = $"{medicine.Name}.json";
-                FileStream file = File.Create($"D:/Escritorio/ORT/5to/DA2/FileExporter/{medicine.Name}.json");
+                //string fileName = $"{medicine.Name}.json";
                 //string jsonString = JsonSerializer.Serialize(medicine);
                 //File.WriteAllText(fileName, jsonString);
+
+                string fileName = $"{medicine.Name}.json";
+                FileStream createStream = File.Create(fileName);
+                string jsonString = JsonSerializer.Serialize(medicine);
+                File.WriteAllText(fileName, jsonString);
             }
         }
     }

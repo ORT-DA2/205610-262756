@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StartUp.IBusinessLogic;
+using StartUp.ModelsExporter;
+using StartUp.WebApi.Filters;
 using System.Collections.Generic;
 
 namespace StartUp.WebApi.Controllers
@@ -7,7 +9,7 @@ namespace StartUp.WebApi.Controllers
 
     [Route("api/exporter")]
     [ApiController]
-    //[AuthorizationFilter("administrator")]
+    [AuthorizationFilter("employee")]
     public class ExportController : ControllerBase
     {
         private readonly IExporterService _exporterService;
@@ -25,10 +27,10 @@ namespace StartUp.WebApi.Controllers
         }
 
         [HttpPost]
-        public IActionResult ExportMedicines([FromBody] string routeName, string format)
+        public IActionResult ExportMedicines([FromBody] ModelExporter model)
         {
 
-            _exporterService.ExportMedicines(routeName, format);
+            _exporterService.ExportMedicines(model.RouteName, model.Format);
             return Ok();
         }
     }
