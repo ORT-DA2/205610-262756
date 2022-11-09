@@ -10,7 +10,7 @@ import { LoginComponent } from './Components/login/login.component';
 import { SessionComponent } from './Components/session/session.component';
 import { RegisterComponent } from './Components/register/register.component';
 import { InvitationComponent } from './Components/invitation/invitation.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UserComponent } from './Components/user/user.component';
 import { AuthGuard } from './auth/auth.guard';
 import { AuthService } from './auth/auth.service';
@@ -35,7 +35,8 @@ import { PharmacyComponent } from './Components/pharmacy/pharmacy.component';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [AuthService, AuthGuard],
   bootstrap: [AppComponent]

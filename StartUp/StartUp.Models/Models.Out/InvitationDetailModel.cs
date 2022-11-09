@@ -13,6 +13,7 @@ namespace StartUp.Models.Models.Out
 
         public InvitationDetailModel(Invitation invitation)
         {
+            this.Id = invitation.Id;
             this.Rol = invitation.Rol;
             this.UserName = invitation.UserName;
             this.Code = invitation.Code;

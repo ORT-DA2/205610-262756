@@ -25,18 +25,7 @@ namespace StartUp.BusinessLogic
 
         public List<Invitation> GetAllInvitation(InvitationSearchCriteria searchCriteria)
         {
-            /*var rolCriteria = searchCriteria.Rol?.ToLower() ?? string.Empty;
-            var userNameCriteria = searchCriteria.UserName?.ToLower() ?? string.Empty;
-            var codeCriteria = searchCriteria.Code.ToString()?.ToLower() ?? string.Empty;
-            var isActiveCriteria = searchCriteria.State ?? null;
-            var pharmacyCriteria = searchCriteria.Pharmacy ?? null;*/
-
             Expression<Func<Invitation, bool>> invitationFilter = invitation => true;
-                /*invitation.Rol.ToLower().Contains(rolCriteria) &&
-                invitation.UserName.ToLower().Contains(userNameCriteria) &&
-                invitation.Code.ToString().Contains(codeCriteria) &&
-                invitation.State.Contains(isActiveCriteria) &&
-                invitation.Pharmacy == pharmacyCriteria;*/
 
             List<Invitation> invitations = _invitationRepository.GetAllByExpression(invitationFilter).ToList();
 
@@ -98,8 +87,13 @@ namespace StartUp.BusinessLogic
             {
                 invitationStored.Rol = updatedInvitation.Rol;
                 invitationStored.UserName = updatedInvitation.UserName;
-                invitationStored.Pharmacy = updatedInvitation.Pharmacy;
-                invitationStored.Code = GenerateCode();
+                if (updatedInvitation.Rol != "administrator")
+                {
+                    invitationStored.Pharmacy =
+                        this._pharmacyRepository.GetOneByExpression(p => p.Name == updatedInvitation.Pharmacy.Name);
+                }
+
+                invitationStored.Code = updatedInvitation.Code;
             }
             else
             {
@@ -130,7 +124,7 @@ namespace StartUp.BusinessLogic
             }
         }
 
-        private int GenerateCode()
+        public int GenerateCode()
         {
             Random random = new Random();
             int code = random.Next(100000, 999999);

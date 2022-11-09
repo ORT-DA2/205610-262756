@@ -14,6 +14,7 @@ namespace StartUp.IBusinessLogic
         Invitation CreateInvitation(Invitation invitation);
         Invitation UpdateInvitation(int invitationId, Invitation invitation);
         void DeleteInvitation(int invitationId);
+        int GenerateCode();
 
     }
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { InvitationModel } from 'src/app/Models/invitationModel';
 
@@ -10,21 +10,31 @@ import { InvitationModel } from 'src/app/Models/invitationModel';
 })
 export class InvitationService {
 
+  public errorMessage: string;
   public URL: string = `${environment.API_URL}/invitation`;
 
   constructor(private http: HttpClient) { }
 
-  postInvitation(invitation: InvitationModel): Observable<any> {
-    var req = this.http.post<InvitationModel>(this.URL, invitation)
+  generateNewCode(): Observable<any> {
+    return this.http.get<any>(this.URL + '/generateCode')
       .pipe(
-        catchError(error => {
-          console.error('HTTP error: ', error)
-          window.alert(error.error.message);
-          return throwError(() => error)
-        })
+        tap(
+          {
+            next: (data: any) => { console.log(data) },
+            error: (error: any) => { return error.message }
+          }
+        )
       );
+  }
 
-    console.log("req", req);
+  updateInvitation(id: number, invitation: InvitationModel): Observable<any> {
+    var req = this.http.put<any>(this.URL + `/${id}`, invitation);
+
+    return req;
+  }
+
+  postInvitation(invitation: InvitationModel): Observable<any> {
+    var req = this.http.post<InvitationModel>(this.URL, invitation);
     return req;
   }
 
