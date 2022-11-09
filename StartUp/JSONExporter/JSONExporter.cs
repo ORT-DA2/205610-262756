@@ -15,14 +15,15 @@ namespace StartUp.WebApi.Exporters
         {
             foreach (MedicineModelExport medicine in medicines)
             {
-                //string fileName = $"{medicine.Name}.json";
-                //string jsonString = JsonSerializer.Serialize(medicine);
-                //File.WriteAllText(fileName, jsonString);
+                Directory.CreateDirectory($"{routeName}.JSON");
+                Environment.CurrentDirectory = ($"{routeName}.JSON");
 
                 string fileName = $"{medicine.Name}.json";
-                FileStream createStream = File.Create(fileName);
                 string jsonString = JsonSerializer.Serialize(medicine);
+                string pathString = Path.Combine($"{routeName}.JSON", $"{medicine.Name}.json");
                 File.WriteAllText(fileName, jsonString);
+
+                Environment.CurrentDirectory = @"D:\\Escritorio\\ORT\\5to\\DA2\\Obligatorio 2\\205610-262756\\StartUp\\WebApi";
             }
         }
     }

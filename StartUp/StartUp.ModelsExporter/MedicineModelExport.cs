@@ -12,33 +12,38 @@ namespace StartUp.ModelsExporter
         public int Price { get; set; }
         public bool Prescription { get; set; }
         public int Stock { get; set; }
-        public List<Symptom> Symptoms { get; set; }
-        
+        public List<SymptomModel> Symptoms { get; set; }
+
         public MedicineModelExport(Medicine medicine)
+        {
+            this.Presentation = medicine.Presentation;
+            this.Amount = medicine.Amount;
+            this.Price = medicine.Price;
+            this.Stock = medicine.Stock;
+            this.Prescription = medicine.Prescription;
+            this.Name = medicine.Name;
+            this.Measure = medicine.Measure;
+            Symptoms = new List<SymptomModel>();
+            if (medicine.Symptoms != null)
             {
-                this.Presentation = medicine.Presentation;
-                this.Amount = medicine.Amount;
-                this.Price = medicine.Price;
-                this.Stock = medicine.Stock;
-                this.Prescription = medicine.Prescription;
-                this.Name = medicine.Name;
-                this.Measure = medicine.Measure;
-                this.Symptoms = medicine.Symptoms;
-                this.Code = medicine.Code;
+                Symptoms = medicine.Symptoms.Select(s => new SymptomModel(s)).ToList();
             }
 
-            public override bool Equals(object? obj)
-            {
-                if (obj is MedicineModelExport)
-                {
-                    var otherMedicine = obj as MedicineModelExport;
+            this.Code = medicine.Code;
+        }
 
-                    return Name == otherMedicine.Name;
-                }
-                else
-                {
-                    return false;
-                }
+        public override bool Equals(object? obj)
+        {
+            if (obj is MedicineModelExport)
+            {
+                var otherMedicine = obj as MedicineModelExport;
+
+                return Name == otherMedicine.Name;
+            }
+            else
+            {
+                return false;
             }
         }
+    }
 }

@@ -29,9 +29,8 @@ namespace StartUp.WebApi.Controllers
         [HttpPost]
         public IActionResult ExportMedicines([FromBody] ModelExporter model)
         {
-
             _exporterService.ExportMedicines(model.RouteName, model.Format);
-            return Ok();
+            return Ok($"All the drugs in your pharmacy have been exported in the format {model.Format} in the path {model.RouteName}.{model.Format}");
         }
     }
 }
