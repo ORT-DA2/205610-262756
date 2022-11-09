@@ -1,5 +1,7 @@
 ﻿
 
+using StartUp.Exceptions;
+
 namespace StartUp.Domain
 {
     public class InvoiceLine
@@ -15,7 +17,10 @@ namespace StartUp.Domain
         {
             Validator validator = new Validator();
             validator.ValidateAmount(Amount, 1, "The Amount cant be less than 1");
-            validator.ValidateMedicineNotNull(Medicine, "The medicine cant be null");
+            if(Medicine == null)
+            {
+                throw new InputException("The medicine cant be null");
+            }
         }
 
         public override bool Equals(object? obj)
