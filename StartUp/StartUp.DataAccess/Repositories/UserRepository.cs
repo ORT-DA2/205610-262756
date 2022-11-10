@@ -19,7 +19,7 @@ namespace StartUp.DataAccess.Repositories
         
         public override IEnumerable<User> GetAllByExpression(Expression<Func<User, bool>> expression)
         {
-            return _context.Set<User>().Where(expression).ToList();
+            return _context.Set<User>().Where(expression).Include("Roles").ToList();
         }
 
         public override User GetOneByExpression(Expression<Func<User, bool>> expression)

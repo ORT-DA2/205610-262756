@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Domain\StartUp.Domain.csproj" />
+    <ProjectReference Include="..\StartUp.ModelsExporter\StartUp.ModelsExporter.csproj" />
   </ItemGroup>
 
 </Project>

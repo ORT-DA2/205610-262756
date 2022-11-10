@@ -11,6 +11,7 @@
     <ProjectReference Include="..\StartUp.DataAccess\StartUp.DataAccess.csproj" />
     <ProjectReference Include="..\StartUp.Exceptions\StartUp.Exceptions.csproj" />
     <ProjectReference Include="..\StartUp.IDataAccess\StartUp.IDataAccess.csproj" />
+    <ProjectReference Include="..\StartUp.ModelsExporter\StartUp.ModelsExporter.csproj" />
   </ItemGroup>
 
   <ItemGroup>

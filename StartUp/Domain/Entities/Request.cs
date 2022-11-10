@@ -1,7 +1,5 @@
 ﻿using StartUp.Exceptions;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace StartUp.Domain
 {
@@ -14,9 +12,10 @@ namespace StartUp.Domain
         public Request() { }
         public void isValidRequest()
         {
-
-            Validator validator = new Validator();
-            validator.ValidatePetitions(Petitions, "Petitions empty");
+            if(Petitions == null)
+            {
+                throw new InputException("Petitions empty");
+            }
         }
 
         public override bool Equals(object? obj)

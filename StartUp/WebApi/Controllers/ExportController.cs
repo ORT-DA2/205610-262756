@@ -1,15 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StartUp.IBusinessLogic;
-using StartUp.Models.Models.Out;
+using StartUp.ModelsExporter;
+using StartUp.WebApi.Filters;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace StartUp.WebApi.Controllers
 {
 
     [Route("api/exporter")]
     [ApiController]
-    //[AuthorizationFilter("administrator")]
+    [AuthorizationFilter("employee")]
     public class ExportController : ControllerBase
     {
         private readonly IExporterService _exporterService;
@@ -19,18 +19,18 @@ namespace StartUp.WebApi.Controllers
             _exporterService = exporterService;
         }
 
-        [HttpGet("exporters")]
+        [HttpGet]
         public IActionResult GetExporters()
         {
             List<string> retrievedExporters = _exporterService.GetAllExporters();
             return Ok(retrievedExporters);
         }
 
-        [HttpPost("export")]
-        public IActionResult ExportMedicines([FromBody] string exporterName)
+        [HttpPost]
+        public IActionResult ExportMedicines([FromBody] ModelExporter model)
         {
-            List<MedicineBasicModel> exportedMedicine = _exporterService.ExportMedicines(exporterName).Select(pet => new MedicineBasicModel(pet)).ToList();
-            return Ok(exportedMedicine);
+            _exporterService.ExportMedicines(model.RouteName, model.Format);
+            return Ok($"All the drugs in your pharmacy have been exported in the format {model.Format} in the path {model.RouteName}.{model.Format}");
         }
     }
 }

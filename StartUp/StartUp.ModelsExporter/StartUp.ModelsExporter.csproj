@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Domain\StartUp.Domain.csproj" />
-    <ProjectReference Include="..\IExporter\StartUp.IExporterInterface.csproj" />
   </ItemGroup>
 
 </Project>

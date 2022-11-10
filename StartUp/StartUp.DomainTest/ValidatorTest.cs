@@ -87,62 +87,6 @@ namespace StartUp.DomainTest
         }
 
         [TestMethod]
-        [ExpectedException(typeof(Exceptions.InputException))]
-        public void ValidateInvitationNullTest()
-        {
-            validator.ValidateInvitationNotNull(null, "Is null");
-        }
-
-        [TestMethod]
-        public void ValidateInvitationNotNullTest()
-        {
-            Invitation inv = new Invitation();
-            validator.ValidateInvitationNotNull(inv, "Is null");
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(Exceptions.InputException))]
-        public void ValidateListPharmacyIsNullTest()
-        {
-            validator.ValidateListPharmacyNotNull(null, "Is null");
-        }
-
-        [TestMethod]
-        public void ValidateListPharmacyIsNotNullTest()
-        {
-            List<Pharmacy> pharmacies = new List<Pharmacy>();
-            validator.ValidateListPharmacyNotNull(pharmacies, "Is null");
-        }
-
-        [TestMethod]
-        public void ValidateMedicineListNotNullTest()
-        {
-            List<Medicine> medicines = new List<Medicine>();
-            validator.ValidateMedicineListNotNull(medicines, "Is null");
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(Exceptions.InputException))]
-        public void ValidateMedicineListNullTest()
-        {
-            validator.ValidateMedicineListNotNull(null, "Is null");
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(Exceptions.InputException))]
-        public void ValidateMedicineNullTest()
-        {
-            validator.ValidateMedicineNotNull(null, "Is null");
-        }
-
-        [TestMethod]
-        public void ValidateMedicineIsNotNullTest()
-        {
-            Medicine medicine = new Medicine();
-            validator.ValidateMedicineNotNull(medicine, "Is null");
-        }
-
-        [TestMethod]
         public void ValidatePasswordValidTest()
         {
             string password = "password?.(asa";
@@ -175,77 +119,6 @@ namespace StartUp.DomainTest
 
         [TestMethod]
         [ExpectedException(typeof(Exceptions.InputException))]
-        public void ValidatePetitionNullTest()
-        {
-            validator.ValidatePetitionNotNull(null, "Is null");
-        }
-
-        [TestMethod]
-        public void ValidatePetitionIsNotNullTest()
-        {
-            Petition petition = new Petition(); 
-            validator.ValidatePetitionNotNull(petition, "Is null");
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(Exceptions.InputException))]
-        public void ValidateRequestNullTest()
-        {
-            validator.ValidateRequestNotNull(null, "Is null");
-        }
-
-        [TestMethod]
-        public void ValidateRequestIsNotNullTest()
-        {
-            Request request = new Request();
-            validator.ValidateRequestNotNull(request, "Is null");
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(Exceptions.InputException))]
-        public void ValidateRoleNullTest()
-        {
-            validator.ValidateRoleIsNotNull(null, "Is null");
-        }
-
-        [TestMethod]
-        public void ValidateRoleIsNotNullTest()
-        {
-            Role role = new Role();
-            validator.ValidateRoleIsNotNull(role, "Is null");
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(Exceptions.ResourceNotFoundException))]
-        public void ValidateSaleNullTest()
-        {
-            validator.ValidateSaleNotNull(null, "Is null");
-        }
-
-        [TestMethod]
-        public void ValidateSaleIsNotNullTest()
-        {
-            Sale sale = new Sale();
-            validator.ValidateSaleNotNull(sale, "Is null");
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(Exceptions.InputException))]
-        public void ValidatePharmacyNullTest()
-        {
-            validator.ValidatePharmacyNotNull(null, "Is null");
-        }
-
-        [TestMethod]
-        public void ValidatePharmacyIsNotNullTest()
-        {
-            Pharmacy pharmacy = new Pharmacy();
-            validator.ValidatePharmacyNotNull(pharmacy, "Is null");
-        }
-
-
-        [TestMethod]
-        [ExpectedException(typeof(Exceptions.InputException))]
         public void ValidateStringNotEqualsTest()
         {
             validator.ValidateStringEquals(stringTest, "79878", "Are not equal");
@@ -255,48 +128,6 @@ namespace StartUp.DomainTest
         public void ValidateStringEqualsTest()
         {
             validator.ValidateStringEquals(stringTest, "", "Are not equal");
-        }
-
-        [TestMethod]
-        public void ValidateTokenAccessTest()
-        {
-            TokenAccess token = new TokenAccess();
-            validator.ValidateTokenAccess(token, "Is empty");
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(Exceptions.InputException))]
-        public void ValidateTokenAccessNullTest()
-        {
-            validator.ValidateTokenAccess(null, "Is null");
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(Exceptions.InputException))]
-        public void ValidateUserTest()
-        {
-            User user = new User();
-            validator.ValidateUserNull(user, "Is empty");
-        }
-
-        [TestMethod]
-        public void ValidateUserNullTest()
-        {
-            validator.ValidateUserNull(null, "Is null");
-        }
-
-        [TestMethod]
-        public void ValidateSessionTest()
-        {
-            Session session = new Session();
-            validator.ValidateSessionNotNull(session, "Is empty");
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(Exceptions.InputException))]
-        public void ValidateSessionNullTest()
-        {
-            validator.ValidateSessionNotNull(null, "Is null");
         }
 
     }

@@ -47,11 +47,13 @@ namespace StartUp.BusinessLogic
 
         public Petition GetSpecificPetition(int petitionId)
         {
-            Validator validator = new Validator();
             Pharmacy pharmacy = _pharmacyRepository.GetOneByExpression(p => p.Id == _sessionService.UserLogged.Pharmacy.Id);
 
             var petitionSaved = _petitionRepository.GetOneByExpression(p => p.Id == petitionId);
-            validator.ValidatePetitionNotNull(petitionSaved, $"Could not find specified petition {petitionId}");
+            if(petitionSaved == null)
+            {
+                throw new InputException($"Could not find specified petition {petitionId}");
+            }
 
             foreach (Request request in pharmacy.Requests)
             {

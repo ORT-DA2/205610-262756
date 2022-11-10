@@ -44,6 +44,7 @@ namespace StartUp.Factory
             serviceCollection.AddScoped<ISessionService, SessionService>();
             serviceCollection.AddTransient<ITokenAccessService, TokenAccessService>();
             serviceCollection.AddTransient<IRoleService, RoleService>();
+            serviceCollection.AddTransient<IExporterService, ExporterService>();
         }
     }
 }
