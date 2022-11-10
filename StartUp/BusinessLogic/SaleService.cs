@@ -64,11 +64,13 @@ namespace StartUp.BusinessLogic
 
         public Sale GetSpecificSale(int saleId)
         {
-            Validator validator = new Validator();
             Pharmacy pharmacy = _pharmacyRepository.GetOneByExpression(p => p.Id == _sessionService.UserLogged.Pharmacy.Id);
 
             var saleSaved = _saleRepository.GetOneByExpression(s => s.Id == saleId);
-            validator.ValidateSaleNotNull(saleSaved, $"Could not find specified sale {saleId}");
+            if(saleSaved == null)
+            {
+                throw new InputException($"Could not find specified sale {saleId}");
+            }
 
             if (pharmacy.Sales.Contains(saleSaved))
             {
@@ -82,11 +84,13 @@ namespace StartUp.BusinessLogic
 
         public Sale GetSpecificSaleForCode(string saleCode)
         {
-            Validator validator = new Validator();
 
             saleCode = CleanString(saleCode);
             Sale saleSaved = _saleRepository.GetOneByExpression(s => s.Code == Int32.Parse(saleCode));
-            validator.ValidateSaleNotNull(saleSaved, $"Could not find specified sale {saleCode}");
+            if (saleSaved == null)
+            {
+                throw new InputException($"Could not find specified sale {saleCode}");
+            }
 
             return saleSaved;
         }

@@ -25,8 +25,15 @@ namespace StartUp.Domain.Entities
             validator.ValidateString(Address, "Address empty");
             validator.ValidatePasswordValid(Password, "Password invalid", 7);
             validator.ValidateString(RegisterDate.ToString(), "Register date empty");
-            validator.ValidateInvitationNotNull(Invitation, "Invitation empty");
-            validator.ValidateRoleIsNotNull(Roles, "Rol empty");
+
+            if(Roles == null)
+            {
+                throw new InputException("Roles empty");
+            }
+            if (Invitation == null)
+            {
+                throw new InputException("Invitation empty");
+            }
         }
 
         public bool EmailIsValid(string emailAddress)

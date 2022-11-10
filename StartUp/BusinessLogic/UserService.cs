@@ -41,7 +41,10 @@ namespace BusinessLogic
 
             User UserSaved = _userRepository.GetOneByExpression(u => u.Id == userId);
 
-            validator.ValidateUserNotNull(UserSaved, $"The user {userId} not exist");
+            if(UserSaved == null)
+            {
+                throw new InputException($"The user {userId} not exist");
+            }
 
             return UserSaved;
         }
@@ -53,8 +56,11 @@ namespace BusinessLogic
 
             User UserSaved = _userRepository.GetOneByExpression(u => u.Invitation.UserName == username);
 
-            validator.ValidateUserNotNull(UserSaved, $"The user {username} not exist");
-
+            if (UserSaved == null)
+            {
+                throw new InputException($"The user {username} not exist");
+            }
+            
             return UserSaved;
         }
 
@@ -121,8 +127,12 @@ namespace BusinessLogic
         {
             Validator validator = new Validator();
             validator.ValidateString(userId.ToString(), "UserID empty");
+
             var userStored = GetSpecificUser(userId);
-            validator.ValidateUserNotNull(userStored, "User not exist");
+            if (userStored == null)
+            {
+                throw new InputException("User not exist");
+            }
 
             _userRepository.DeleteOne(userStored);
             _userRepository.Save();
@@ -130,9 +140,11 @@ namespace BusinessLogic
 
         private void EmailNotExistInDataBase(User user)
         {
-            Validator validator = new Validator();
-            validator.ValidateUserNotNull(user, "User empty");
-
+            if (user == null)
+            {
+                throw new InputException("User empty");
+            }
+            
             User userSaved = _userRepository.GetOneByExpression(u => u.Email == user.Email);
 
             if (userSaved != null)
