@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { PharmacyModel } from 'src/app/Models/pharmacyModel';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -14,5 +15,9 @@ export class PharmacyService {
 
   getPharmacies(): Observable<any> {
     return this.http.get<any>(this.URL);
+  };
+
+  postPharmacy(pharmacy: PharmacyModel): Observable<any> {
+    return this.http.post<PharmacyModel>(this.URL, pharmacy);
   };
 }
