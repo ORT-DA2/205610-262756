@@ -32,13 +32,10 @@
                         <div class="form-group col-12">
                             <label for="userName" class="form-label">User name</label>
                             <input formControlName="userName" type="text" name="userName" class="form-control"
-                                id="userName" maxlength="50" />
+                                id="userName" />
                             <div *ngIf="formCreateInvitation.controls['userName'].invalid &&
                                 (formCreateInvitation.controls['userName'].dirty || 
                                 formCreateInvitation.controls['userName'].touched)" class="alert alert-danger">
-                                <div *ngIf="formCreateInvitation.controls['userName'].errors?.['maxLength']">
-                                    user name is required.
-                                </div>
                                 <div *ngIf="formCreateInvitation.controls['userName'].errors?.['required']">
                                     user name is required.
                                 </div>
@@ -131,6 +128,14 @@
                                         <label for="userName" class="form-label">User name</label>
                                         <input formControlName="userName" type="text" name="userName"
                                             class="form-control" id="userName" />
+                                        <div *ngIf="formEditInvitation.controls['userName'].invalid &&
+                                                (formEditInvitation.controls['userName'].dirty || 
+                                                formEditInvitation.controls['userName'].touched)"
+                                            class="alert alert-danger">
+                                            <div *ngIf="formEditInvitation.controls['userName'].errors?.['required']">
+                                                user name is required.
+                                            </div>
+                                        </div>
                                     </div>
 
                                     <div class="container" style="margin-top: 1rem!important;">
@@ -153,6 +158,15 @@
                                                         <label class="form-check-label" for="flexRadioDisabled">
                                                             {{role.permission | uppercase}}
                                                         </label>
+                                                        <div *ngIf="formEditInvitation.controls['role'].invalid &&
+                                                                                        (formEditInvitation.controls['role'].dirty ||
+                                                                                        formEditInvitation.controls['role'].touched)"
+                                                            class="alert alert-danger">
+                                                            <div
+                                                                *ngIf="formEditInvitation.controls['role'].errors?.['required']">
+                                                                role is required.
+                                                            </div>
+                                                        </div>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -180,19 +194,29 @@
                                                         <label class="form-check-label" for="flexRadioDisabled">
                                                             {{pharma.name | uppercase}}
                                                         </label>
+                                                        <div *ngIf="formEditInvitation.controls['pharmacy'].invalid &&
+                                                                    (formEditInvitation.controls['pharmacy'].dirty ||
+                                                                    formEditInvitation.controls['pharmacy'].touched)"
+                                                            class="alert alert-danger">
+                                                            <div
+                                                                *ngIf="formEditInvitation.controls['pharmacy'].errors?.['required']">
+                                                                pharmacy is required.
+                                                            </div>
+                                                        </div>
                                                     </li>
                                                 </ul>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="container" style="margin-top: 1rem!important;">
+                                    <div class="container" style="margin-top: 1rem !important;">
                                         <div class="row">
                                             <div class="col">
                                                 <label class="form-label">{{code}}</label>
                                             </div>
                                             <div class="col">
                                                 <button class="btn btn-secondary w-100"
-                                                    (click)="generateNewCode()">Generate new code</button>
+                                                    (click)="generateNewCode()">Generate new code
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -200,8 +224,9 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary" (click)="editInvitation()"
-                                    data-bs-dismiss="modal">Edit</button>
+                                <button type="button" class="btn btn-primary submit"
+                                    [disabled]="formEditInvitation.invalid" data-bs-dismiss="modal"
+                                    (click)="editInvitation()">Edit</button>
                             </div>
                         </div>
                     </div>
