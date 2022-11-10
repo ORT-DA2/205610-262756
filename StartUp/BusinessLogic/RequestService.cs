@@ -46,12 +46,14 @@ namespace StartUp.BusinessLogic
 
         public Request GetSpecificRequest(int requestId)
         {
-            Validator validator = new Validator();
             Pharmacy pharmacy = _pharmacyRepository.GetOneByExpression(p => p.Id == _sessionService.UserLogged.Pharmacy.Id);
 
             var requestSaved = _requestRepository.GetOneByExpression(r => r.Id == requestId);
-            validator.ValidateRequestNotNull(requestSaved, $"Could not find specified request {requestId}");
-
+            if(requestSaved == null)
+            {
+                throw new InputException($"Could not find specified request { requestId }");
+            }
+            
             if (!pharmacy.Requests.Contains(requestSaved))
             {
                 throw new ResourceNotFoundException($"The request {requestId} does not belong to your pharmacy");
@@ -104,9 +106,15 @@ namespace StartUp.BusinessLogic
 
         private Pharmacy UpdateStockInPharmacy(Pharmacy pharmacy, Request request)
         {
-            Validator validator = new Validator();
-            validator.ValidateRequestNotNull(request, "Request empty");
-            validator.ValidatePharmacyNotNull(pharmacy, "Pharmacy empty");
+            if (request == null)
+            {
+                throw new InputException("Request empty");
+            }
+            
+            if (pharmacy == null)
+            {
+                throw new InputException("Pharmacy empty");
+            }
 
             foreach (Petition pet in request.Petitions)
             {

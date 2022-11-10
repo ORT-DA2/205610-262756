@@ -1,12 +1,10 @@
-using StartUp.Domain;
-using System.Collections.Generic;
+using StartUp.ModelsExporter;
 
 namespace StartUp.IExporterInterface;
 
 public interface IExporter
 {
     string GetName();
-
-    List<Medicine> ExportMedicines();
+    void ExportMedicines(string routeName, string format, List<MedicineModelExport> medicines);
 
 }

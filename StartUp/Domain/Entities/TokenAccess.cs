@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StartUp.Exceptions;
+using System;
 
 namespace StartUp.Domain.Entities
 {
@@ -11,9 +12,10 @@ namespace StartUp.Domain.Entities
         public TokenAccess() { }
         public void IsValidTokenAccess()
         {
-            Validator validator = new Validator();
-            
-            validator.ValidateUserNotNull(User, "User empty");
+            if(User == null)
+            {
+                throw new InputException("User empty");
+            }
         }
 
         public override bool Equals(object? obj)

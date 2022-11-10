@@ -64,13 +64,14 @@ namespace StartUp.BusinessLogic
         public Invitation CreateInvitation(Invitation invitation)
         {
             invitation.IsValidInvitation();
-            NotExistInDataBase(invitation);
+            UsernameNotExistInDataBase(invitation);
             ValidateInvitationRoles(invitation);
             ValidatePharmacyExist(invitation);
 
             if (invitation.Rol != "administrator")
             {
                 invitation.Pharmacy = _pharmacyRepository.GetOneByExpression(p => p.Name == invitation.Pharmacy.Name);
+            
             }
             CreateAndSave(invitation);
             
@@ -80,8 +81,16 @@ namespace StartUp.BusinessLogic
         public Invitation UpdateInvitation(int invitationId, Invitation updatedInvitation)
         {
             updatedInvitation.IsValidInvitation();
+            UsernameNotExistInDataBase(updatedInvitation);
+            ValidateInvitationRoles(updatedInvitation);
+            ValidatePharmacyExist(updatedInvitation);
 
             var invitationStored = GetSpecificInvitation(invitationId);
+            
+            if (updatedInvitation.Pharmacy != null)
+            {
+                updatedInvitation.Pharmacy = _pharmacyRepository.GetOneByExpression(p => p.Name == updatedInvitation.Pharmacy.Name);
+            }
 
             if (invitationStored.State == "Available")
             {
@@ -114,7 +123,7 @@ namespace StartUp.BusinessLogic
             _invitationRepository.Save();
         }
 
-        private void NotExistInDataBase(Invitation invitation)
+        private void UsernameNotExistInDataBase(Invitation invitation)
         {
             var invitationSaved = _invitationRepository.GetOneByExpression(i => i.UserName == invitation.UserName);
 
@@ -141,6 +150,10 @@ namespace StartUp.BusinessLogic
             string roles = "administrator, owner, employee";
             if ((invitation.Rol.ToLower() == "owner" || invitation.Rol.ToLower() == "employee")
                 && invitation.Pharmacy == null)
+            {
+                throw new InputException("The owner and the employee roles need a pharmacy");
+            }
+            if (invitation.Rol.ToLower() == "administrator" && invitation.Pharmacy != null)
             {
                 throw new InputException("The owner and the employee roles need a pharmacy");
             }
@@ -179,5 +192,6 @@ namespace StartUp.BusinessLogic
 
             }
         }
+
     }
 }

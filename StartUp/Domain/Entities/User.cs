@@ -1,7 +1,5 @@
 ﻿using StartUp.Exceptions;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Mail;
 
 namespace StartUp.Domain.Entities
@@ -27,8 +25,15 @@ namespace StartUp.Domain.Entities
             validator.ValidateString(Address, "Address empty");
             validator.ValidatePasswordValid(Password, "Password invalid", 7);
             validator.ValidateString(RegisterDate.ToString(), "Register date empty");
-            validator.ValidateInvitationNotNull(Invitation, "Invitation empty");
-            validator.ValidateRoleIsNotNull(Roles, "Rol empty");
+
+            if(Roles == null)
+            {
+                throw new InputException("Roles empty");
+            }
+            if (Invitation == null)
+            {
+                throw new InputException("Invitation empty");
+            }
         }
 
         public bool EmailIsValid(string emailAddress)
@@ -59,11 +64,43 @@ namespace StartUp.Domain.Entities
             return hasPermission;
         }
 
-        public void VerifyInvitationStateIsAvailable()
+        public void VerifyInvitationState()
         {
             if (Invitation.State.ToLower() != "available")
             {
                 throw new InputException("The invitation has already been used");
+            }
+        }
+
+        public void VerifyInvitationExist()
+        {
+            if (this.Invitation == null)
+            {
+                throw new InputException("It is not possible to create a user who does not have an invitation created");
+            }
+        }
+
+        public void VerifyInvitationRoles()
+        {
+            if(this.Invitation.Rol != Roles.Permission)
+            {
+                throw new InputException("The user must be created with the permission that was assigned in the invitation");
+            }
+        }
+
+        public void VerifyRolesAndPharmacy()
+        {
+           if(this.Invitation.Rol.ToLower() == "administrator" && this.Pharmacy != null || 
+                this.Invitation.Rol.ToLower() != "adminisrador" && this.Pharmacy == null){
+                throw new InputException("The role does not match the pharmacy");
+            }
+        }
+
+        public void VerifyInvitationPharmacy()
+        {
+            if (this.Invitation.Pharmacy.Name! == this.Pharmacy.Name)
+            {
+                throw new InputException("The user must have assigned the pharmacy that has assigned their invitation");
             }
         }
 
