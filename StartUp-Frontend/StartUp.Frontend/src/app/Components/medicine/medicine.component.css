@@ -1,0 +1,18 @@
+.col-form-label {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.col-form-label:hover {
+    overflow: visible;
+    white-space: initial;
+}
+
+.col-form-label:hover span {
+    position: relative;
+    background-color: white;
+
+    box-shadow: 0 0 4px 0 black;
+    border-radius: 1px;
+}

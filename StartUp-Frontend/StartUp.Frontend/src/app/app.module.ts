@@ -16,6 +16,7 @@ import { AuthGuard } from './auth/auth.guard';
 import { AuthService } from './auth/auth.service';
 import { RoleComponent } from './Components/role/role.component';
 import { PharmacyComponent } from './Components/pharmacy/pharmacy.component';
+import { MedicineComponent } from './Components/medicine/medicine.component';
 
 
 @NgModule({
@@ -29,7 +30,8 @@ import { PharmacyComponent } from './Components/pharmacy/pharmacy.component';
     InvitationComponent,
     UserComponent,
     RoleComponent,
-    PharmacyComponent
+    PharmacyComponent,
+    MedicineComponent
   ],
   imports: [
     BrowserModule,
