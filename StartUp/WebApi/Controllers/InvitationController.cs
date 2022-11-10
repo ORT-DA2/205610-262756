@@ -40,6 +40,14 @@ namespace StartUp.WebApi.Controllers
             var retrievedInvitation = _invitationManager.GetSpecificInvitationByUserAndPass(username, code);
             return Ok(new InvitationDetailModel(retrievedInvitation));
         }
+        
+        [HttpGet("generateCode", Name = "generateCode")]
+        //[AuthorizationFilter("administrator")]
+        public IActionResult generateCode()
+        {
+            var code = _invitationManager.GenerateCode();
+            return Ok(code);
+        }
 
         [HttpPost]
         //[AuthorizationFilter("administrator")]

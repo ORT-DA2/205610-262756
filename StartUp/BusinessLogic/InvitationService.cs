@@ -96,8 +96,13 @@ namespace StartUp.BusinessLogic
             {
                 invitationStored.Rol = updatedInvitation.Rol;
                 invitationStored.UserName = updatedInvitation.UserName;
-                invitationStored.Pharmacy = updatedInvitation.Pharmacy;
-                invitationStored.Code = GenerateCode();
+                if (updatedInvitation.Rol != "administrator")
+                {
+                    invitationStored.Pharmacy =
+                        this._pharmacyRepository.GetOneByExpression(p => p.Name == updatedInvitation.Pharmacy.Name);
+                }
+
+                invitationStored.Code = updatedInvitation.Code;
             }
             else
             {
@@ -128,7 +133,7 @@ namespace StartUp.BusinessLogic
             }
         }
 
-        private int GenerateCode()
+        public int GenerateCode()
         {
             Random random = new Random();
             int code = random.Next(100000, 999999);

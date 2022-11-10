@@ -40,7 +40,7 @@ namespace StartUp.WebApi.Controllers
             newUser.Pharmacy = newUser.Invitation.Pharmacy;
             var createdUser = _userService.CreateUser(newUser.ToEntity());
             var userModel = new UserDetailModel(createdUser);
-            return CreatedAtRoute("GetUser", new { id = userModel.Id }, userModel);
+            return Ok(userModel);
         }
 
         [HttpPut("{id}")]

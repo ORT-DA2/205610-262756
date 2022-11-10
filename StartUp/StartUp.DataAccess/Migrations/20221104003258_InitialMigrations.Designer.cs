@@ -12,7 +12,7 @@ using StartUp.DataAccess;
 namespace StartUp.DataAccess.Migrations
 {
     [DbContext(typeof(StartUpContext))]
-    [Migration("20221030130809_InitialMigrations")]
+    [Migration("20221104003258_InitialMigrations")]
     partial class InitialMigrations
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
