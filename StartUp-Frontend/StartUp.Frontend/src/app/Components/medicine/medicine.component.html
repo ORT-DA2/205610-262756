@@ -1,0 +1,148 @@
+<main id="main" class="main">
+    <section class="section">
+        <div class="row">
+            <div class="col-lg-12">
+                <div *ngIf="successfulResponse" class="alert alert-success alert-dismissible fade show " role="alert">
+                    {{successfulResponseMessage}}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <div *ngIf="errorResponse" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{errorResponseMessage}}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Create Medicine</h5>
+                        <form (submit)="createMedicine()" [formGroup]="formCreateMedicine"
+                            class="row g-3 needs-validation">
+                            <div class="row mb-3">
+                                <label for="inputText" class="col-sm-2 col-form-label">Name</label>
+                                <div class="col-sm-10">
+                                    <input formControlName="name" name="name" type="text" class="form-control">
+                                    <div *ngIf="formCreateMedicine.controls['name'].invalid &&
+                                        (formCreateMedicine.controls['name'].dirty || 
+                                        formCreateMedicine.controls['name'].touched)" class="alert alert-danger">
+                                        <div *ngIf="formCreateMedicine.controls['name'].errors?.['required']">
+                                            Medicine name is required.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">Code</label>
+                                <div class="col-sm-10">
+                                    <input formControlName="code" name="code" type="text" class="form-control">
+                                    <div *ngIf="formCreateMedicine.controls['code'].invalid &&
+                                        (formCreateMedicine.controls['code'].dirty || 
+                                        formCreateMedicine.controls['code'].touched)" class="alert alert-danger">
+                                        <div *ngIf="formCreateMedicine.controls['code'].errors?.['required']">
+                                            Medicine code is required.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">Presentation</label>
+                                <div class="col-sm-10">
+                                    <input formControlName="presentation" name="presentation" type="text"
+                                        class="form-control">
+                                    <div *ngIf="formCreateMedicine.controls['presentation'].invalid &&
+                                        (formCreateMedicine.controls['presentation'].dirty || 
+                                        formCreateMedicine.controls['presentation'].touched)"
+                                        class="alert alert-danger">
+                                        <div *ngIf="formCreateMedicine.controls['presentation'].errors?.['required']">
+                                            Medicine Presentation is required.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">Amount per presentation</label>
+                                <div class="col-sm-10">
+                                    <input formControlName="amount" name="amount" type="number" class="form-control">
+                                    <div *ngIf="formCreateMedicine.controls['amount'].invalid &&
+                                        (formCreateMedicine.controls['amount'].dirty || 
+                                        formCreateMedicine.controls['amount'].touched)" class="alert alert-danger">
+                                        <div *ngIf="formCreateMedicine.controls['amount'].errors?.['required']">
+                                            Medicine amount is required.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">Unit of Measuremeasure</label>
+                                <div class="col-sm-10">
+                                    <input formControlName="measure" name="measure" type="text" class="form-control">
+                                    <div *ngIf="formCreateMedicine.controls['measure'].invalid &&
+                                        (formCreateMedicine.controls['measure'].dirty || 
+                                        formCreateMedicine.controls['measure'].touched)" class="alert alert-danger">
+                                        <div *ngIf="formCreateMedicine.controls['measure'].errors?.['required']">
+                                            Medicine Unit of Measuremeasure is required.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">Price</label>
+                                <div class="col-sm-10">
+                                    <input formControlName="price" name="price" type="number" class="form-control">
+                                    <div *ngIf="formCreateMedicine.controls['price'].invalid &&
+                                        (formCreateMedicine.controls['price'].dirty || 
+                                        formCreateMedicine.controls['price'].touched)" class="alert alert-danger">
+                                        <div *ngIf="formCreateMedicine.controls['price'].errors?.['required']">
+                                            Medicine price is required.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-5">
+                                <div class="col-sm-10">
+                                    <div class="form-check form-switch">
+                                        <label class="form-check-label"
+                                            for="flexSwitchCheckDefault">Prescription</label>
+                                        <input formControlName="prescription" class="form-check-input" type="checkbox"
+                                            id="flexSwitchCheckDefault">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h6 class="row card-title">Symptoms</h6>
+                            <div class="row mb-3">
+                                <div>
+                                    <ul *ngFor="let sym of symptoms" class="col list-group">
+                                        <li class="col-12 list-group-item">{{sym.symptomDescription}}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col">
+                                        <input name="symptoms" formControlName="symptom" type="text"
+                                            class="form-control">
+                                    </div>
+                                    <div class="col">
+                                        <button class=" btn btn-primary" (click)="addSymptom()"> Add
+                                            Symptom</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="row-6">
+                                    <button type="submit" class="btn btn-primary col-12">Create
+                                        Medicine
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
