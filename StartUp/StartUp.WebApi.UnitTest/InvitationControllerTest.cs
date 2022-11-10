@@ -59,8 +59,8 @@ namespace StartUp.WebApi.UnitTest
         [TestMethod]
         public void GetExistingInvitationWithModelTest()
         {
-            InvitationSearchCriteriaModel invitationModel = new InvitationSearchCriteriaModel();
-            invitationModel.Rol = "Administrator";
+            InvitationSearchCriteriaModel invitationModel = new InvitationSearchCriteriaModel(); 
+            //invitationModel.Rol = "Administrator";
             invitationModel.UserName = "apodo";
             List<Invitation> invList = new List<Invitation>();
             Invitation inv = CreateInvitation();

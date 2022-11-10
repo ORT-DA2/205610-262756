@@ -27,11 +27,11 @@ namespace StartUp.BusinessLogicTest
         [TestInitialize]
         public void SetUp()
         {
-            
+
             _repoMock = new Mock<IRepository<Sale>>(MockBehavior.Strict);
             _pharmacyRepoMock = new Mock<IRepository<Pharmacy>>(MockBehavior.Strict);
-            _sessionService = new SessionService(_sessionRepoMock.Object,_userRepoMock.Object,_tokenRepoMock.Object);
-            _service = new SaleService(_repoMock.Object, _sessionService, _pharmacyRepoMock.Object, _invoiceLineRepo.Object);
+            //_sessionService = new SessionService(_sessionRepoMock.Object,_userRepoMock.Object,_tokenRepoMock.Object);
+            // _service = new SaleService(_repoMock.Object, _sessionService, _pharmacyRepoMock.Object);
             _invoiceLine = new List<InvoiceLine>();
             SetSession();
         }
@@ -100,7 +100,7 @@ namespace StartUp.BusinessLogicTest
 
             _service.CreateSale(sale);
         }
-        
+
         private List<Sale> GenerateDummySale() => new List<Sale>()
         {
             new Sale() { Id= 1, InvoiceLines = _invoiceLine},
@@ -148,9 +148,9 @@ namespace StartUp.BusinessLogicTest
                 Name = "Aspirina",
                 Stock = 60
             };
-            
+
             _sessionService.UserLogged.Pharmacy.Stock.Add(med);
-            
+
             return new InvoiceLine
             {
                 Amount = 3,
@@ -162,7 +162,7 @@ namespace StartUp.BusinessLogicTest
         private Sale CreateSale(int id, List<InvoiceLine> inv)
         {
             inv.Add(CreateInvoiceLine());
-            
+
             Sale sale = new Sale
             {
                 Id = id,

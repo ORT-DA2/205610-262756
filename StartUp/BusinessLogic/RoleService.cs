@@ -23,8 +23,7 @@ namespace StartUp.BusinessLogic
         {
             var permissionsCriteria = searchCriteria.Permission ?? string.Empty;
 
-            Expression<Func<Role, bool>> roleFilter = role =>
-                role.Permission == permissionsCriteria;
+            Expression<Func<Role, bool>> roleFilter = role => true;
 
             return _roleRepository.GetAllByExpression(roleFilter).ToList();
         }

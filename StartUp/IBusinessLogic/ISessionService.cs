@@ -21,5 +21,6 @@ namespace StartUp.IBusinessLogic
         TokenAccess GetUserToken();
         User GetTokenUser(string token);
         void SaveUserSession();
+        string CleanAuthorization(string authorizationHeader);
     }
 }

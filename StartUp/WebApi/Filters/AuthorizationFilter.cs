@@ -32,7 +32,7 @@ namespace StartUp.WebApi.Filters
             {
                 if (authorizationHeader.ToString().Contains("Bearer "))
                 {
-                    authorizationHeader = CleanAuthorization(authorizationHeader);
+                    authorizationHeader = sessionService.CleanAuthorization(authorizationHeader);
                 }
                 try
                 {
@@ -65,16 +65,6 @@ namespace StartUp.WebApi.Filters
                     };
                 }
             }
-        }
-
-        private string CleanAuthorization(string authorizationHeader)
-        {
-            string authorization = "";
-            for (int i = 7; i < authorizationHeader.Length; i++)
-            {
-                authorization = authorization + authorizationHeader[i];
-            }
-            return authorization;
         }
 
         protected ISessionService GetSessionService(AuthorizationFilterContext context)

@@ -22,6 +22,11 @@ namespace StartUp.DataAccess.Repositories
         {
             return _context.Set<Session>().FirstOrDefault(expression);
         }
+        
+        public Session GetSession()
+        {
+            return _context.Set<Session>().FirstOrDefault();
+        }
 
         public override void InsertOne(Session elem)
         {

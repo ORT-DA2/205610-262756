@@ -1,4 +1,13 @@
 <main id="main" class="main">
+    <div *ngIf="successfulResponse" class="alert alert-success alert-dismissible fade show " role="alert">
+        {{successfulResponseMessage}}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <div *ngIf="errorResponse" class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{errorResponseMessage}}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
     <div class="card">
         <div class="card-body">
             <h5 class="card-title">Invitations</h5>
@@ -18,60 +27,184 @@
             <div class="tab-content pt-2" id="borderedTabJustifiedContent">
                 <div class="tab-pane fade show active" id="bordered-justified-create" role="tabpanel"
                     aria-labelledby="create-tab">
-                    <form class="row g-3 needs-validation" novalidate>
-                        <div class="col-12">
-                            <label for="username" class="form-label">User name</label>
-                            <input type="text" name="username" class="form-control" id="username" #username required />
-                            <div class="invalid-feedback">
-                                Please, enter a valid User name!
+                    <form [formGroup]="formCreateInvitation" class="row g-3 needs-validation"
+                        (submit)="createInvitation()">
+                        <div class="form-group col-12">
+                            <label for="userName" class="form-label">User name</label>
+                            <input formControlName="userName" type="text" name="userName" class="form-control"
+                                id="userName" maxlength="50" />
+                            <div *ngIf="formCreateInvitation.controls['userName'].invalid &&
+                                (formCreateInvitation.controls['userName'].dirty || 
+                                formCreateInvitation.controls['userName'].touched)" class="alert alert-danger">
+                                <div *ngIf="formCreateInvitation.controls['userName'].errors?.['maxLength']">
+                                    user name is required.
+                                </div>
+                                <div *ngIf="formCreateInvitation.controls['userName'].errors?.['required']">
+                                    user name is required.
+                                </div>
                             </div>
                         </div>
 
-                        <div>
-                            <div class="col-12">
-                                <label for="role" class="form-label">Role</label>
-                                <input type="email" name="email" class="form-control" id="yourEmail" required />
-                                <div class="invalid-feedback">
-                                    Please enter a valid Email adddress!
-                                </div>
-                            </div>
-
-                            <div class="col-12">
-                                <label for="yourPassword" class="form-label">Password</label>
-                                <input type="password" name="password" class="form-control" id="yourPassword"
-                                    required />
-                                <div class="invalid-feedback">
-                                    Please enter your password!
-                                </div>
-                            </div>
-
-                            <div class="col-12">
-                                <label for="address" class="form-label">Address</label>
-                                <input type="text" name="address" class="form-control" id="address" required />
-                                <div class="invalid-feedback">
-                                    Please, enter a valid address!
-                                </div>
-                            </div>
-
-                            <div class="col-12">
-                                <button class="btn btn-primary w-100" type="submit">
-                                    Register
-                                </button>
-                            </div>
-                        </div>
                         <div class="col-12">
-                            <p class="small mb-0">
-                                Already have an account?
-                                <a [routerLink]="'/login'">Log in</a>
-                            </p>
+                            <button class="btn btn-secondary w-100 dropdown-toggle" type="button" id="roleDropDown"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                Roles
+                            </button>
+                            <ul class="dropdown-menu col-12" aria-labelledby="roleDropDown">
+                                <li class="col-12 form-check form-switch" *ngFor='let role of Roles[0];'>
+                                    <input formControlName="role" id={{role.permission}} class="form-check-input"
+                                        type="radio" name="role" value="{{role.permission}}">
+                                    <label class="form-check-label" for="flexRadioDisabled">
+                                        {{role.permission | uppercase}}
+                                    </label>
+                                </li>
+                                <div *ngIf="formCreateInvitation.controls['role'].invalid &&
+                                (formCreateInvitation.controls['role'].dirty ||
+                                formCreateInvitation.controls['role'].touched)" class="alert alert-danger">
+                                    <div *ngIf="formCreateInvitation.controls['role'].errors?.['required']">
+                                        role is required.
+                                    </div>
+                                </div>
+                            </ul>
+                        </div>
+
+                        <div class="col-12" *ngIf="selectedRole != 'administrator'">
+                            <button class="btn btn-secondary w-100 dropdown-toggle" type="button" id="pharmaDropDown"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                Pharmacy
+                            </button>
+                            <ul class="dropdown-menu col-12" aria-labelledby="pharmaDropDown">
+                                <li class="col-12 form-check form-switch" *ngFor='let pharma of Pharmacies[0];'>
+                                    <input id={{pharma.name}} class="form-check-input" type="radio" name="pharmacy"
+                                        value="{{pharma.name}}" (change)="onPharmacieChecked($event)"
+                                        formControlName="pharmacy">
+                                    <label class="form-check-label" for="flexRadioDisabled">
+                                        {{pharma.name | uppercase}}
+                                    </label>
+                                </li>
+                                <div *ngIf="formCreateInvitation.controls['pharmacy'].invalid &&
+                                        (formCreateInvitation.controls['pharmacy'].dirty ||
+                                        formCreateInvitation.controls['pharmacy'].touched)" class="alert alert-danger">
+                                    <div *ngIf="formCreateInvitation.controls['pharmacy'].errors?.['required']">
+                                        pharmacy is required.
+                                    </div>
+                                </div>
+                            </ul>
+                        </div>
+
+                        <div class="col-12">
+                            <button [disabled]="formCreateInvitation.pristine || formCreateInvitation.invalid"
+                                class="btn btn-primary w-100" type="submit">
+                                Create Invitation
+                            </button>
                         </div>
                     </form>
                 </div>
                 <div class="tab-pane fade" id="bordered-justified-view" role="tabpanel" aria-labelledby="view-tab">
-                    Nesciunt totam et. Consequuntur magnam aliquid eos nulla dolor iure eos quia. Accusantium distinctio
-                    omnis et atque fugiat. Itaque doloremque aliquid sint quasi quia distinctio similique. Voluptate
-                    nihil
-                    recusandae mollitia dolores. Ut laboriosam voluptatum dicta.
+                    <div class="list-group">
+                        <button data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                            *ngFor='let inv of Invitations[0]' id={{inv.userName}} type="button"
+                            class="list-group-item list-group-item-action" (click)="changeSelectedInvitation(inv)"
+                            [disabled]="inv.state == 'Not available'">
+                            UserName: {{inv.userName}}
+                            Role: {{inv.rol}}
+                            Code: {{inv.code}}
+                            State: {{inv.state}}
+                            <span *ngIf="inv.pharmacy != null">Pharmacy: {{inv.pharmacy.name | uppercase}}</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- edit Modal -->
+                <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+                    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form [formGroup]="formEditInvitation" class="row g-3 needs-validation">
+                                    <div class="col-12">
+                                        <label for="userName" class="form-label">User name</label>
+                                        <input formControlName="userName" type="text" name="userName"
+                                            class="form-control" id="userName" />
+                                    </div>
+
+                                    <div class="container" style="margin-top: 1rem!important;">
+                                        <div class="row">
+                                            <div class="col">
+                                                <label for="role">{{selectedRole}}</label>
+                                            </div>
+                                            <div class="col">
+                                                <button class="btn btn-secondary w-100 dropdown-toggle" type="button"
+                                                    id="roleDropDown" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    Roles
+                                                </button>
+                                                <ul class="dropdown-menu col-12" aria-labelledby="roleDropDown">
+                                                    <li class="col-12 form-check form-switch"
+                                                        *ngFor='let role of Roles[0];'>
+                                                        <input id={{role.permission}}
+                                                            class="form-control form-check-input" type="radio"
+                                                            name="role" formControlName="role"
+                                                            value="{{role.permission}}">
+                                                        <label class="form-check-label" for="flexRadioDisabled">
+                                                            {{role.permission | uppercase}}
+                                                        </label>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="container" *ngIf="selectedRole != 'administrator'"
+                                        style="margin-top: 1rem!important;">
+                                        <div class="row">
+                                            <div class="col">
+                                                <label for="pharmacy" class="form-label">{{selectedPharmacy}}</label>
+                                            </div>
+                                            <div class="col">
+                                                <button class="btn btn-secondary w-100 dropdown-toggle" type="button"
+                                                    id="pharmaDropDown" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    Pharmacy
+                                                </button>
+
+                                                <ul class="dropdown-menu col" aria-labelledby="pharmaDropDown">
+                                                    <li class="col-12 form-check form-switch"
+                                                        *ngFor='let pharma of Pharmacies[0];'>
+                                                        <input id={{pharma.name}} class="form-control form-check-input"
+                                                            type="radio" name="pharmacy" value="{{pharma.name}}"
+                                                            formControlName="pharmacy">
+                                                        <label class="form-check-label" for="flexRadioDisabled">
+                                                            {{pharma.name | uppercase}}
+                                                        </label>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="container" style="margin-top: 1rem!important;">
+                                        <div class="row">
+                                            <div class="col">
+                                                <label class="form-label">{{code}}</label>
+                                            </div>
+                                            <div class="col">
+                                                <button class="btn btn-secondary w-100"
+                                                    (click)="generateNewCode()">Generate new code</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary" (click)="editInvitation()"
+                                    data-bs-dismiss="modal">Edit</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

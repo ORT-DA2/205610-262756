@@ -1,33 +1,48 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { stringify } from 'querystring';
-import { catchError, Observable, throwError } from 'rxjs';
-import { InvitationModel } from 'src/app/Models/invitationModel';
-import { InvitationSearchCriteria } from 'src/app/Models/SearchCriteria/invitationSearchCriteria';
+import { HttpClient } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError, map, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { InvitationModel } from 'src/app/Models/invitationModel';
 
 @Injectable({
   providedIn: 'root'
 })
 export class InvitationService {
 
-  private URL: string = `${environment.API_URL}/invitation`;
+  public errorMessage: string;
+  public URL: string = `${environment.API_URL}/invitation`;
 
   constructor(private http: HttpClient) { }
 
-  postInvitation(invitation: InvitationModel) {
-    let params = new HttpParams;
-    params.append("username", invitation.username);
-    params.append("code", invitation.rol);
-    if (invitation.pharmacy) {
-      params.append("pharmacyName", invitation.pharmacy.name);
-    }
+  generateNewCode(): Observable<any> {
+    return this.http.get<any>(this.URL + '/generateCode')
+      .pipe(
+        tap(
+          {
+            next: (data: any) => { console.log(data) },
+            error: (error: any) => { return error.message }
+          }
+        )
+      );
+  }
 
-    return this.http.post<InvitationModel>(this.URL, { observe: 'body', params })
+  updateInvitation(id: number, invitation: InvitationModel): Observable<any> {
+    var req = this.http.put<any>(this.URL + `/${id}`, invitation);
+
+    return req;
+  }
+
+  postInvitation(invitation: InvitationModel): Observable<any> {
+    var req = this.http.post<InvitationModel>(this.URL, invitation);
+    return req;
   }
 
   getInvitation(userName: string, code: number): Observable<any> {
-
     return this.http.get<any>(this.URL + `/${userName}` + `/${code}`);
+  };
+
+  getAllInvitations(): Observable<any> {
+    return this.http.get<any>(this.URL);
   };
 }

@@ -22,27 +22,29 @@
                                 </div>
 
                                 <form class="row g-3 needs-validation" novalidate>
-                                    <div class="col-12">
-                                        <label for="username" class="form-label">User name</label>
-                                        <input [(ngModel)]="username" type="text" name="username" class="form-control"
-                                            id="username" required />
-                                        <div class="invalid-feedback">
-                                            Please, enter a valid User name!
+                                    <div *ngIf="showRegister.value == false">
+                                        <div class="col-12">
+                                            <label for="username" class="form-label">User name</label>
+                                            <input [(ngModel)]="username" type="text" name="username"
+                                                class="form-control" id="username" required />
+                                            <div class="invalid-feedback">
+                                                Please, enter a valid User name!
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <div class="col-12">
-                                        <label for="code" class="form-label">Code</label>
-                                        <input [(ngModel)]="code" type="number" name="code" class="form-control"
-                                            id="code" min="100000" max="999999" required />
-                                        <div class="invalid-feedback">Please enter a valid code!</div>
-                                    </div>
+                                        <div class="col-12">
+                                            <label for="code" class="form-label">Code</label>
+                                            <input [(ngModel)]="code" type="number" name="code" class="form-control"
+                                                id="code" min="100000" max="999999" required />
+                                            <div class="invalid-feedback">Please enter a valid code!</div>
+                                        </div>
 
-                                    <div class="col-12" *ngIf="showRegister.value == false">
-                                        <button class="btn btn-primary w-100" type="submit"
-                                            (click)="isValidInvitation()">
-                                            Validate invitation
-                                        </button>
+                                        <div class="col-12">
+                                            <button class="btn btn-primary w-100" type="submit"
+                                                (click)="isValidInvitation()">
+                                                Validate invitation
+                                            </button>
+                                        </div>
                                     </div>
 
                                     <div *ngIf="showRegister.value == true">
