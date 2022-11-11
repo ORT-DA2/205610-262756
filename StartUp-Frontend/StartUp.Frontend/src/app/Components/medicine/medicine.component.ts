@@ -30,10 +30,10 @@ export class MedicineComponent implements OnInit {
   constructor(private medicineService: MedicineService) { }
 
   ngOnInit(): void {
-    this.createFormPharmacy();
+    this.createFormMedicine();
   }
 
-  createFormPharmacy() {
+  createFormMedicine() {
     this.formCreateMedicine = new FormGroup(
       {
         name: new FormControl('', [

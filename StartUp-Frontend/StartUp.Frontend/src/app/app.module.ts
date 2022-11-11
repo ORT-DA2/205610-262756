@@ -17,6 +17,7 @@ import { AuthService } from './auth/auth.service';
 import { RoleComponent } from './Components/role/role.component';
 import { PharmacyComponent } from './Components/pharmacy/pharmacy.component';
 import { MedicineComponent } from './Components/medicine/medicine.component';
+import { PetitionComponent } from './Components/petition/petition.component';
 
 
 @NgModule({
@@ -31,7 +32,8 @@ import { MedicineComponent } from './Components/medicine/medicine.component';
     UserComponent,
     RoleComponent,
     PharmacyComponent,
-    MedicineComponent
+    MedicineComponent,
+    PetitionComponent
   ],
   imports: [
     BrowserModule,
