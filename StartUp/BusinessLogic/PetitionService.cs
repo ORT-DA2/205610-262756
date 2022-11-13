@@ -26,7 +26,7 @@ namespace StartUp.BusinessLogic
 
         public List<Petition> GetAllPetition(PetitionSearchCriteria searchCriteria)
         {
-            Pharmacy pharmacy = _pharmacyRepository.GetOneByExpression(p => p.Id == _sessionService.UserLogged.Pharmacy.Id);
+            Pharmacy pharmacy = _pharmacyRepository.GetOneByExpression(p => p.Name == _sessionService.UserLogged.Pharmacy.Name);
 
             var medicineCodeCriteria = searchCriteria.MedicineCode?.ToLower() ?? string.Empty;
 
