@@ -16,7 +16,6 @@ namespace StartUp.WebApi.Exporters
             Directory.CreateDirectory($"{routeName}.XML");
             Environment.CurrentDirectory = ($"{routeName}.XML");
             XmlWriter xmlWriter = XmlWriter.Create("Medicines.XML");
-            //string pathString = Path.Combine($"{routeName}.XML", xmlWriter.ToString());
 
             xmlWriter.WriteStartDocument();
 
@@ -34,12 +33,10 @@ namespace StartUp.WebApi.Exporters
                 {
                     xmlWriter.WriteAttributeString("Symptom Description", sym.SymptomDescription);
                 }
-
-                xmlWriter.WriteEndDocument();
-                xmlWriter.Close();
-                }
+            }
+            xmlWriter.WriteEndDocument();
+            xmlWriter.Close();
+            Environment.CurrentDirectory = @"D:\\Escritorio\\ORT\\5to\\DA2\\Obligatorio 2\\205610-262756\\StartUp\\WebApi";
         }
-        Environment.CurrentDirectory = @"D:\\Escritorio\\ORT\\5to\\DA2\\Obligatorio 2\\205610-262756\\StartUp\\WebApi";
-           
     }
 }
