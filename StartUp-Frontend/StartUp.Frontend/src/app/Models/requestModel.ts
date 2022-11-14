@@ -1,6 +1,6 @@
 import { PetitionModel } from "./petitionModel";
 
 export class RequestModel {
-    petitions: Array<PetitionModel>[];
+    petitions: Array<PetitionModel>;
     state: string;
 }

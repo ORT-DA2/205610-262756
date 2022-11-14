@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { SessionModel } from 'src/app/Models/sessionModel';
 import { UserService } from '../user/user.service';
+import { RequestOptions } from 'http';
 
 @Injectable({
   providedIn: 'root'
@@ -13,9 +14,13 @@ import { UserService } from '../user/user.service';
 export class SessionService {
 
   public URL: string = `${environment.API_URL}/sessions`;
-  public userLogged: any;
+  public userLogged: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+  public authHeader: HttpHeaders = new HttpHeaders;
+  public token: string;
+  public options: any;
 
-  constructor(private http: HttpClient, private userService: UserService) { }
+  constructor(private http: HttpClient) {
+  }
 
   login(session: SessionModel): Observable<any> {
     var request = this.http.post<SessionModel>(this.URL, session)
@@ -27,9 +32,16 @@ export class SessionService {
         })
       );
 
-    this.userLogged = this.userService.getUser(session.userName);
-    console.log("USERLOGGED: ", this.userLogged);
-
     return request;
   };
+
+  logOut() {
+    var req = this.http.delete(this.URL + `${sessionStorage.getItem('ActualUserName')}`);
+
+    this.userLogged.next(null);
+    sessionStorage.clear();
+    console.log(sessionStorage);
+
+    return req;
+  }
 }

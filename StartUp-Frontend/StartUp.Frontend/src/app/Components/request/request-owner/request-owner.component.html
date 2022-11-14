@@ -1,0 +1,45 @@
+<main id="main" class="main">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Request of your farmacy</h5>
+            <div *ngIf="showEmptyMessage == false" class="accordion" id="accordionExample">
+                <div *ngFor="let req of Requests[0]" class="accordion-item">
+                    <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            {{req.state}}
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
+                        data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <ul class="list-group col-12">
+                                <li class="list-group-item" *ngFor="let pet of req.petitions">
+                                    <label>Medicine: {{pet.medicineCode}} - Amount: {{pet.amount}}</label>
+                                </li>
+                                <li *ngIf="req.state != 'approved'" class="list-group-item">
+                                    <div>
+                                        <button type="submit" (click)="approveRequest(req)"
+                                            class="btn btn-primary col-12">
+                                            Approve this request
+                                        </button>
+                                    </div>
+                                    <div>
+                                        <button type="submit" (click)="rejectRequest(req)"
+                                            class="btn btn-danger col-12">
+                                            Reject
+                                        </button>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="showEmptyMessage == true">
+                <label class="form-label">There's no requests yet!</label>
+            </div>
+        </div>
+    </div>
+</main>

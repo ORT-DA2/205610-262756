@@ -23,7 +23,7 @@ namespace StartUp.DataAccess.Repositories
 
         public override Pharmacy GetOneByExpression(Expression<Func<Pharmacy, bool>> expression)
         {
-            return _context.Set<Pharmacy>().Include("Stock").Include("Requests").Include("Sales").FirstOrDefault(expression);
+            return _context.Set<Pharmacy>().Include("Stock").Include("Requests").Include("Sales").Include("Petitions").FirstOrDefault(expression);
         }
 
         public override void InsertOne(Pharmacy elem)

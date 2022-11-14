@@ -198,11 +198,17 @@ namespace StartUp.DataAccess.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     MedicineCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Amount = table.Column<int>(type: "int", nullable: false),
+                    PharmacyId = table.Column<int>(type: "int", nullable: true),
                     RequestId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Petitions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Petitions_Pharmacies_PharmacyId",
+                        column: x => x.PharmacyId,
+                        principalTable: "Pharmacies",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Petitions_Requests_RequestId",
                         column: x => x.RequestId,
@@ -274,6 +280,11 @@ namespace StartUp.DataAccess.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Medicines_PharmacyId",
                 table: "Medicines",
+                column: "PharmacyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Petitions_PharmacyId",
+                table: "Petitions",
                 column: "PharmacyId");
 
             migrationBuilder.CreateIndex(

@@ -1,5 +1,5 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { HeaderService } from '../header/header.service';
+import { Component, OnInit } from '@angular/core';
+import { SessionService } from '../session/session.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -7,11 +7,23 @@ import { HeaderService } from '../header/header.service';
   styleUrls: ['./sidebar.component.css']
 })
 export class SidebarComponent implements OnInit {
+  user: any
+  role: any;
 
-  constructor(private headerService: HeaderService) {
+  constructor(private sessionService: SessionService) {
+    this.sessionService.userLogged.subscribe(
+      user => {
+        this.user = user;
+        this.role = user?.invitation.rol;
+      }
+    );
   }
 
   ngOnInit(): void {
+  }
+
+  ngOnChange(): void {
+    this.role = sessionStorage.getItem('role');
   }
 
 }

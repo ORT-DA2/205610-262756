@@ -1,8 +1,9 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { MedicineModel } from 'src/app/Models/medicineModel';
 import { environment } from 'src/environments/environment';
+import { SessionService } from '../session/session.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,13 +12,26 @@ export class MedicineService {
 
   public URL: string = `${environment.API_URL}/medicine`;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private sessionService: SessionService) { }
 
   postMedicine(medicine: MedicineModel): Observable<any> {
-    return this.http.post<MedicineModel>(this.URL, medicine);
+
+    const reqOp = {
+      headers: new HttpHeaders({
+        Authorization: `Bearer ${this.sessionService.token}`
+      })
+    };
+
+    console.log("header", reqOp);
+    return this.http.post<MedicineModel>(this.URL, medicine, reqOp);
   }
 
   getMedicine(): Observable<any> {
-    return this.http.get<MedicineModel>(this.URL);
+    const reqOp = {
+      headers: new HttpHeaders({
+        Authorization: `Bearer ${this.sessionService.token}`
+      })
+    };
+    return this.http.get<MedicineModel>(this.URL, reqOp);
   }
 }

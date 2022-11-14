@@ -35,7 +35,7 @@ namespace StartUp.WebApi.Controllers
         }
 
         [HttpPost]
-        //[AuthorizationFilter("employee")]
+        [AuthorizationFilter("employee")]
         public IActionResult CreateMedicine([FromBody] MedicineModel newMedicine)
         {
             var createdMedicine = _medicineService.CreateMedicine(newMedicine.ToEntity());

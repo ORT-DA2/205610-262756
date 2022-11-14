@@ -112,6 +112,7 @@ export class MedicineComponent implements OnInit {
         this.successfulResponseMessage = `${medicine.name} was created successfully`
         this.errorResponse = false;
         this.formCreateMedicine.reset();
+        this.symptoms = [];
       },
       error => {
         this.errorResponseMessage = error.error;

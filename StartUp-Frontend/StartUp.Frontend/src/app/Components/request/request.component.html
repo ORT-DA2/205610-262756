@@ -1,0 +1,36 @@
+<p>request works!</p>
+<main id="main" class="main">
+    <div *ngIf="successfulResponse" class="alert alert-success alert-dismissible fade show " role="alert">
+        {{successfulResponseMessage}}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <div *ngIf="errorResponse" class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{errorResponseMessage}}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Make a request</h5>
+
+            <label class="form-label">
+                Check the petitions you want to inlcude on your request:
+            </label>
+            <ul class="list-group list-petitions">
+                <li *ngFor='let pet of petitions[0];' class=" list-group-item">
+                    <input (change)="onChange(pet, $event)" class="form-check-input me-1" type="checkbox">
+                    <label class="form-check-label" for="flexRadioDisabled">
+                        Code: {{pet.medicineCode}} - Amount: {{pet.amount}}
+                    </label>
+                </li>
+            </ul>
+
+            <div>
+                <div class="row-6">
+                    <button type="submit" (click)="createRequest()" class="btn btn-primary col-12">Create
+                        Request
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

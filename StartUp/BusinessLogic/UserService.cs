@@ -77,7 +77,7 @@ namespace BusinessLogic
             user.ChangeStatusInvitation();
             user.RegisterDate = DateTime.Now;
 
-            if (user.Pharmacy != null && user.Roles.Permission.Contains("administrador"));
+            if ((user.Pharmacy != null) && !user.Roles.Permission.Contains("administrator"))
             {
                 user.Pharmacy = _pharmacyRepository.GetOneByExpression(p => p.Name == user.Pharmacy.Name);
             }

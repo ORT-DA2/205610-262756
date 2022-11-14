@@ -9,7 +9,7 @@ namespace StartUp.WebApi.Controllers
 {
     [Route("api/petition")]
     [ApiController]
-    //[AuthorizationFilter("employee")]
+    [AuthorizationFilter("employee")]
     public class PetitionController : ControllerBase
     {
         private readonly IPetitionService _petitionService;
@@ -17,6 +17,14 @@ namespace StartUp.WebApi.Controllers
         public PetitionController(IPetitionService service)
         {
             _petitionService = service;
+        }
+
+        [HttpGet("fromPharmacy", Name="fromPharmacy")]
+
+        public IActionResult GetPetitions([FromQuery] PetitionSearchCriteriaModel searchCriteria)
+        {
+            var retrievedPetition = _petitionService.GetPharmacyPetitons(searchCriteria.ToEntity());
+            return Ok(retrievedPetition.Select(p => new PetitionBasicModel(p)));
         }
 
         [HttpGet]
