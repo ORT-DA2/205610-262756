@@ -1,34 +1,34 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { PharmacyModel } from 'src/app/Models/pharmacyModel';
+import { PetitionModel } from 'src/app/Models/petitionModel';
 import { environment } from 'src/environments/environment';
-import { SessionService } from '../session/session.service';
+import { SessionService } from '../../session/session.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class PharmacyService {
+export class PetitionService {
 
-  public URL: string = `${environment.API_URL}/pharmacy`;
+  public URL: string = `${environment.API_URL}/petition`;
 
   constructor(private http: HttpClient, private sessionService: SessionService) { }
 
-  getPharmacies(): Observable<any> {
+  postPetition(medicine: PetitionModel): Observable<any> {
     const reqOp = {
       headers: new HttpHeaders({
         Authorization: `Bearer ${this.sessionService.token}`
       })
     };
-    return this.http.get<any>(this.URL, reqOp);
-  };
+    return this.http.post<PetitionModel>(this.URL, medicine, reqOp);
+  }
 
-  postPharmacy(pharmacy: PharmacyModel): Observable<any> {
+  getPetitions() {
     const reqOp = {
       headers: new HttpHeaders({
         Authorization: `Bearer ${this.sessionService.token}`
       })
     };
-    return this.http.post<PharmacyModel>(this.URL, pharmacy, reqOp);
-  };
+    return this.http.get(this.URL + "/fromPharmacy", reqOp);
+  }
 }

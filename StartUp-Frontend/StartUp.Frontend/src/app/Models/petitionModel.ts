@@ -1,4 +1,4 @@
 export class PetitionModel {
-    code: string;
+    medicineCode: string;
     amount: number;
 }

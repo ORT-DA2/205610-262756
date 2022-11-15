@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HeaderService } from './header.service';
+import { SessionService } from '../session/session.service';
 
 @Component({
   selector: 'app-header',
@@ -8,12 +8,23 @@ import { HeaderService } from './header.service';
 })
 
 export class HeaderComponent implements OnInit {
+  public user: any;
 
-  constructor(private service: HeaderService) {
+  constructor(private sessionService: SessionService) {
+    this.sessionService.userLogged.subscribe(
+      user => { this.user = user; }
+    );
   }
 
   public toggle() {
     document.body.classList.toggle('toggle-sidebar');
+  }
+
+  loadUserLogged() {
+  }
+
+  logOut() {
+    this.sessionService.logOut();
   }
 
   ngOnInit(): void {

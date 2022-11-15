@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
 import { InvitationModel } from 'src/app/Models/invitationModel';
 import { PharmacyModel } from 'src/app/Models/pharmacyModel';
-import { PharmacyService } from '../pharmacy/pharmacy.service';
-import { RoleService } from '../role/role.service';
+import { PharmacyService } from '../../pharmacy/pharmacy.service';
+import { RoleService } from '../../role/role.service';
 import { InvitationService } from './invitation.service';
 
 @Component({
@@ -15,7 +15,7 @@ export class InvitationComponent implements OnInit {
 
   Roles: Array<any> = [];
   Pharmacies: Array<any> = [];
-  Invitations: Array<any> = [];
+  Invitations: any[] = [];
   username: string = "";
   selectedRole: any = null;
   selectedPharmacy: any = null;
@@ -33,7 +33,9 @@ export class InvitationComponent implements OnInit {
     private pharmacyService: PharmacyService, private invitationService: InvitationService) {
     this.getAllRoles();
     this.getAllPharmacies();
-    this.getAllInvitations();
+    this.invitationService.getAllInvitations().forEach(inv => {
+      this.Invitations.push(inv)
+    });
   }
 
   ngOnInit(): void {
@@ -130,8 +132,7 @@ export class InvitationComponent implements OnInit {
     this.invitationService.postInvitation(invModel)
       .subscribe(
         data => {
-          console.log(data);
-          this.Invitations.push(data);
+          this.Invitations[0].push(data);
           this.successfulResponse = true;
           this.successfulResponseMessage = `An invitation for ${invModel.username} was created with the code ${data.code}`
           this.errorResponse = false;
@@ -141,28 +142,22 @@ export class InvitationComponent implements OnInit {
           this.errorResponseMessage = error.error;
           if (this.errorResponseMessage != null) {
             this.errorResponse = true;
+            this.successfulResponse = false;
           }
         }
       );
-
-    this.getAllInvitations();
   }
 
   generateNewCode() {
     this.invitationService.generateNewCode().subscribe(
       (newCode: any) => {
         this.code = newCode;
-        console.log(this.code);
       }
     );
   }
 
   changeSelectedInvitation(inv: any) {
-    this.Invitations[0].forEach((invit: any) => {
-      if (invit.code == inv.code) {
-        this.selectedToEdit = invit;
-      }
-    });
+    this.selectedToEdit = inv
 
     this.formEditInvitation.controls['userName'].setValue(inv.userName);
     this.formEditInvitation.controls['role'].setValue(inv.rol);
@@ -177,15 +172,30 @@ export class InvitationComponent implements OnInit {
   editInvitation() {
     this.selectedToEdit.userName = this.username;
     this.selectedToEdit.rol = this.selectedRole;
+    console.log(this.selectedRole);
     this.selectedToEdit.code = this.code;
-    console.log(this.code);
-    if (this.selectedRole != 'administrator') {
+    if (this.selectedToEdit.rol != 'administrator') {
       this.selectedToEdit.pharmacy.id = 0;
       this.selectedToEdit.pharmacy.name = this.selectedPharmacy;
+      console.log("here");
+    } else {
+      this.selectedToEdit.pharmacy = null;
     }
-    this.invitationService.updateInvitation(this.selectedToEdit.id, this.selectedToEdit).subscribe(invit => {
-      console.log(invit);
-    });
+    this.invitationService.updateInvitation(this.selectedToEdit.id, this.selectedToEdit).subscribe(
+      data => {
+        this.Invitations[0].push(data);
+        this.successfulResponse = true;
+        this.successfulResponseMessage = `the invitation for ${this.selectedToEdit.userName} was edited successfully`
+        this.errorResponse = false;
+        this.formCreateInvitation.reset();
+      },
+      error => {
+        this.errorResponseMessage = error.error;
+        if (this.errorResponseMessage != null) {
+          this.errorResponse = true;
+        }
+      }
+    );
   }
 
   requiredPharmacy(formGroup: FormGroup) {
@@ -203,12 +213,6 @@ export class InvitationComponent implements OnInit {
   private getAllPharmacies() {
     this.pharmacyService.getPharmacies().forEach(ph => {
       this.Pharmacies.push(ph);
-    });
-  }
-
-  private getAllInvitations() {
-    this.invitationService.getAllInvitations().forEach(inv => {
-      this.Invitations.push(inv);
     });
   }
 }

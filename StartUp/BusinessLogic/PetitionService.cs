@@ -24,9 +24,29 @@ namespace StartUp.BusinessLogic
             _sessionService = sessionService;
         }
 
+
+        public List<Petition> GetPharmacyPetitons(PetitionSearchCriteria searchCriteria)
+        {
+            Pharmacy pharmacy = _pharmacyRepository.GetOneByExpression(p => p.Name == _sessionService.UserLogged.Pharmacy.Name);
+            
+            var medicineCodeCriteria = searchCriteria.MedicineCode?.ToLower() ?? string.Empty;
+            
+            List<Petition> listSalved = new List<Petition>();
+
+            foreach (var petition in pharmacy.Petitions)
+            {
+                if (petition.MedicineCode.Contains(medicineCodeCriteria))
+                {
+                    listSalved.Add(petition);
+                }
+            }
+
+            return listSalved;
+        }
+
         public List<Petition> GetAllPetition(PetitionSearchCriteria searchCriteria)
         {
-            Pharmacy pharmacy = _pharmacyRepository.GetOneByExpression(p => p.Id == _sessionService.UserLogged.Pharmacy.Id);
+            Pharmacy pharmacy = _pharmacyRepository.GetOneByExpression(p => p.Name == _sessionService.UserLogged.Pharmacy.Name);
 
             var medicineCodeCriteria = searchCriteria.MedicineCode?.ToLower() ?? string.Empty;
 
@@ -78,6 +98,7 @@ namespace StartUp.BusinessLogic
             }
             else
             {
+                pharmacy.Petitions.Add(petition);
                 _petitionRepository.InsertOne(petition);
                 _petitionRepository.Save();
 

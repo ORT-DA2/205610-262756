@@ -1,7 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { UserModel } from 'src/app/Models/userModel';
 import { environment } from 'src/environments/environment';
+import { SessionService } from '../session/session.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,7 @@ export class UserService {
 
   public URL: string = `${environment.API_URL}/user`;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private sessionService: SessionService) { }
 
   postUser(user: UserModel) {
 
@@ -24,7 +25,12 @@ export class UserService {
   }
 
   getUser(username: string): any {
-    let req = this.http.get(this.URL + `/${username}`);
+    const reqOp = {
+      headers: new HttpHeaders({
+        Authorization: `Bearer ${this.sessionService.token}`
+      })
+    };
+    let req = this.http.get(this.URL + `/${username}`, reqOp);
 
     return req;
   }

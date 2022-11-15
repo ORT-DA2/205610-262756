@@ -21,15 +21,16 @@ export class PetitionComponent implements OnInit {
   constructor(private petitionService: PetitionService) { }
 
   ngOnInit(): void {
+    this.createFormPetition();
   }
 
   createFormPetition() {
     this.formCreatePetition = new FormGroup(
       {
-        name: new FormControl('', [
+        code: new FormControl('', [
           Validators.required,
         ]),
-        code: new FormControl('', [
+        amount: new FormControl('', [
           Validators.required,
         ]),
       }
@@ -50,12 +51,13 @@ export class PetitionComponent implements OnInit {
   createPetition() {
     var petition = new PetitionModel();
     petition.amount = this.amount;
-    petition.code = this.code;
+    petition.medicineCode = this.code;
+    console.log(petition);
 
     this.petitionService.postPetition(petition).subscribe(
       data => {
         this.successfulResponse = true;
-        this.successfulResponseMessage = `${petition.code} was created successfully`
+        this.successfulResponseMessage = `${petition.medicineCode} was created successfully`
         this.errorResponse = false;
         this.formCreatePetition.reset();
       },
