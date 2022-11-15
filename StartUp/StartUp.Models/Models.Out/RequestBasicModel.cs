@@ -1,4 +1,5 @@
-﻿using StartUp.Domain;
+﻿#nullable enable
+using StartUp.Domain;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,11 +10,13 @@ namespace StartUp.Models.Models.Out
     {
         public int Id { get; set; }
         public string State { get; set; }
+        public List<Petition> ?Petitions { get; set; }
 
         public RequestBasicModel(Request request)
         {
             this.Id = request.Id;
             this.State = request.State;
+            this.Petitions = request.Petitions;
         }
 
         public override bool Equals(object? obj)

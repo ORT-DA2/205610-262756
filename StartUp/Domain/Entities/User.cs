@@ -91,16 +91,20 @@ namespace StartUp.Domain.Entities
         public void VerifyRolesAndPharmacy()
         {
            if(this.Invitation.Rol.ToLower() == "administrator" && this.Pharmacy != null || 
-                this.Invitation.Rol.ToLower() != "adminisrador" && this.Pharmacy == null){
+                this.Invitation.Rol.ToLower() != "administrator" && this.Pharmacy == null){
                 throw new InputException("The role does not match the pharmacy");
             }
         }
 
         public void VerifyInvitationPharmacy()
         {
-            if (this.Invitation.Pharmacy.Name! == this.Pharmacy.Name)
+            if (this.Invitation.Rol != "administrator")
             {
-                throw new InputException("The user must have assigned the pharmacy that has assigned their invitation");
+                if (this.Invitation.Pharmacy.Name != this.Pharmacy.Name)
+                {
+                    throw new InputException(
+                        "The user must have assigned the pharmacy that has assigned their invitation");
+                }
             }
         }
 

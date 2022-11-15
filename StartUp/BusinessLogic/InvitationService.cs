@@ -64,7 +64,7 @@ namespace StartUp.BusinessLogic
         public Invitation CreateInvitation(Invitation invitation)
         {
             invitation.IsValidInvitation();
-            UsernameNotExistInDataBase(invitation);
+            UsernameNotExistInDataBase(invitation, invitation.Id);
             ValidateInvitationRoles(invitation);
             ValidatePharmacyExist(invitation);
 
@@ -81,7 +81,7 @@ namespace StartUp.BusinessLogic
         public Invitation UpdateInvitation(int invitationId, Invitation updatedInvitation)
         {
             updatedInvitation.IsValidInvitation();
-            UsernameNotExistInDataBase(updatedInvitation);
+            UsernameNotExistInDataBase(updatedInvitation, invitationId);
             ValidateInvitationRoles(updatedInvitation);
             ValidatePharmacyExist(updatedInvitation);
 
@@ -123,11 +123,11 @@ namespace StartUp.BusinessLogic
             _invitationRepository.Save();
         }
 
-        private void UsernameNotExistInDataBase(Invitation invitation)
+        private void UsernameNotExistInDataBase(Invitation invitation, int ?id)
         {
             var invitationSaved = _invitationRepository.GetOneByExpression(i => i.UserName == invitation.UserName);
 
-            if (invitationSaved != null)
+            if (invitationSaved != null && invitationSaved.Id != id)
             {
                 throw new InputException($"An invitation already exists for that user {invitation.UserName}");
             }
@@ -155,7 +155,7 @@ namespace StartUp.BusinessLogic
             }
             if (invitation.Rol.ToLower() == "administrator" && invitation.Pharmacy != null)
             {
-                throw new InputException("The owner and the employee roles need a pharmacy");
+                throw new InputException("The administrator can't have a pharmacy");
             }
             if (!roles.Contains(invitation.Rol))
             {

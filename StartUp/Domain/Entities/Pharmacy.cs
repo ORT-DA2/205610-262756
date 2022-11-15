@@ -16,6 +16,8 @@ namespace StartUp.Domain
 
         public List<Sale> Sales { get; set; }
 
+        public List<Petition> Petitions { get; set; }
+
 
         public Pharmacy()
         {

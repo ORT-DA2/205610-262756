@@ -12,7 +12,7 @@ using StartUp.DataAccess;
 namespace StartUp.DataAccess.Migrations
 {
     [DbContext(typeof(StartUpContext))]
-    [Migration("20221104003258_InitialMigrations")]
+    [Migration("20221114020755_InitialMigrations")]
     partial class InitialMigrations
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -241,10 +241,15 @@ namespace StartUp.DataAccess.Migrations
                     b.Property<string>("MedicineCode")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("PharmacyId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("RequestId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PharmacyId");
 
                     b.HasIndex("RequestId");
 
@@ -394,6 +399,10 @@ namespace StartUp.DataAccess.Migrations
 
             modelBuilder.Entity("StartUp.Domain.Petition", b =>
                 {
+                    b.HasOne("StartUp.Domain.Pharmacy", null)
+                        .WithMany("Petitions")
+                        .HasForeignKey("PharmacyId");
+
                     b.HasOne("StartUp.Domain.Request", null)
                         .WithMany("Petitions")
                         .HasForeignKey("RequestId");
@@ -427,6 +436,8 @@ namespace StartUp.DataAccess.Migrations
 
             modelBuilder.Entity("StartUp.Domain.Pharmacy", b =>
                 {
+                    b.Navigation("Petitions");
+
                     b.Navigation("Requests");
 
                     b.Navigation("Sales");

@@ -8,6 +8,7 @@ namespace StartUp.IBusinessLogic
 {
     public interface IPetitionService
     {
+        List<Petition> GetPharmacyPetitons(PetitionSearchCriteria searchCriteria);
         List<Petition> GetAllPetition(PetitionSearchCriteria searchCriteria);
         Petition GetSpecificPetition(int petitionId);
         Petition CreatePetition(Petition petition);

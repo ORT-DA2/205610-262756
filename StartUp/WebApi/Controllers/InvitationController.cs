@@ -10,7 +10,7 @@ namespace StartUp.WebApi.Controllers
 
     [Route("api/invitation")]
     [ApiController]
-    //[AuthorizationFilter("administrator")];
+    //[AuthorizationFilter("administrator")]
     public class InvitationController : ControllerBase
     {
         private readonly IInvitationService _invitationManager;
@@ -42,7 +42,7 @@ namespace StartUp.WebApi.Controllers
         }
         
         [HttpGet("generateCode", Name = "generateCode")]
-        //[AuthorizationFilter("administrator")]
+        [AuthorizationFilter("administrator")]
         public IActionResult generateCode()
         {
             var code = _invitationManager.GenerateCode();
@@ -50,7 +50,7 @@ namespace StartUp.WebApi.Controllers
         }
 
         [HttpPost]
-        //[AuthorizationFilter("administrator")]
+        [AuthorizationFilter("administrator")]
         public IActionResult CreateInvitation([FromBody] InvitationModel newInvitation)
         {
             var createdInvitation = _invitationManager.CreateInvitation(newInvitation.ToEntity());
@@ -59,7 +59,7 @@ namespace StartUp.WebApi.Controllers
         }
 
         [HttpPut("{id}")]
-        //[AuthorizationFilter("administrator")]
+        [AuthorizationFilter("administrator")]
         public IActionResult Update(int id, [FromBody] InvitationModel updatedInvitation)
         {
             var retrievedInvitation = _invitationManager.UpdateInvitation(id, updatedInvitation.ToEntity());
@@ -67,7 +67,7 @@ namespace StartUp.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        //[AuthorizationFilter("administrator")]
+        [AuthorizationFilter("administrator")]
         public IActionResult Delete(int id)
         {
             _invitationManager.DeleteInvitation(id);

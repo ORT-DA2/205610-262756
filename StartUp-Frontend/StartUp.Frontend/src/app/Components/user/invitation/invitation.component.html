@@ -90,8 +90,7 @@
                         </div>
 
                         <div class="col-12">
-                            <button [disabled]="formCreateInvitation.pristine || formCreateInvitation.invalid"
-                                class="btn btn-primary w-100" type="submit">
+                            <button class="btn btn-primary w-100" type="submit">
                                 Create Invitation
                             </button>
                         </div>
@@ -224,8 +223,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary submit"
-                                    [disabled]="formEditInvitation.invalid" data-bs-dismiss="modal"
+                                <button type="button" class="btn btn-primary submit" data-bs-dismiss="modal"
                                     (click)="editInvitation()">Edit</button>
                             </div>
                         </div>
