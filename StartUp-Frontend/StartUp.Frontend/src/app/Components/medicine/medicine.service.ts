@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { MedicineModel } from 'src/app/Models/medicineModel';
+import { SearchCriteriaMedicine } from 'src/app/Models/SearchCriteria/searchCriteriaMedicine';
 import { environment } from 'src/environments/environment';
 import { SessionService } from '../session/session.service';
 
@@ -26,12 +27,16 @@ export class MedicineService {
     return this.http.post<MedicineModel>(this.URL, medicine, reqOp);
   }
 
-  getMedicine(): Observable<any> {
+  getMedicine(searchCriteria?: SearchCriteriaMedicine): Observable<any> {
     const reqOp = {
       headers: new HttpHeaders({
         Authorization: `Bearer ${this.sessionService.token}`
       })
     };
+    if (searchCriteria != null) {
+      return this.http.get<SearchCriteriaMedicine>(this.URL + `?Name=${searchCriteria.name}`);
+    }
+
     return this.http.get<MedicineModel>(this.URL, reqOp);
   }
 }

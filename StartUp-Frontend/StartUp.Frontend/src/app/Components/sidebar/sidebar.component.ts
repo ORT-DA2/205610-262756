@@ -23,7 +23,7 @@ export class SidebarComponent implements OnInit {
   }
 
   ngOnChange(): void {
-    this.role = sessionStorage.getItem('role');
+    this.role = localStorage.getItem('role');
   }
 
 }

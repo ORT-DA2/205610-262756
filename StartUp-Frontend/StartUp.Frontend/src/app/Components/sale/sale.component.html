@@ -1,0 +1,112 @@
+<main id="main" class="main">
+    <div *ngIf="successfulResponse" class="alert alert-success alert-dismissible fade show " role="alert">
+        {{successfulResponseMessage}}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <div *ngIf="errorResponse" class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{errorResponseMessage}}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+
+            <h5 class="card-title">Shop!<button type="button" data-bs-toggle="modal" data-bs-target="#purchaseTracking"
+                    class="btn btn-primary col-12 button-add">
+                    Purchase tracking
+                </button>
+            </h5>
+
+            <form class="d-flex col-6" role="search" style="text-align: center; margin: auto;">
+                <input [(ngModel)]="medicineName" class="form-control me-2" type="search" placeholder="Medicine"
+                    aria-label="Search">
+                <div>
+                    <button class="btn btn-outline-success" style="display: inline-block !important;" (click)="filter()"
+                        type="submit">Search</button>
+                    <button class="btn btn-outline-success clear" (click)="clear()" type="submit">Clear Filters</button>
+                </div>
+            </form>
+
+            <div class="card-body">
+                <ul class="list-group col-12">
+                    <li class="list-group-item" *ngFor='let med of medicines[0]'>
+                        <label class="label-list">Name: {{med.name}} - Presentation: {{med.presentation}} - Price:
+                            {{med.price}}</label>
+                        <button type="button" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                            (click)="changeSelectedMedicine(med)" class="btn btn-primary col-12 button-add">
+                            View
+                        </button>
+                    </li>
+                </ul>
+                <button type="submit" (click)="buy()" class="btn btn-primary col-12">
+                    Buy
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Add to cart-->
+    <div *ngIf="selectedMedicine != null" class="modal fade" id="exampleModal" tabindex="-1"
+        aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Add to cart</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-12">
+                        <label class="form-label">
+                            Name: {{ selectedMedicine?.name }} <br>
+                            Presentation: {{ selectedMedicine?.presentation }} <br>
+                            Price: {{ selectedMedicine?.price }} <br>
+                            Stock: {{ selectedMedicine?.stock }} <br>
+                        </label>
+                        <input [(ngModel)]="amount" type="number" class="form-control" max="{{selectedMedicine?.stock}}"
+                            min="1" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" (click)="addToCart()">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Tracking-->
+    <div class="modal fade" id="purchaseTracking" tabindex="-1" aria-labelledby="purchaseTracking" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Purchase Tracking</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-12">
+                        <label class="form-label">
+                            Enter your tracking code
+                        </label>
+                        <div class="row">
+                            <input [(ngModel)]="trackingCode" type="number" class="col form-control" />
+                            <button (click)="getSaleForCode()" type="button" class="col-1 btn btn-primary button-add">
+                                Search
+                            </button>
+                        </div>
+
+                        <li class="list-group-item result" *ngFor='let line of saleTracked?.invoiceLines'>
+                            <label class="label-result">
+                                Medicine: {{line.medicine.name}}<br>
+                                Status: {{line.state}}<br>
+                            </label>
+                        </li>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                        style="text-align: center; margin: auto;">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

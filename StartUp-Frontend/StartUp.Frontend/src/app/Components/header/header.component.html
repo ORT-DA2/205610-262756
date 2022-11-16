@@ -8,20 +8,12 @@
       <span class="d-none d-lg-block">FarmaSys</span>
     </a>
   </div>
-  <!-- End Logo -->
 
-  <div class="search-bar">
-    <form class="search-form d-flex align-items-center" method="POST" action="#">
-      <input type="text" name="query" placeholder="Search" title="Enter search keyword" />
-      <button type="submit" title="Search"><i class="bi bi-search"></i></button>
-    </form>
-  </div>
-  <!-- End Search Bar -->
-
-  <nav class="header-nav ms-auto">
+  <nav *ngIf="user != null && user != undefined" class="
+    header-nav ms-auto">
     <ul class="d-flex align-items-center">
 
-      <li *ngIf="user != null && user != undefined" class="nav-item dropdown pe-3">
+      <li *ngIf="user.invitation != undefined" class="nav-item dropdown pe-3">
         <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
           <span class="d-none d-md-block dropdown-toggle ps-2">{{user.invitation.userName | uppercase}}</span>
         </a>
@@ -37,7 +29,7 @@
           </li>
 
           <li>
-            <a class="dropdown-item d-flex align-items-center" (click)="logOut()">
+            <a [routerLink]="''" class="dropdown-item d-flex align-items-center" (click)="logOut()">
               <i class="bi bi-box-arrow-right"></i>
               <span>Log Out</span>
             </a>

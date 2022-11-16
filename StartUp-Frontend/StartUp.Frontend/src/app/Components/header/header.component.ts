@@ -11,9 +11,6 @@ export class HeaderComponent implements OnInit {
   public user: any;
 
   constructor(private sessionService: SessionService) {
-    this.sessionService.userLogged.subscribe(
-      user => { this.user = user; }
-    );
   }
 
   public toggle() {
@@ -28,6 +25,12 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (localStorage.getItem('userLogged') != null && localStorage.getItem('userLogged') != undefined) {
+      this.sessionService.userLogged.subscribe(value => {
+        this.user = value
+        console.log(value);
+      });
+    }
   }
 
 }

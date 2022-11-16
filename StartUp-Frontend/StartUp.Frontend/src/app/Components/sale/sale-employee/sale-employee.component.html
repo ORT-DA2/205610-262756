@@ -1,0 +1,36 @@
+<main id="main" class="main">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Sales</h5>
+            <div class="accordion" id="accordionExample">
+                <div *ngFor="let sale of sales[0]" class="accordion-item">
+                    <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            {{sale.code}}
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
+                        data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <ul class="list-group col-12">
+                                <li style="text-align: left;" class="list-group-item"
+                                    *ngFor="let line of sale.invoiceLines;">
+                                    <label style="display: inline; vertical-align: middle;">Medicine:
+                                        {{line.medicine.name}} - Amount: {{line.amount}} - Statetate:
+                                        {{line.state}}</label>
+                                    <div style="display: inline;">
+                                        <button style="float: right; width: auto;" type="submit"
+                                            (click)="approveLine(line)" class="btn btn-primary col-12">
+                                            Approve this line
+                                        </button>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
