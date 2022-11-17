@@ -1,6 +1,14 @@
 <main id="main" class="main">
     <div class="card">
         <div class="card-body">
+            <div *ngIf="successfulResponse" class="alert alert-success alert-dismissible fade show " role="alert">
+                {{successfulResponseMessage}}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <div *ngIf="errorResponse" class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{errorResponseMessage}}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
             <h5 class="card-title">Sales</h5>
             <div class="accordion" id="accordionExample">
                 <div *ngFor="let sale of sales[0]" class="accordion-item">

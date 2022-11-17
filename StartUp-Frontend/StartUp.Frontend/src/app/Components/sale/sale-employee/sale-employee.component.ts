@@ -38,7 +38,7 @@ export class SaleEmployeeComponent implements OnInit {
     this.saleService.updateSale(sale.code, sale).subscribe(
       data => {
         this.successfulResponse = true;
-        this.successfulResponseMessage = `request was approved successfully`
+        this.successfulResponseMessage = `Sale was approved successfully`
         this.errorResponse = false;
       },
       error => {

@@ -74,7 +74,7 @@ export class ExportersComponent implements OnInit {
         this.formCreateInvitation.reset();
       },
       error => {
-        this.errorResponseMessage = error.error.error;
+        this.errorResponseMessage = error.error.text;
         console.log(this.errorResponseMessage);
         if (this.errorResponseMessage != null) {
           this.errorResponse = true;
