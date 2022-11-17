@@ -50,26 +50,23 @@ namespace StartUp.BusinessLogic
             string[] filePaths = Directory.GetFiles(exportersPath);
 
             foreach (string filePath in filePaths)
-
-                foreach (string file in filePaths)
+            {
+                if (filePath.EndsWith(".dll"))
                 {
-                    if (filePath.EndsWith(".dll"))
-                    {
-                        FileInfo fileInfo = new FileInfo(filePath);
-                        Assembly assembly = Assembly.LoadFile(fileInfo.FullName);
+                    FileInfo fileInfo = new FileInfo(filePath);
+                    Assembly assembly = Assembly.LoadFile(fileInfo.FullName);
 
-                        foreach (Type type in assembly.GetTypes())
+                    foreach (Type type in assembly.GetTypes())
+                    {
+                        if (typeof(IExporter).IsAssignableFrom(type) && !type.IsInterface && !type.IsAbstract)
                         {
-                            if (typeof(IExporter).IsAssignableFrom(type) && !type.IsInterface && !type.IsAbstract)
-                            {
-                                IExporter exporter = (IExporter)Activator.CreateInstance(type);
-                                if (exporter != null)
-                                    availableExporters.Add(exporter);
-                            }
+                            IExporter exporter = (IExporter)Activator.CreateInstance(type);
+                            if (exporter != null)
+                                availableExporters.Add(exporter);
                         }
                     }
                 }
-
+            }
             return availableExporters;
         }
     }
