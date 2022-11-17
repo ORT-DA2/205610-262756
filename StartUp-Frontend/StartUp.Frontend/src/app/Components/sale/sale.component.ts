@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { InvoiceLineModel } from 'src/app/Models/invoiceLineModel';
 import { SaleModel } from 'src/app/Models/saleModel';
@@ -20,6 +21,7 @@ export class SaleComponent implements OnInit {
   trackingCode: number = 0;
   saleTracked: any;
   medicineName: string = "";
+  formSale: FormGroup;
 
   successfulResponse: boolean = false;
   successfulResponseMessage: string;
@@ -27,19 +29,32 @@ export class SaleComponent implements OnInit {
   errorResponseMessage: string;
 
   constructor(private medicineService: MedicineService, private saleService: SaleService) {
-    console.log(this.amount);
     this.getAllMedicines();
-    console.log(this.medicines);
   }
 
   ngOnInit(): void {
+    this.createFormSale();
 
   }
+
+  createFormSale() {
+    this.formSale = new FormGroup(
+      {
+        amount: new FormControl('', [
+          Validators.min(1)
+        ]),
+      }
+    );
+
+    this.formSale.get('amount')?.valueChanges.subscribe((change) => {
+      this.amount = change;
+    });
+  }
+
 
   addToCart() {
     var invoiceLine = new InvoiceLineModel();
     invoiceLine.medicine = this.selectedMedicine;
-    console.log(this.amount);
     invoiceLine.amount = this.amount;
     this.medicines[0].find((m: { id: any; stock: number; }) => {
       if (m.id == this.selectedMedicine.id) {
@@ -47,7 +62,6 @@ export class SaleComponent implements OnInit {
       }
     });
     this.amount = 0;
-    console.log(this.medicines);
     this.cart.push(invoiceLine);
   }
 
@@ -76,7 +90,6 @@ export class SaleComponent implements OnInit {
 
   changeSelectedMedicine(med: any) {
     this.selectedMedicine = med;
-    console.log(this.selectedMedicine);
 
   }
 
@@ -89,10 +102,8 @@ export class SaleComponent implements OnInit {
   }
 
   public getSaleForCode() {
-    console.log(this.trackingCode);
     this.saleService.getSale(this.trackingCode).subscribe(
       data => {
-        console.log(data);
         this.errorResponse = false;
         this.saleTracked = data;
       },
@@ -110,12 +121,9 @@ export class SaleComponent implements OnInit {
     search.name = this.medicineName;
     this.medicineService.getMedicine(search).subscribe(
       data => {
-        console.log("form filter:", data);
         this.medicines.splice(0, this.medicines.length);
-        console.log("clear", this.medicines);
         this.medicines.push(data);
 
-        console.log("new med:", this.medicines);
         this.errorResponse = false;
         this.saleTracked = data;
       },
@@ -130,7 +138,6 @@ export class SaleComponent implements OnInit {
 
   clear() {
     this.medicines.splice(0, this.medicines.length);
-    console.log("clear", this.medicines);
     this.getAllMedicines();
   }
 }

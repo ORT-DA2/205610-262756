@@ -7,13 +7,13 @@ import { AuthService } from './auth.service';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthGuard implements CanActivate {
+export class AuthGuardEmployee implements CanActivate {
   constructor(private authService: AuthService, private sessionService: SessionService) { };
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
 
     var token = localStorage.getItem('Token');
-    if (localStorage.getItem('Rol') == 'administrator') {
+    if (localStorage.getItem('Rol') == 'employee') {
       return true;
     }
     return false;

@@ -16,27 +16,27 @@ export class SaleEmployeeComponent implements OnInit {
   errorResponse: boolean = false;
   errorResponseMessage: string;
 
-  constructor(private saleService: SaleService, private invoiceLine: InvoiceLineService) {
-    this.saleService.getSales().forEach(item => this.sales.push(item));
+  constructor(private saleService: SaleService, private invoiceLineService: InvoiceLineService) {
+    this.loadSales()
   }
 
   ngOnInit(): void {
   }
 
-  approveLine(line: any) {
-    console.log("line", line);
-    var invoiceLine = new InvoiceLineModel();
-    invoiceLine.state = 'approved';
-    invoiceLine.medicine = line.medicine;
-    invoiceLine.amount = line.amount;
+  loadSales() {
+    this.saleService.getSales().forEach(item => this.sales.push(item));
+  }
 
-    this.invoiceLine.updateInvoideLine(line.id, invoiceLine).subscribe(
+  approveLine(sale: any, line: any) {
+
+    sale.invoiceLines.forEach((Iline: { state: string; }) => {
+      if (Iline == line) {
+        Iline.state = 'approved';
+      }
+    })
+
+    this.saleService.updateSale(sale.code, sale).subscribe(
       data => {
-        this.sales.find(l => {
-          if (l.id == line.id) {
-            l.state = invoiceLine.state;
-          }
-        });
         this.successfulResponse = true;
         this.successfulResponseMessage = `request was approved successfully`
         this.errorResponse = false;

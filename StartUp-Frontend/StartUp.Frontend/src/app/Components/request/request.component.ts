@@ -22,11 +22,14 @@ export class RequestComponent implements OnInit {
   errorResponseMessage: string;
 
   constructor(private petitionService: PetitionService, private requestService: RequestService) {
+    this.loadPetitionsList();
+  }
+
+  loadPetitionsList() {
     this.petitionService.getPetitions().forEach(
       pet => {
         this.petitions.push(pet);
-        console.log(this.petitions);
-      })
+      });
   }
 
   createFormRequest() {
@@ -44,14 +47,11 @@ export class RequestComponent implements OnInit {
   }
 
   onChange(petition: any, event: any) {
-    console.log("event:", event.target.checked);
     if (event.target.checked) {
       this.petitionsSelected.push(petition);
-      console.log("list", this.petitionsSelected);
     } else {
       const index = this.petitionsSelected.findIndex(x => x.value === petition);
       this.petitionsSelected.splice(index, 1);
-      console.log(this.petitionsSelected);
     }
   }
 

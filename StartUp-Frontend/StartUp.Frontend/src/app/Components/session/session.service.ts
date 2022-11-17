@@ -17,7 +17,7 @@ export class SessionService {
   public token: string;
   public options: any;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private sessionService: SessionService) {
     this.userLogged = new BehaviorSubject<any>(null);
   }
 
@@ -35,11 +35,19 @@ export class SessionService {
   };
 
   logOut() {
-    var req = this.http.delete(this.URL + `${localStorage.getItem('ActualUserName')}`);
+    const token = localStorage.getItem('Token');
+    const userName = localStorage.getItem('ActualUserName');
 
-    this.userLogged.next(null);
     localStorage.clear();
-    console.log(localStorage);
+    this.userLogged.next(null);
+
+    const reqOp = {
+      headers: new HttpHeaders({
+        Authorization: `Bearer ${token}`
+      }),
+    };
+
+    var req = this.http.delete(this.URL + `/${userName}`, reqOp);
 
     return req;
   }

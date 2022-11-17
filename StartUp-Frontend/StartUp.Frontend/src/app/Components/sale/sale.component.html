@@ -55,20 +55,33 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="col-12">
-                        <label class="form-label">
-                            Name: {{ selectedMedicine?.name }} <br>
-                            Presentation: {{ selectedMedicine?.presentation }} <br>
-                            Price: {{ selectedMedicine?.price }} <br>
-                            Stock: {{ selectedMedicine?.stock }} <br>
-                        </label>
-                        <input [(ngModel)]="amount" type="number" class="form-control" max="{{selectedMedicine?.stock}}"
-                            min="1" />
-                    </div>
+                    <form [formGroup]="formSale">
+                        <div class="col-12">
+                            <label class="form-label">
+                                Name: {{ selectedMedicine?.name }} <br>
+                                Presentation: {{ selectedMedicine?.presentation }} <br>
+                                Price: {{ selectedMedicine?.price }} <br>
+                                Stock: {{ selectedMedicine?.stock }} <br>
+                            </label>
+                            <input formControlName="amount" type="number" class="form-control"
+                                max="{{selectedMedicine?.stock}}" min="1" />
+                            <div *ngIf="formSale.controls['amount'].invalid &&
+                                 (formSale.controls['amount'].dirty || 
+                                 formSale.controls['amount'].touched)" class="alert alert-danger">
+                                <div *ngIf="formSale.controls['amount'].errors?.['required']">
+                                    Amount is required.
+                                </div>
+                                <div *ngIf="formSale.controls['amount'].errors?.['min']">
+                                    you have to buy at least one item
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" (click)="addToCart()">Add to Cart</button>
+                    <button [disabled]="formSale.invalid" type="button" class="btn btn-primary"
+                        (click)="addToCart()">Add to Cart</button>
                 </div>
             </div>
         </div>

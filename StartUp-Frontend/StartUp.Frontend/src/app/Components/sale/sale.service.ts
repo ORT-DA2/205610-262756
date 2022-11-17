@@ -21,7 +21,7 @@ export class SaleService {
   getSales(): Observable<any> {
     const reqOp = {
       headers: new HttpHeaders({
-        Authorization: `Bearer ${this.sessionService.token}`
+        Authorization: `Bearer ${localStorage.getItem('Token')}`
       })
     };
 
@@ -30,5 +30,15 @@ export class SaleService {
 
   postSale(sale: SaleModel): Observable<any> {
     return this.http.post<SaleModel>(this.URL, sale);
+  }
+
+  updateSale(code: number, sale: SaleModel): Observable<any> {
+    const reqOp = {
+      headers: new HttpHeaders({
+        Authorization: `Bearer ${localStorage.getItem('Token')}`
+      })
+    };
+
+    return this.http.put(this.URL + `/${code}`, sale, reqOp);
   }
 }

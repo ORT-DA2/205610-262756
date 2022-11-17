@@ -17,7 +17,7 @@
                                 <li class="list-group-item" *ngFor="let pet of req.petitions">
                                     <label>Medicine: {{pet.medicineCode}} - Amount: {{pet.amount}}</label>
                                 </li>
-                                <li *ngIf="req.state != 'approved'" class="list-group-item">
+                                <li *ngIf="req.state == 'Pending'" class="list-group-item">
                                     <div>
                                         <button type="submit" (click)="approveRequest(req)"
                                             class="btn btn-primary col-12">

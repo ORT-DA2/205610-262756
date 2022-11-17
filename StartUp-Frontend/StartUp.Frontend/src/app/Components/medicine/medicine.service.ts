@@ -19,18 +19,17 @@ export class MedicineService {
 
     const reqOp = {
       headers: new HttpHeaders({
-        Authorization: `Bearer ${this.sessionService.token}`
+        Authorization: `Bearer ${localStorage.getItem('Token')}`
       })
     };
 
-    console.log("header", reqOp);
     return this.http.post<MedicineModel>(this.URL, medicine, reqOp);
   }
 
   getMedicine(searchCriteria?: SearchCriteriaMedicine): Observable<any> {
     const reqOp = {
       headers: new HttpHeaders({
-        Authorization: `Bearer ${this.sessionService.token}`
+        Authorization: `Bearer ${localStorage.getItem('Token')}`
       })
     };
     if (searchCriteria != null) {

@@ -32,10 +32,10 @@
       </a>
     </li>
 
-    <li *ngIf="role == 'administrator'" class="nav-item">
-      <a class="nav-link collapsed" [routerLink]="'/pharmacy'">
+    <li *ngIf="role == 'employee'" class="nav-item">
+      <a class="nav-link collapsed" [routerLink]="'/exportMedicines'">
         <i class="bi bi-prescription"></i>
-        <span>Pharmacy</span>
+        <span>Export Medicines</span>
       </a>
     </li>
 
@@ -43,6 +43,13 @@
       <a class="nav-link collapsed" [routerLink]="'/ViewRequest'">
         <i class="bi bi-prescription"></i>
         <span>Requests</span>
+      </a>
+    </li>
+
+    <li *ngIf="role == 'administrator'" class="nav-item">
+      <a class="nav-link collapsed" [routerLink]="'/pharmacy'">
+        <i class="bi bi-prescription"></i>
+        <span>Pharmacy</span>
       </a>
     </li>
 

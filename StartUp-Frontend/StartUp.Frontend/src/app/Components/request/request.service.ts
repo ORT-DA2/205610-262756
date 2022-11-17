@@ -17,7 +17,7 @@ export class RequestService {
   postRequest(requestModel: RequestModel): Observable<any> {
     const reqOp = {
       headers: new HttpHeaders({
-        Authorization: `Bearer ${this.sessionService.token}`
+        Authorization: `Bearer ${localStorage.getItem('Token')}`
       })
     }; return this.http.post<RequestModel>(this.URL, requestModel, reqOp);
   }
@@ -25,7 +25,7 @@ export class RequestService {
   getRequests(): Observable<any> {
     const reqOp = {
       headers: new HttpHeaders({
-        Authorization: `Bearer ${this.sessionService.token}`
+        Authorization: `Bearer ${localStorage.getItem('Token')}`
       })
     };
     return this.http.get(this.URL, reqOp);
@@ -34,21 +34,20 @@ export class RequestService {
   putRequest(id: number, requestModel: RequestModel): Observable<any> {
     const reqOp = {
       headers: new HttpHeaders({
-        Authorization: `Bearer ${this.sessionService.token}`
+        Authorization: `Bearer ${localStorage.getItem('Token')}`
       })
     };
 
     return this.http.put(this.URL + `/${id}`, requestModel, reqOp);
   }
 
-  deleteRequest(id: number): Observable<any> {
+  rejectRequest(id: number, requestModel: RequestModel): Observable<any> {
     const reqOp = {
       headers: new HttpHeaders({
-        Authorization: `Bearer ${this.sessionService.token}`
+        Authorization: `Bearer ${localStorage.getItem('Token')}`
       })
     };
-    console.log(reqOp)
 
-    return this.http.delete(this.URL + `/${id}`, reqOp);
+    return this.http.put(this.URL + `/${id}`, requestModel, reqOp);
   }
 }

@@ -17,7 +17,7 @@ export class InvoiceLineService {
   updateInvoideLine(id: number, invoiceLine: InvoiceLineModel): Observable<any> {
     const reqOp = {
       headers: new HttpHeaders({
-        Authorization: `Bearer ${this.sessionService.token}`
+        Authorization: `Bearer ${localStorage.getItem('Token')}`
       }),
     };
 
