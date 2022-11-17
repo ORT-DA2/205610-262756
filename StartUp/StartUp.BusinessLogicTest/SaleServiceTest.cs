@@ -19,6 +19,7 @@ namespace StartUp.BusinessLogicTest
         private Mock<IRepository<TokenAccess>> _tokenRepoMock;
         private Mock<IRepository<User>> _userRepoMock;
         private Mock<IRepository<Session>> _sessionRepoMock;
+        private Mock<IRepository<Medicine>> _medicineRepoMock;
         private Mock<IRepository<InvoiceLine>> _invoiceLineRepo;
         private SaleService _service;
         private SessionService _sessionService;
@@ -30,8 +31,10 @@ namespace StartUp.BusinessLogicTest
 
             _repoMock = new Mock<IRepository<Sale>>(MockBehavior.Strict);
             _pharmacyRepoMock = new Mock<IRepository<Pharmacy>>(MockBehavior.Strict);
-            //_sessionService = new SessionService(_sessionRepoMock.Object,_userRepoMock.Object,_tokenRepoMock.Object);
-            // _service = new SaleService(_repoMock.Object, _sessionService, _pharmacyRepoMock.Object);
+            _invoiceLineRepo = new Mock<IRepository<InvoiceLine>>(MockBehavior.Strict);
+            _medicineRepoMock = new Mock<IRepository<Medicine>>(MockBehavior.Strict);
+            _sessionService = new SessionService(_sessionRepoMock.Object,_userRepoMock.Object,_tokenRepoMock.Object);
+            _service = new SaleService(_repoMock.Object, _sessionService, _pharmacyRepoMock.Object, _invoiceLineRepo.Object, _medicineRepoMock.Object);
             _invoiceLine = new List<InvoiceLine>();
             SetSession();
         }

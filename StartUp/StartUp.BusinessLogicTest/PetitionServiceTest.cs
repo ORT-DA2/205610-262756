@@ -25,6 +25,7 @@ namespace StartUp.BusinessLogicTest
         private Mock<IRepository<User>> _userRepoMock;
         private Mock<IRepository<Request>> _requestRepoMock;
         private Mock<IRepository<TokenAccess>> _tokenRepoMock;
+        private Mock<IRepository<Petition>> _petitionRepoMock;
         private PetitionService _service;
         private SessionService _sessionService;
         private RequestService _requestService;
@@ -35,13 +36,14 @@ namespace StartUp.BusinessLogicTest
             _requestRepoMock = new Mock<IRepository<Request>>(MockBehavior.Strict);
             _pharmacyRepoMock = new Mock<IRepository<Pharmacy>>(MockBehavior.Strict);
             _medicineRepoMock = new Mock<IRepository<Medicine>>(MockBehavior.Strict);
+            _petitionRepoMock = new Mock<IRepository<Petition>>(MockBehavior.Strict);
             _repoMock = new Mock<IRepository<Petition>>(MockBehavior.Strict);
             _userRepoMock = new Mock<IRepository<User>>(MockBehavior.Strict);
             _sessionRepoMock = new Mock<IRepository<Session>>(MockBehavior.Strict);
             _tokenRepoMock = new Mock<IRepository<TokenAccess>>(MockBehavior.Strict);
-            //_sessionService = new SessionService(_sessionRepoMock.Object, _userRepoMock.Object, _tokenRepoMock.Object);
-            _requestService = new RequestService(_requestRepoMock.Object, _sessionService, _pharmacyRepoMock.Object);
+            _sessionService = new SessionService(_sessionRepoMock.Object, _userRepoMock.Object, _tokenRepoMock.Object);
             _service = new PetitionService(_repoMock.Object, _pharmacyRepoMock.Object, _sessionService, _medicineRepoMock.Object);
+            _requestService = new RequestService(_requestRepoMock.Object, _sessionService, _pharmacyRepoMock.Object, _petitionRepoMock.Object);
             SetSession();
         }
         

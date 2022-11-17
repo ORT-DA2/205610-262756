@@ -20,6 +20,7 @@ namespace StartUp.BusinessLogicTest
         private Mock<IRepository<User>> _repoMock;
         private Mock<IRepository<Role>> _roleRepoMock;
         private Mock<IRepository<Pharmacy>> _pharmacyRepoMock;
+        private Mock<IRepository<Invitation>> _invitationRepoMock;
         private UserService _service;
         private Pharmacy pharmacy1;
         private Invitation invitation1;
@@ -33,7 +34,8 @@ namespace StartUp.BusinessLogicTest
             _repoMock = new Mock<IRepository<User>>(MockBehavior.Strict);
             _roleRepoMock = new Mock<IRepository<Role>>(MockBehavior.Strict);
             _pharmacyRepoMock = new Mock<IRepository<Pharmacy>>(MockBehavior.Strict);
-            //_service = new UserService(_repoMock.Object, _roleRepoMock.Object, _pharmacyRepoMock.Object);
+            _invitationRepoMock = new Mock<IRepository<Invitation>>(MockBehavior.Strict);
+            _service = new UserService(_repoMock.Object, _roleRepoMock.Object, _pharmacyRepoMock.Object, _invitationRepoMock.Object);
             pharmacy1 = new Pharmacy();
             invitation1 = new Invitation();
             pharmacy2 = new Pharmacy();
