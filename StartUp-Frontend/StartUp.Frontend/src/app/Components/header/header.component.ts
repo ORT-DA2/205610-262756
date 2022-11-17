@@ -8,23 +8,40 @@ import { SessionService } from '../session/session.service';
 })
 
 export class HeaderComponent implements OnInit {
-  public user: any;
+  public userName: any;
+  public userRole: any;
+  errorResponse: boolean = false;
+  errorResponseMessage: string;
 
   constructor(private sessionService: SessionService) {
-    this.sessionService.userLogged.subscribe(
-      user => { this.user = user; }
-    );
+    if (this.sessionService.userLogged != null || this.sessionService.userLogged != undefined) {
+      this.sessionService.userLogged.subscribe(value => {
+        value = localStorage.getItem('userLogged');
+        if (value != null) {
+          this.userName = localStorage.getItem('ActualUserName');
+          this.userRole = localStorage.getItem('Rol');
+        }
+      });
+    }
   }
 
   public toggle() {
     document.body.classList.toggle('toggle-sidebar');
   }
 
-  loadUserLogged() {
-  }
-
   logOut() {
-    this.sessionService.logOut();
+    this.sessionService.logOut().subscribe(
+      data => {
+
+      },
+      error => {
+        this.errorResponseMessage = error.error;
+        if (this.errorResponseMessage != null) {
+          console.error(this.errorResponseMessage);
+        }
+      }
+    );
+    window.location.reload();
   }
 
   ngOnInit(): void {

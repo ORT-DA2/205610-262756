@@ -83,7 +83,7 @@ namespace StartUp.BusinessLogic
         public Sale GetSpecificSaleForCode(string saleCode)
         {
 
-            saleCode = CleanString(saleCode);
+            // saleCode = CleanString(saleCode);
             Sale saleSaved = _saleRepository.GetOneByExpression(s => s.Code == Int32.Parse(saleCode));
             if (saleSaved == null)
             {

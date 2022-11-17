@@ -25,7 +25,8 @@ namespace StartUp.Domain.Entities
             validator.ValidateString(Address, "Address empty");
             validator.ValidatePasswordValid(Password, "Password invalid", 7);
             validator.ValidateString(RegisterDate.ToString(), "Register date empty");
-
+            EmailIsValid(Email);
+            
             if(Roles == null)
             {
                 throw new InputException("Roles empty");
@@ -36,17 +37,15 @@ namespace StartUp.Domain.Entities
             }
         }
 
-        public bool EmailIsValid(string emailAddress)
+        public void EmailIsValid(string emailAddress)
         {
             try
             {
                 MailAddress m = new MailAddress(emailAddress);
-
-                return true;
             }
             catch (FormatException)
             {
-                return false;
+                throw new InputException("Wrong email format");
             }
         }
 

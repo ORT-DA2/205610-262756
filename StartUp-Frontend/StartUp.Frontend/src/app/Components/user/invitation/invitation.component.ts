@@ -102,22 +102,6 @@ export class InvitationComponent implements OnInit {
     }
   }
 
-  onRoleChecked(value: Event) {
-    this.Roles[0].forEach((role: any) => {
-      if (role.permission == (value.target as HTMLInputElement).value) {
-        this.selectedRole = (value.target as HTMLInputElement).value;
-      }
-    });
-  }
-
-  onPharmacieChecked(value: Event) {
-    this.Pharmacies[0].forEach((ph: any) => {
-      if (ph.name == (value.target as HTMLInputElement).value) {
-        this.selectedPharmacy = (value.target as HTMLInputElement).value;
-      }
-    });
-  }
-
   createInvitation() {
     let invModel = new InvitationModel();
     invModel.username = this.username;
@@ -172,12 +156,10 @@ export class InvitationComponent implements OnInit {
   editInvitation() {
     this.selectedToEdit.userName = this.username;
     this.selectedToEdit.rol = this.selectedRole;
-    console.log(this.selectedRole);
     this.selectedToEdit.code = this.code;
     if (this.selectedToEdit.rol != 'administrator') {
       this.selectedToEdit.pharmacy.id = 0;
       this.selectedToEdit.pharmacy.name = this.selectedPharmacy;
-      console.log("here");
     } else {
       this.selectedToEdit.pharmacy = null;
     }

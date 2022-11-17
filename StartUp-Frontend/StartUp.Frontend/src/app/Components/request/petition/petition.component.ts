@@ -52,7 +52,6 @@ export class PetitionComponent implements OnInit {
     var petition = new PetitionModel();
     petition.amount = this.amount;
     petition.medicineCode = this.code;
-    console.log(petition);
 
     this.petitionService.postPetition(petition).subscribe(
       data => {

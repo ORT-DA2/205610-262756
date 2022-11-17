@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { RequestModel } from 'src/app/Models/requestModel';
+import { runInThisContext } from 'vm';
 import { RequestService } from '../request.service';
 
 @Component({
@@ -16,10 +18,12 @@ export class RequestOwnerComponent implements OnInit {
   errorResponseMessage: string;
 
   constructor(private requestService: RequestService) {
+    this.loadRequest();
+  }
+
+  loadRequest() {
     this.requestService.getRequests().forEach(req => {
-      console.log(req);
       this.Requests.push(req)
-      console.log(this.Requests);
     });
   }
 
@@ -27,7 +31,7 @@ export class RequestOwnerComponent implements OnInit {
   }
 
   approveRequest(request: any) {
-    request.state = 'approved';
+    request.state = 'Approved';
     this.requestService.putRequest(request.id, request).subscribe(
       data => {
         this.successfulResponse = true;
@@ -44,10 +48,14 @@ export class RequestOwnerComponent implements OnInit {
   }
 
   rejectRequest(request: any) {
-    this.requestService.deleteRequest(request.id).subscribe(
+    var model = new RequestModel();
+    model.state = 'Rejected',
+      model.petitions = request.petitions;
+
+    this.requestService.rejectRequest(request.id, model).subscribe(
       data => {
         this.successfulResponse = true;
-        this.successfulResponseMessage = `request was rejected and deleted successfully`
+        this.successfulResponseMessage = `request was rejected successfully`
         this.errorResponse = false;
       },
       error => {

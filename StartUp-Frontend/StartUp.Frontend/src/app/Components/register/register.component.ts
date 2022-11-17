@@ -19,6 +19,10 @@ export class RegisterComponent implements OnInit {
   public invitation: any;
   public invitationObs: Observable<any> = new Observable<any>();
   public showRegister: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  successfulResponse: boolean = false;
+  successfulResponseMessage: string;
+  errorResponse: boolean = false;
+  errorResponseMessage: string;
 
   constructor(private invitationService: InvitationService, private userService: UserService) {
   }
@@ -38,20 +42,40 @@ export class RegisterComponent implements OnInit {
     userModel.roles = new RoleModel();
     userModel.roles.permission = this.invitation.rol;
 
-    this.userService.postUser(userModel);
+    this.userService.postUser(userModel).subscribe(
+      data => {
+        this.successfulResponse = true;
+        this.successfulResponseMessage = `User created successfully`
+        this.errorResponse = false;
+      },
+      error => {
+        this.errorResponseMessage = error.error;
+        if (this.errorResponseMessage != null) {
+          this.errorResponse = true;
+          this.successfulResponse = false;
+        }
+      }
+    );
   }
 
   public isValidInvitation(): void {
 
-    let invitation = this.invitationService.getInvitation(this.username, this.code);
-
-    if (invitation != null) {
-      this.showRegister.next(true);
-      this.invitationObs = invitation;
-      this.invitationObs.subscribe(inv => this.invitation = inv);
-
-    } else {
-      this.showRegister.next(false);
-    }
+    this.invitationService.getInvitation(this.username, this.code).subscribe(
+      data => {
+        this.invitation = data
+        this.showRegister.next(true);
+        this.successfulResponse = true;
+        this.successfulResponseMessage = `Invitation authenticated successfully`
+        this.errorResponse = false;
+      },
+      error => {
+        this.errorResponseMessage = error.error;
+        if (this.errorResponseMessage != null) {
+          this.errorResponse = true;
+          this.successfulResponse = false;
+        }
+        this.showRegister.next(false);
+      }
+    );
   }
 }

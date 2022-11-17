@@ -50,7 +50,7 @@ namespace StartUp.BusinessLogic
             string[] filePaths = Directory.GetFiles(exportersPath);
 
             foreach (string filePath in filePaths)
-
+            {
                 if (filePath.EndsWith(".dll"))
                 {
                     FileInfo fileInfo = new FileInfo(filePath);
@@ -67,7 +67,7 @@ namespace StartUp.BusinessLogic
                     }
 
                 }
-
+            }
             return availableExporters;
         }
     }

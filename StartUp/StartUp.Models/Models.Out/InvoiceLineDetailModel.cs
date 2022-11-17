@@ -7,11 +7,16 @@ namespace StartUp.Models.Models.Out
         public int Id { get; set; }
         public MedicineInvoiceLineModel Medicine { get; set; }
         public string State { get; set; }
+        
+        public int Amount { get; set; }
+
 
         public InvoiceLineDetailModel(InvoiceLine line)
         {
+            Id = line.Id;
             Medicine = new MedicineInvoiceLineModel(line.Medicine);
             this.State = line.State;
+            Amount = line.Amount;
         }
 
         public override bool Equals(object? obj)
