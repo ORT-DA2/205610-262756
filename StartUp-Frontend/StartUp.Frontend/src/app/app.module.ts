@@ -21,6 +21,10 @@ import { PetitionComponent } from './Components/request/petition/petition.compon
 import { RequestComponent } from './Components/request/request.component';
 import { RequestOwnerComponent } from './Components/request/request-owner/request-owner.component';
 import { ExportMedicineComponent } from './Components/medicine/export-medicine/export-medicine.component';
+import { SaleComponent } from './Components/sale/sale.component';
+import { PharmacySalesComponent } from './Components/pharmacy-sales/pharmacy-sales.component';
+import { ExportersComponent } from './Components/exporters/exporters.component';
+import { SaleEmployeeComponent } from './Components/sale/sale-employee/sale-employee.component';
 
 
 @NgModule({
@@ -39,7 +43,11 @@ import { ExportMedicineComponent } from './Components/medicine/export-medicine/e
     PetitionComponent,
     RequestComponent,
     RequestOwnerComponent,
-    ExportMedicineComponent
+    ExportMedicineComponent,
+    SaleComponent,
+    PharmacySalesComponent,
+    ExportersComponent,
+    SaleEmployeeComponent
   ],
   imports: [
     BrowserModule,

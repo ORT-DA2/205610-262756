@@ -93,7 +93,6 @@ export class MedicineComponent implements OnInit {
     var newSymptom = new SymptomModel();
     newSymptom.symptomDescription = this.symptom;
     this.symptoms.push(newSymptom);
-    console.log(this.symptoms);
   }
 
   createMedicine() {

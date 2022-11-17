@@ -14,12 +14,7 @@ export class UserService {
   constructor(private http: HttpClient, private sessionService: SessionService) { }
 
   postUser(user: UserModel) {
-
-    console.log("body:", user);
-
     let req = this.http.post<UserModel>(this.URL, user);
-
-    req.forEach(usr => console.log(usr));
 
     return req;
   }
@@ -27,7 +22,7 @@ export class UserService {
   getUser(username: string): any {
     const reqOp = {
       headers: new HttpHeaders({
-        Authorization: `Bearer ${this.sessionService.token}`
+        Authorization: `Bearer ${localStorage.getItem('Token')}`
       })
     };
     let req = this.http.get(this.URL + `/${username}`, reqOp);

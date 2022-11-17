@@ -73,8 +73,7 @@
                             <ul class="dropdown-menu col-12" aria-labelledby="pharmaDropDown">
                                 <li class="col-12 form-check form-switch" *ngFor='let pharma of Pharmacies[0];'>
                                     <input id={{pharma.name}} class="form-check-input" type="radio" name="pharmacy"
-                                        value="{{pharma.name}}" (change)="onPharmacieChecked($event)"
-                                        formControlName="pharmacy">
+                                        value="{{pharma.name}}" formControlName="pharmacy">
                                     <label class="form-check-label" for="flexRadioDisabled">
                                         {{pharma.name | uppercase}}
                                     </label>

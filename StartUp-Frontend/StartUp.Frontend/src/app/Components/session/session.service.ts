@@ -4,8 +4,6 @@ import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { SessionModel } from 'src/app/Models/sessionModel';
-import { UserService } from '../user/user.service';
-import { RequestOptions } from 'http';
 
 @Injectable({
   providedIn: 'root'
@@ -14,12 +12,13 @@ import { RequestOptions } from 'http';
 export class SessionService {
 
   public URL: string = `${environment.API_URL}/sessions`;
-  public userLogged: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+  public userLogged: BehaviorSubject<any>;
   public authHeader: HttpHeaders = new HttpHeaders;
   public token: string;
   public options: any;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private sessionService: SessionService) {
+    this.userLogged = new BehaviorSubject<any>(null);
   }
 
   login(session: SessionModel): Observable<any> {
@@ -36,11 +35,19 @@ export class SessionService {
   };
 
   logOut() {
-    var req = this.http.delete(this.URL + `${sessionStorage.getItem('ActualUserName')}`);
+    const token = localStorage.getItem('Token');
+    const userName = localStorage.getItem('ActualUserName');
 
+    localStorage.clear();
     this.userLogged.next(null);
-    sessionStorage.clear();
-    console.log(sessionStorage);
+
+    const reqOp = {
+      headers: new HttpHeaders({
+        Authorization: `Bearer ${token}`
+      }),
+    };
+
+    var req = this.http.delete(this.URL + `/${userName}`, reqOp);
 
     return req;
   }

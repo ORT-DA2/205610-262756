@@ -19,7 +19,7 @@ export class InvitationService {
   generateNewCode(): Observable<any> {
     const reqOp = {
       headers: new HttpHeaders({
-        Authorization: `Bearer ${this.sessionService.token}`
+        Authorization: `Bearer ${localStorage.getItem('Token')}`
       })
     };
     return this.http.get<any>(this.URL + '/generateCode', reqOp)
@@ -36,7 +36,7 @@ export class InvitationService {
   updateInvitation(id: number, invitation: InvitationModel): Observable<any> {
     const reqOp = {
       headers: new HttpHeaders({
-        Authorization: `Bearer ${this.sessionService.token}`
+        Authorization: `Bearer ${localStorage.getItem('Token')}`
       })
     };
     var req = this.http.put<any>(this.URL + `/${id}`, invitation, reqOp);
@@ -47,7 +47,7 @@ export class InvitationService {
   postInvitation(invitation: InvitationModel): Observable<any> {
     const reqOp = {
       headers: new HttpHeaders({
-        Authorization: `Bearer ${this.sessionService.token}`
+        Authorization: `Bearer ${localStorage.getItem('Token')}`
       })
     };
     var req = this.http.post<InvitationModel>(this.URL, invitation, reqOp);
@@ -57,7 +57,7 @@ export class InvitationService {
   getInvitation(userName: string, code: number): Observable<any> {
     const reqOp = {
       headers: new HttpHeaders({
-        Authorization: `Bearer ${this.sessionService.token}`
+        Authorization: `Bearer ${localStorage.getItem('Token')}`
       })
     };
     return this.http.get<any>(this.URL + `/${userName}` + `/${code}`, reqOp);
@@ -66,7 +66,7 @@ export class InvitationService {
   getAllInvitations(): Observable<any> {
     const reqOp = {
       headers: new HttpHeaders({
-        Authorization: `Bearer ${this.sessionService.token}`
+        Authorization: `Bearer ${localStorage.getItem('Token')}`
       })
     };
     return this.http.get<any>(this.URL, reqOp);

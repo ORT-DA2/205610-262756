@@ -13,17 +13,13 @@ export class SidebarComponent implements OnInit {
   constructor(private sessionService: SessionService) {
     this.sessionService.userLogged.subscribe(
       user => {
-        this.user = user;
-        this.role = user?.invitation.rol;
+        this.user = localStorage.getItem('userLogged');
+        this.role = localStorage.getItem('Rol');
       }
     );
   }
 
   ngOnInit(): void {
-  }
-
-  ngOnChange(): void {
-    this.role = sessionStorage.getItem('role');
   }
 
 }

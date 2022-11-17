@@ -17,7 +17,7 @@ export class PetitionService {
   postPetition(medicine: PetitionModel): Observable<any> {
     const reqOp = {
       headers: new HttpHeaders({
-        Authorization: `Bearer ${this.sessionService.token}`
+        Authorization: `Bearer ${localStorage.getItem('Token')}`
       })
     };
     return this.http.post<PetitionModel>(this.URL, medicine, reqOp);
@@ -26,7 +26,7 @@ export class PetitionService {
   getPetitions() {
     const reqOp = {
       headers: new HttpHeaders({
-        Authorization: `Bearer ${this.sessionService.token}`
+        Authorization: `Bearer ${localStorage.getItem('Token')}`
       })
     };
     return this.http.get(this.URL + "/fromPharmacy", reqOp);

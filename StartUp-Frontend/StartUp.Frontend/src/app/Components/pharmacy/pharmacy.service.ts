@@ -17,7 +17,7 @@ export class PharmacyService {
   getPharmacies(): Observable<any> {
     const reqOp = {
       headers: new HttpHeaders({
-        Authorization: `Bearer ${this.sessionService.token}`
+        Authorization: `Bearer ${localStorage.getItem('Token')}`
       })
     };
     return this.http.get<any>(this.URL, reqOp);
@@ -26,7 +26,7 @@ export class PharmacyService {
   postPharmacy(pharmacy: PharmacyModel): Observable<any> {
     const reqOp = {
       headers: new HttpHeaders({
-        Authorization: `Bearer ${this.sessionService.token}`
+        Authorization: `Bearer ${localStorage.getItem('Token')}`
       })
     };
     return this.http.post<PharmacyModel>(this.URL, pharmacy, reqOp);

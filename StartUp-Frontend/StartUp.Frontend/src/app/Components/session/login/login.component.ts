@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { SessionModel } from 'src/app/Models/sessionModel';
 import { SessionService } from '../session.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -26,10 +27,10 @@ export class LoginComponent implements OnInit {
       .subscribe(
         session => {
           this.sessions.push(session)
-          sessionStorage.setItem('Rol', session.user.invitation.rol);
-          sessionStorage.setItem('Token', session.token);
-          sessionStorage.setItem('ActualUserName', session.user.invitation.userName);
-          sessionStorage.setItem('userLogged', session.user);
+          localStorage.setItem('Rol', session.user.invitation.rol);
+          localStorage.setItem('Token', session.token);
+          localStorage.setItem('ActualUserName', session.user.invitation.userName);
+          localStorage.setItem('userLogged', session.user);
           this.sessionService.userLogged.next(session.user);
           this.sessionService.token = session.token;
         },

@@ -43,7 +43,7 @@ namespace StartUp.BusinessLogic
         public InvoiceLine GetSpecificInvoiceLine(int invoiceLineId)
         {
             var invoiceLineSaved = _invoiceLineRepository.GetOneByExpression(
-                i => i.Medicine.Id == invoiceLineId);
+                i => i.Id == invoiceLineId);
 
             if (invoiceLineSaved is null)
             {
@@ -77,6 +77,7 @@ namespace StartUp.BusinessLogic
             {
                 invoiceLineStored.Medicine = _medicineRepository.GetOneByExpression(m => m.Code == updatedInvoiceLine.Medicine.Code);
                 invoiceLineStored.Amount = updatedInvoiceLine.Amount;
+                invoiceLineStored.State = updatedInvoiceLine.State;
             }
             else
             {
