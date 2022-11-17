@@ -13,18 +13,11 @@ namespace StartUp.WebApi.Exporters
 
         public void ExportMedicines(string routeName, string format, List<MedicineModelExport> medicines)
         {
-            foreach (MedicineModelExport medicine in medicines)
-            {
-                Directory.CreateDirectory($"{routeName}.JSON");
-                Environment.CurrentDirectory = ($"{routeName}.JSON");
+            Directory.CreateDirectory($"{routeName}.JSON");
 
-                string fileName = $"{medicine.Name}.json";
-                string jsonString = JsonSerializer.Serialize(medicine);
-                string pathString = Path.Combine($"{routeName}.JSON", $"{medicine.Name}.json");
-                File.WriteAllText(fileName, jsonString);
-
-                Environment.CurrentDirectory = @"D:\\Escritorio\\ORT\\5to\\DA2\\Obligatorio 2\\205610-262756\\StartUp\\WebApi";
-            }
+            string jsonString = JsonSerializer.Serialize(medicines);
+            string pathString = Path.Combine($"{routeName}.JSON", "Medicines.json");
+            File.WriteAllText(pathString, jsonString);
         }
     }
 }

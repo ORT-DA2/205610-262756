@@ -45,7 +45,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StartUp.IExporterInterface"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StartUp.ModelsExporter", "StartUp.ModelsExporter\StartUp.ModelsExporter.csproj", "{20C40EC8-2587-4AFE-990B-74394186E443}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JSONExporter", "JSONExporter\JSONExporter.csproj", "{C1C62551-D6FF-4CCB-92D2-D7C14F53FC27}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JSONExporter", "JSONExporter\JSONExporter.csproj", "{C1C62551-D6FF-4CCB-92D2-D7C14F53FC27}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

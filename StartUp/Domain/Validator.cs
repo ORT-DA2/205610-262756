@@ -1,6 +1,4 @@
-﻿using StartUp.Domain.Entities;
-using StartUp.Exceptions;
-using System.Collections.Generic;
+﻿using StartUp.Exceptions;
 
 namespace StartUp.Domain
 {

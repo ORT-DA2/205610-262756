@@ -46,7 +46,6 @@ namespace StartUp.BusinessLogic
         private List<IExporter> GetExporterImplementations()
         {
             List<IExporter> availableExporters = new List<IExporter>();
-            // Va a estar adentro de WebApi, ya que mira relativo de donde se ejecuta el programa
             string exportersPath = "./Exporters";
             string[] filePaths = Directory.GetFiles(exportersPath);
 
