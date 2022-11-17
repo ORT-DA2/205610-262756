@@ -1,0 +1,36 @@
+#amount {
+    display: inline-block;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    width: auto;
+}
+
+.button-add {
+    width: auto;
+    float: right;
+}
+
+.list-group {
+    margin-bottom: 1rem;;
+}
+
+.label-list {
+    vertical-align: middle;
+    width: auto;
+    padding: inherit;
+}
+
+.result {
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.label-result{
+    text-align: center;
+}
+
+.clear {
+    display: inline-block !important;
+    position: absolute !important;
+    margin-left: 1rem !important;
+}

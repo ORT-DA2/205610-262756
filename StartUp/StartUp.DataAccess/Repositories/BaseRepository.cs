@@ -36,7 +36,7 @@ public class BaseRepository<T> : IRepository<T> where T : class
         _context.Set<T>().Remove(elem);
     }
 
-    public void UpdateOne(T elem)
+    public virtual void UpdateOne(T elem)
     {
         _context.Set<T>().Update(elem);
     }

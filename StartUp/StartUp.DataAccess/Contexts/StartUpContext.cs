@@ -28,6 +28,7 @@ namespace StartUp.DataAccess
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            optionsBuilder.EnableSensitiveDataLogging();
             if (!optionsBuilder.IsConfigured)
             {
                 string directory = Directory.GetCurrentDirectory();

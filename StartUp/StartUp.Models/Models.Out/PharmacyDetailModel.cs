@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using StartUp.Models.Models.In;
 
 namespace StartUp.Models.Models.Out
 {
@@ -13,6 +14,10 @@ namespace StartUp.Models.Models.Out
         public List<MedicineBasicModel> Stock { get; set; }
         public List<RequestBasicModel> Requests { get; set; }
         public List<SaleBasicModel> Sales { get; set; }
+        
+        public List<PetitionBasicModel> Petitions { get; set; }
+
+        
 
         public PharmacyDetailModel(Pharmacy pharmacy)
         {
@@ -32,6 +37,11 @@ namespace StartUp.Models.Models.Out
             foreach (var item in pharmacy.Sales)
             {
                 Sales.Add(new SaleBasicModel(item));
+            }
+            Petitions = new List<PetitionBasicModel>();
+            foreach (var item in pharmacy.Petitions)
+            {
+                Petitions.Add(new PetitionBasicModel(item));
             }
         }
 

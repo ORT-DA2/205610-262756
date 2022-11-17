@@ -19,6 +19,14 @@ namespace StartUp.WebApi.Controllers
             _petitionService = service;
         }
 
+        [HttpGet("fromPharmacy", Name="fromPharmacy")]
+
+        public IActionResult GetPetitions([FromQuery] PetitionSearchCriteriaModel searchCriteria)
+        {
+            var retrievedPetition = _petitionService.GetPharmacyPetitons(searchCriteria.ToEntity());
+            return Ok(retrievedPetition.Select(p => new PetitionBasicModel(p)));
+        }
+
         [HttpGet]
         public IActionResult GetPetition([FromQuery] PetitionSearchCriteriaModel searchCriteria)
         {

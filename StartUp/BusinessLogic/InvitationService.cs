@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 
 namespace StartUp.BusinessLogic
 {
@@ -25,18 +24,7 @@ namespace StartUp.BusinessLogic
 
         public List<Invitation> GetAllInvitation(InvitationSearchCriteria searchCriteria)
         {
-            var rolCriteria = searchCriteria.Rol?.ToLower() ?? string.Empty;
-            var userNameCriteria = searchCriteria.UserName?.ToLower() ?? string.Empty;
-            var codeCriteria = searchCriteria.Code.ToString()?.ToLower() ?? string.Empty;
-            var isActiveCriteria = searchCriteria.State ?? null;
-            var pharmacyCriteria = searchCriteria.Pharmacy ?? null;
-
-            Expression<Func<Invitation, bool>> invitationFilter = invitation =>
-                invitation.Rol.ToLower().Contains(rolCriteria) &&
-                invitation.UserName.ToLower().Contains(userNameCriteria) &&
-                invitation.Code.ToString().Contains(codeCriteria) &&
-                invitation.State.Contains(isActiveCriteria) &&
-                invitation.Pharmacy == pharmacyCriteria;
+            Expression<Func<Invitation, bool>> invitationFilter = invitation => true;
 
             List<Invitation> invitations = _invitationRepository.GetAllByExpression(invitationFilter).ToList();
 
@@ -59,13 +47,31 @@ namespace StartUp.BusinessLogic
 
             return invitationSaved;
         }
+        
+        public Invitation GetSpecificInvitationByUserAndPass(string username, int code)
+        {
+            var invitationSaved = _invitationRepository.GetOneByExpression(i =>i.UserName == username && i.Code == code);
+           
+            if (invitationSaved is null)
+            {
+                throw new ResourceNotFoundException($"Could not find specified invitation {username} and {code}");
+            }
+
+            return invitationSaved;
+        }
 
         public Invitation CreateInvitation(Invitation invitation)
         {
             invitation.IsValidInvitation();
-            NotExistInDataBase(invitation);
+            UsernameNotExistInDataBase(invitation, invitation.Id);
             ValidateInvitationRoles(invitation);
             ValidatePharmacyExist(invitation);
+
+            if (invitation.Rol != "administrator")
+            {
+                invitation.Pharmacy = _pharmacyRepository.GetOneByExpression(p => p.Name == invitation.Pharmacy.Name);
+            
+            }
             CreateAndSave(invitation);
             
             return invitation;
@@ -74,12 +80,33 @@ namespace StartUp.BusinessLogic
         public Invitation UpdateInvitation(int invitationId, Invitation updatedInvitation)
         {
             updatedInvitation.IsValidInvitation();
+            UsernameNotExistInDataBase(updatedInvitation, invitationId);
+            ValidateInvitationRoles(updatedInvitation);
+            ValidatePharmacyExist(updatedInvitation);
 
             var invitationStored = GetSpecificInvitation(invitationId);
+            
+            if (updatedInvitation.Pharmacy != null)
+            {
+                updatedInvitation.Pharmacy = _pharmacyRepository.GetOneByExpression(p => p.Name == updatedInvitation.Pharmacy.Name);
+            }
 
-            invitationStored.Rol = updatedInvitation.Rol;
-            invitationStored.UserName = updatedInvitation.UserName;
-            invitationStored.Pharmacy = updatedInvitation.Pharmacy;
+            if (invitationStored.State == "Available")
+            {
+                invitationStored.Rol = updatedInvitation.Rol;
+                invitationStored.UserName = updatedInvitation.UserName;
+                if (updatedInvitation.Rol != "administrator")
+                {
+                    invitationStored.Pharmacy =
+                        this._pharmacyRepository.GetOneByExpression(p => p.Name == updatedInvitation.Pharmacy.Name);
+                }
+
+                invitationStored.Code = updatedInvitation.Code;
+            }
+            else
+            {
+                throw new InputException($"The invitation {invitationStored.UserName} has already been used");
+            }
 
             _invitationRepository.UpdateOne(invitationStored);
             _invitationRepository.Save();
@@ -95,17 +122,17 @@ namespace StartUp.BusinessLogic
             _invitationRepository.Save();
         }
 
-        private void NotExistInDataBase(Invitation invitation)
+        private void UsernameNotExistInDataBase(Invitation invitation, int ?id)
         {
             var invitationSaved = _invitationRepository.GetOneByExpression(i => i.UserName == invitation.UserName);
 
-            if (invitationSaved != null)
+            if (invitationSaved != null && invitationSaved.Id != id)
             {
                 throw new InputException($"An invitation already exists for that user {invitation.UserName}");
             }
         }
 
-        private int GenerateCode()
+        public int GenerateCode()
         {
             Random random = new Random();
             int code = random.Next(100000, 999999);
@@ -124,6 +151,10 @@ namespace StartUp.BusinessLogic
                 && invitation.Pharmacy == null)
             {
                 throw new InputException("The owner and the employee roles need a pharmacy");
+            }
+            if (invitation.Rol.ToLower() == "administrator" && invitation.Pharmacy != null)
+            {
+                throw new InputException("The administrator can't have a pharmacy");
             }
             if (!roles.Contains(invitation.Rol))
             {
@@ -160,5 +191,6 @@ namespace StartUp.BusinessLogic
 
             }
         }
+
     }
 }

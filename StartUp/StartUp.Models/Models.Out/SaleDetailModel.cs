@@ -1,23 +1,23 @@
 ﻿using StartUp.Domain;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace StartUp.Models.Models.Out
 {
     public class SaleDetailModel
     {
         public int Id { get; set; }
-        public List<InvoiceLineBasicModel> InvoiceLines { get; set; }
+        public List<InvoiceLineDetailModel> InvoiceLines { get; set; }
+        public int Code { get; set; }
 
         public SaleDetailModel(Sale sale)
         {
             this.Id = sale.Id;
-            InvoiceLines = new List<InvoiceLineBasicModel>();
+            InvoiceLines = new List<InvoiceLineDetailModel>();
             foreach (var item in sale.InvoiceLines)
             {
-                InvoiceLines.Add(new InvoiceLineBasicModel(item));
+                InvoiceLines.Add(new InvoiceLineDetailModel(item));
             }
+            Code = sale.Code;
         }
 
         public override bool Equals(object? obj)

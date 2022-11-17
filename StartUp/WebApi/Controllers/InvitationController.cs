@@ -10,7 +10,7 @@ namespace StartUp.WebApi.Controllers
 
     [Route("api/invitation")]
     [ApiController]
-    [AuthorizationFilter("administrator")]
+    //[AuthorizationFilter("administrator")]
     public class InvitationController : ControllerBase
     {
         private readonly IInvitationService _invitationManager;
@@ -24,7 +24,7 @@ namespace StartUp.WebApi.Controllers
         public IActionResult GetInvitation([FromQuery] InvitationSearchCriteriaModel searchCriteria)
         {
             var retrievedInvitations = _invitationManager.GetAllInvitation(searchCriteria.ToEntity());
-            return Ok(retrievedInvitations.Select(i => new InvitationBasicModel(i)));
+            return Ok(retrievedInvitations.Select(i => new InvitationDetailModel(i)));
         }
 
         [HttpGet("{id}", Name = "GetInvitation")]
@@ -34,7 +34,23 @@ namespace StartUp.WebApi.Controllers
             return Ok(new InvitationDetailModel(retrievedInvitation));
         }
 
+        [HttpGet("{userName}/{code}", Name = "SpecificInvitation")]
+        public IActionResult GetInvitationByUserAndCode(string username, int code)
+        {
+            var retrievedInvitation = _invitationManager.GetSpecificInvitationByUserAndPass(username, code);
+            return Ok(new InvitationDetailModel(retrievedInvitation));
+        }
+        
+        [HttpGet("generateCode", Name = "generateCode")]
+        [AuthorizationFilter("administrator")]
+        public IActionResult generateCode()
+        {
+            var code = _invitationManager.GenerateCode();
+            return Ok(code);
+        }
+
         [HttpPost]
+        [AuthorizationFilter("administrator")]
         public IActionResult CreateInvitation([FromBody] InvitationModel newInvitation)
         {
             var createdInvitation = _invitationManager.CreateInvitation(newInvitation.ToEntity());
@@ -43,6 +59,7 @@ namespace StartUp.WebApi.Controllers
         }
 
         [HttpPut("{id}")]
+        [AuthorizationFilter("administrator")]
         public IActionResult Update(int id, [FromBody] InvitationModel updatedInvitation)
         {
             var retrievedInvitation = _invitationManager.UpdateInvitation(id, updatedInvitation.ToEntity());
@@ -50,6 +67,7 @@ namespace StartUp.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
+        [AuthorizationFilter("administrator")]
         public IActionResult Delete(int id)
         {
             _invitationManager.DeleteInvitation(id);

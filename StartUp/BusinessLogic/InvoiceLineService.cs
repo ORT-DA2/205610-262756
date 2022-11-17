@@ -14,10 +14,18 @@ namespace StartUp.BusinessLogic
     public class InvoiceLineService : IInvoiceLineService
     {
         private readonly IRepository<InvoiceLine> _invoiceLineRepository;
+        private readonly IRepository<Medicine> _medicineRepository;
+        private readonly IRepository<Pharmacy> _pharmacyRepository;
+        private readonly ISessionService _sessionService;
 
-        public InvoiceLineService(IRepository<InvoiceLine> invoiceLineRepository)
+        public InvoiceLineService(IRepository<InvoiceLine> invoiceLineRepository, 
+            IRepository<Medicine> medicineRepository, IRepository<Pharmacy> pharmacyRepository, 
+            ISessionService sessionService)
         {
             _invoiceLineRepository = invoiceLineRepository;
+            _medicineRepository = medicineRepository;
+            _pharmacyRepository = pharmacyRepository;
+            _sessionService = sessionService;
         }
 
         public List<InvoiceLine> GetAllInvoiceLine(InvoiceLineSearchCriteria searchCriteria)
@@ -35,7 +43,7 @@ namespace StartUp.BusinessLogic
         public InvoiceLine GetSpecificInvoiceLine(int invoiceLineId)
         {
             var invoiceLineSaved = _invoiceLineRepository.GetOneByExpression(
-                i => i.Medicine.Id == invoiceLineId);
+                i => i.Id == invoiceLineId);
 
             if (invoiceLineSaved is null)
             {
@@ -48,6 +56,8 @@ namespace StartUp.BusinessLogic
         public InvoiceLine CreateInvoiceLine(InvoiceLine invoiceLine)
         {
             invoiceLine.IsValidInvoiceLine();
+            invoiceLine.Medicine = _medicineRepository.GetOneByExpression(m => m.Code == invoiceLine.Medicine.Code);
+            invoiceLine.State = "Pending";
 
             _invoiceLineRepository.InsertOne(invoiceLine);
             _invoiceLineRepository.Save();
@@ -61,8 +71,18 @@ namespace StartUp.BusinessLogic
 
             var invoiceLineStored = GetSpecificInvoiceLine(invoiceLineId);
 
-            invoiceLineStored.Medicine = updatedInvoiceLine.Medicine;
-            invoiceLineStored.Amount = updatedInvoiceLine.Amount;
+            Pharmacy pharmacy = _pharmacyRepository.GetOneByExpression(p => p.Equals(_sessionService.UserLogged.Pharmacy));
+
+            if (invoiceLineStored.PharmacyId == pharmacy.Id)
+            {
+                invoiceLineStored.Medicine = _medicineRepository.GetOneByExpression(m => m.Code == updatedInvoiceLine.Medicine.Code);
+                invoiceLineStored.Amount = updatedInvoiceLine.Amount;
+                invoiceLineStored.State = updatedInvoiceLine.State;
+            }
+            else
+            {
+                throw new InputException("The bill line does not belong to your pharmacy");
+            }
 
             _invoiceLineRepository.UpdateOne(invoiceLineStored);
             _invoiceLineRepository.Save();

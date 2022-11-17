@@ -10,7 +10,7 @@ namespace StartUp.WebApi.Controllers
 
     [Route("api/user")]
     [ApiController]
-    [AuthorizationFilter("administrator")]
+    //[AuthorizationFilter("administrator")]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -27,22 +27,24 @@ namespace StartUp.WebApi.Controllers
             return Ok(retrievedUser.Select(a => new UserBasicModel(a)));
         }
 
-        [HttpGet("{id}", Name = "GetUser")]
-        public IActionResult GetUser(int id)
+        [HttpGet("{username}", Name = "GetUser")]
+        public IActionResult GetUser(string username)
         {
-            var retrievedUser = _userService.GetSpecificUser(id);
+            var retrievedUser = _userService.GetSpecificUserByUserName(username);
             return Ok(new UserDetailModel(retrievedUser));
         }
 
         [HttpPost]
         public IActionResult CreateUser([FromBody] UserModel newUser)
         {
+            newUser.Pharmacy = newUser.Invitation.Pharmacy;
             var createdUser = _userService.CreateUser(newUser.ToEntity());
             var userModel = new UserDetailModel(createdUser);
-            return CreatedAtRoute("GetUser", new { id = userModel.Id }, userModel);
+            return Ok(userModel);
         }
 
         [HttpPut("{id}")]
+        [AuthorizationFilter("administrator")]
         public IActionResult Update(int id, [FromBody] UserModel updatedUser)
         {
             var retrievedUser = _userService.UpdateUser(id, updatedUser.ToEntity());
@@ -50,6 +52,7 @@ namespace StartUp.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
+        [AuthorizationFilter("administrator")]
         public IActionResult Delete(int id)
         {
             _userService.DeleteUser(id);

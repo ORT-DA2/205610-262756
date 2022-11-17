@@ -165,8 +165,14 @@ namespace StartUp.DataAccess.Migrations
                     b.Property<int?>("MedicineId")
                         .HasColumnType("int");
 
+                    b.Property<int>("PharmacyId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("SaleId")
                         .HasColumnType("int");
+
+                    b.Property<string>("State")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -233,10 +239,15 @@ namespace StartUp.DataAccess.Migrations
                     b.Property<string>("MedicineCode")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("PharmacyId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("RequestId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PharmacyId");
 
                     b.HasIndex("RequestId");
 
@@ -290,6 +301,9 @@ namespace StartUp.DataAccess.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("Code")
+                        .HasColumnType("int");
 
                     b.Property<int?>("PharmacyId")
                         .HasColumnType("int");
@@ -383,6 +397,10 @@ namespace StartUp.DataAccess.Migrations
 
             modelBuilder.Entity("StartUp.Domain.Petition", b =>
                 {
+                    b.HasOne("StartUp.Domain.Pharmacy", null)
+                        .WithMany("Petitions")
+                        .HasForeignKey("PharmacyId");
+
                     b.HasOne("StartUp.Domain.Request", null)
                         .WithMany("Petitions")
                         .HasForeignKey("RequestId");
@@ -416,6 +434,8 @@ namespace StartUp.DataAccess.Migrations
 
             modelBuilder.Entity("StartUp.Domain.Pharmacy", b =>
                 {
+                    b.Navigation("Petitions");
+
                     b.Navigation("Requests");
 
                     b.Navigation("Sales");

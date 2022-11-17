@@ -1,7 +1,4 @@
 ﻿using StartUp.Exceptions;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace StartUp.Domain
 {
@@ -18,9 +15,14 @@ namespace StartUp.Domain
 
         public void IsValidInvitation()
         {
-            Validator validator = new Validator();
-            validator.ValidateString(UserName, "User name can not be empty or all spaces");
-            validator.ValidateString(Rol, "User rol can not be empty or all spaces");
+            if(string.IsNullOrWhiteSpace(UserName) || UserName.Length == 0)
+            {
+                throw new InputException("User name can not be empty or all spaces");
+            }
+            if (string.IsNullOrWhiteSpace(Rol) || Rol.Length == 0)
+            {
+                throw new InputException("User role can not be empty or all spaces");
+            }
         }
         public override bool Equals(object? obj)
         {

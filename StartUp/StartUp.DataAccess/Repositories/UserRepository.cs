@@ -1,8 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StartUp.Domain.Entities;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using StartUp.Domain;
 
 namespace StartUp.DataAccess.Repositories
 {
@@ -14,6 +16,11 @@ namespace StartUp.DataAccess.Repositories
         {
             _context = context;
         }
+        
+        public override IEnumerable<User> GetAllByExpression(Expression<Func<User, bool>> expression)
+        {
+            return _context.Set<User>().Where(expression).Include("Roles").ToList();
+        }
 
         public override User GetOneByExpression(Expression<Func<User, bool>> expression)
         {
@@ -23,6 +30,11 @@ namespace StartUp.DataAccess.Repositories
         public override void InsertOne(User elem)
         {
             _context.Set<User>().Add(elem);
+        }
+
+        public override void UpdateOne(User elem)
+        {
+            _context.Set<User>().Update(elem);
         }
 
     }

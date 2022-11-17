@@ -1,7 +1,4 @@
 ﻿using StartUp.Domain;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace StartUp.Models.Models.In
 {
@@ -9,13 +6,15 @@ namespace StartUp.Models.Models.In
     {
         public Medicine Medicine { get; set; }
         public int Amount { get; set; }
+        public string State { get; set; }
 
         public InvoiceLine ToEntity()
         {
             return new InvoiceLine()
             {
                 Amount = this.Amount,
-                Medicine = this.Medicine
+                Medicine = this.Medicine,
+                State = this.State
             };
         }
     }

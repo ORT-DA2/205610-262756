@@ -7,8 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StartUp.BusinessLogic
 {
@@ -45,8 +43,10 @@ namespace StartUp.BusinessLogic
 
         public TokenAccess GetSpecificTokenAccess(Session session)
         {
-            Validator validator = new Validator();
-            validator.ValidateSessionNotNull(session, "Session empty");
+            if (session == null)
+            {
+                throw new InputException("Session empty");
+            }
 
             var tokenSaved = _tokenRepository.GetOneByExpression(t => t.User.Invitation.UserName == session.Username);
 
@@ -60,8 +60,11 @@ namespace StartUp.BusinessLogic
 
         public TokenAccess CreateTokenAccess(User user)
         {
-            Validator validator = new Validator();
-            validator.ValidateUserNotNull(user, "User empty");
+            if(user == null)
+            {
+                throw new InputException("User empty");
+            }
+            
             var tokenAccess = new TokenAccess();
             tokenAccess.Token = Guid.NewGuid();
             tokenAccess.User = user;
@@ -73,12 +76,21 @@ namespace StartUp.BusinessLogic
         }
         public TokenAccess UpdateTokenAccess(Session session, TokenAccess updateTokenAccess)
         {
-            Validator validator = new Validator();
-            validator.ValidateSessionNotNull(session, "Session empty");
-            validator.ValidateTokenAccess(updateTokenAccess, "Token for update is empty");
+            if(session == null)
+            {
+                throw new InputException("Session empty");
+            }
+            if(updateTokenAccess == null)
+            {
+                throw new InputException("Token for update is empty");
+            }
+            
 
             var tokenStored = GetSpecificTokenAccess(session);
-            validator.ValidateTokenAccess(tokenStored, "Token not exist in the system");
+            if (tokenStored == null)
+            {
+                throw new InputException("Token not exist in the system");
+            }
 
             tokenStored.User = updateTokenAccess.User;
             tokenStored.Token = updateTokenAccess.Token;
@@ -90,11 +102,18 @@ namespace StartUp.BusinessLogic
         }
         public void DeleteTokenAccess(Session session)
         {
-            Validator validator = new Validator();
-            validator.ValidateSessionNotNull(session, "Session empty");
+            if (session == null)
+            {
+                throw new InputException("Session empty");
+            }
 
             var tokenStored = GetSpecificTokenAccess(session);
-            validator.ValidateTokenAccess(tokenStored, "Token not exist");
+
+            if(tokenStored == null)
+            {
+                throw new InputException("Token not exist");
+            }
+            
 
             _tokenRepository.DeleteOne(tokenStored);
             _tokenRepository.Save();

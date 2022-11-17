@@ -2,6 +2,7 @@
 using StartUp.Domain;
 using StartUp.Domain.Entities;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
@@ -13,6 +14,11 @@ namespace StartUp.DataAccess.Repositories
         public RoleRepository(StartUpContext context) : base(context)
         {
             _context = context;
+        }
+        
+        public override IEnumerable<Role> GetAllByExpression(Expression<Func<Role, bool>> expression)
+        {
+            return _context.Set<Role>().Where(expression).ToList();
         }
 
         public override Role GetOneByExpression(Expression<Func<Role, bool>> expression)

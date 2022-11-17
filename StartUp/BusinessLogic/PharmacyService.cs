@@ -46,6 +46,7 @@ namespace StartUp.BusinessLogic
             pharmacy.Stock = new List<Medicine>();
             pharmacy.Sales = new List<Sale>();
             pharmacy.Requests = new List<Request>();
+            pharmacy.Petitions = new List<Petition>();
 
             _pharmacyRepository.InsertOne(pharmacy);
             _pharmacyRepository.Save();
@@ -76,7 +77,7 @@ namespace StartUp.BusinessLogic
             _pharmacyRepository.Save();
         }
 
-        public void NotExistInDataBase(Pharmacy pharmacy)
+        private void NotExistInDataBase(Pharmacy pharmacy)
         {
             var pharmacySaved = _pharmacyRepository.GetOneByExpression(p => p.Name == pharmacy.Name);
 

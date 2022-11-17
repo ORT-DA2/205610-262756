@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using BusinessLogic;
+using StartUp.IDataAccess;
 
 namespace StartUp.BusinessLogicTest
 {
@@ -16,7 +17,10 @@ namespace StartUp.BusinessLogicTest
     public class UserServiceTest
     {
 
-        private Mock<IDataAccess.IRepository<User>> _repoMock;
+        private Mock<IRepository<User>> _repoMock;
+        private Mock<IRepository<Role>> _roleRepoMock;
+        private Mock<IRepository<Pharmacy>> _pharmacyRepoMock;
+        private Mock<IRepository<Invitation>> _invitationRepoMock;
         private UserService _service;
         private Pharmacy pharmacy1;
         private Invitation invitation1;
@@ -27,8 +31,11 @@ namespace StartUp.BusinessLogicTest
         [TestInitialize]
         public void SetUp()
         {
-            _repoMock = new Mock<IDataAccess.IRepository<User>>(MockBehavior.Strict);
-            _service = new UserService(_repoMock.Object);
+            _repoMock = new Mock<IRepository<User>>(MockBehavior.Strict);
+            _roleRepoMock = new Mock<IRepository<Role>>(MockBehavior.Strict);
+            _pharmacyRepoMock = new Mock<IRepository<Pharmacy>>(MockBehavior.Strict);
+            _invitationRepoMock = new Mock<IRepository<Invitation>>(MockBehavior.Strict);
+            _service = new UserService(_repoMock.Object, _roleRepoMock.Object, _pharmacyRepoMock.Object, _invitationRepoMock.Object);
             pharmacy1 = new Pharmacy();
             invitation1 = new Invitation();
             pharmacy2 = new Pharmacy();

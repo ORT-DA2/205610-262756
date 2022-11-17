@@ -23,8 +23,7 @@ namespace StartUp.BusinessLogic
         {
             var permissionsCriteria = searchCriteria.Permission ?? string.Empty;
 
-            Expression<Func<Role, bool>> roleFilter = role =>
-                role.Permission == permissionsCriteria;
+            Expression<Func<Role, bool>> roleFilter = role => true;
 
             return _roleRepository.GetAllByExpression(roleFilter).ToList();
         }
@@ -43,7 +42,11 @@ namespace StartUp.BusinessLogic
         public Role CreateRole(Role role)
         {
             role.IsValidRole();
-
+            if(_roleRepository.GetOneByExpression(r=>r.Permission == role.Permission) != null)
+            {
+                throw new InputException("The Role already exist");
+            }
+            
             _roleRepository.InsertOne(role);
             _roleRepository.Save();
 
