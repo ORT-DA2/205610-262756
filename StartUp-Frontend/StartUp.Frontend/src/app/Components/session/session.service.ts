@@ -22,14 +22,7 @@ export class SessionService {
   }
 
   login(session: SessionModel): Observable<any> {
-    var request = this.http.post<SessionModel>(this.URL, session)
-      .pipe(
-        catchError(error => {
-          console.error('HTTP error: ', error)
-          window.alert(error.error.message);
-          return throwError(() => error)
-        })
-      );
+    var request = this.http.post<SessionModel>(this.URL, session);
 
     return request;
   };

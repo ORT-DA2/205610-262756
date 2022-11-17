@@ -14,12 +14,13 @@ import { ExportersComponent } from './Components/exporters/exporters.component';
 import { AuthGuard } from './auth/auth.guard';
 import { AuthGuardEmployee } from './auth/auth-employee';
 import { AuthGuardOwner } from './auth/auth-owner';
+import { AuthAnonimusUser } from './auth/auth-anonimus';
 
 const routes: Routes = [
   { path: '', },
-  { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent },
-  { path: 'Shop', component: SaleComponent },
+  { path: 'login', component: LoginComponent, canActivate: [AuthAnonimusUser] },
+  { path: 'register', component: RegisterComponent, canActivate: [AuthAnonimusUser] },
+  { path: 'Shop', component: SaleComponent, canActivate: [AuthAnonimusUser] },
   { path: 'invitation', component: InvitationComponent, canActivate: [AuthGuard] },
   { path: 'pharmacy', component: PharmacyComponent, canActivate: [AuthGuard] },
   { path: 'createMedicine', component: MedicineComponent, canActivate: [AuthGuardEmployee] },
