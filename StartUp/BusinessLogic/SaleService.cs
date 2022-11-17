@@ -1,12 +1,10 @@
 ﻿using StartUp.Domain;
-using StartUp.Domain.SearchCriterias;
 using StartUp.Exceptions;
 using StartUp.IBusinessLogic;
 using StartUp.IDataAccess;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 
 namespace StartUp.BusinessLogic
 {
@@ -110,17 +108,23 @@ namespace StartUp.BusinessLogic
         public Sale CreateSale(Sale sale)
         {
             sale.isValidSale();
+            if (_sessionService.UserLogged == null)
+            {
+                List<Pharmacy> list = PharmaciesThatHaveTheDrugsAndQuantitiesRequested(sale, false);
+                list = PharmaciesThatHaveTheDrugsAndQuantitiesRequested(sale, true);
 
-            List<Pharmacy> list = PharmaciesThatHaveTheDrugsAndQuantitiesRequested(sale, false);
-            list = PharmaciesThatHaveTheDrugsAndQuantitiesRequested(sale, true);
+                sale.Code = GenerateCode();
 
-            sale.Code = GenerateCode();
+                _saleRepository.InsertOne(sale);
+                _saleRepository.Save();
 
-            _saleRepository.InsertOne(sale);
-            _saleRepository.Save();
-
-            AddSaleToPharmacies(list, sale);
-            return sale;
+                AddSaleToPharmacies(list, sale);
+                return sale;
+            }
+            else
+            {
+                throw new InputException("Users who are logged into the system cannot make purchases");
+            }
         }
 
         public Sale UpdateSale(int saleCode, Sale updatedSale)
@@ -141,7 +145,7 @@ namespace StartUp.BusinessLogic
                 {
                     InvoiceLine lineSaleInBD = _invoiceLineRepository.GetOneByExpression(i => i.Id == line.Id);
 
-                    if (lineSaleInBD.PharmacyId == pharmacy.Id && lineSaleInBD.State == "pending")
+                    if (lineSaleInBD.PharmacyId == pharmacy.Id && lineSaleInBD.State == "Pending")
                     {
                         foreach (InvoiceLine inv in updatedSale.InvoiceLines)
                         {

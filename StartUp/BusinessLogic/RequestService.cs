@@ -1,5 +1,4 @@
 ﻿using StartUp.Domain;
-using StartUp.Domain.Entities;
 using StartUp.Domain.SearchCriterias;
 using StartUp.Exceptions;
 using StartUp.IBusinessLogic;
