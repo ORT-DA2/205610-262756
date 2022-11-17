@@ -1,1 +1,65 @@
-<p>exporters works!</p>
+<main id="main" class="main">
+    <section class="section">
+        <div class="row">
+            <div class="col-lg-12">
+                <div *ngIf="successfulResponse" class="alert alert-success alert-dismissible fade show " role="alert">
+                    {{successfulResponseMessage}}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <div *ngIf="errorResponse" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{errorResponseMessage}}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Export pharmacy Medicines</h5>
+                        <div class="tab-content pt-2" id="borderedTabJustifiedContent">
+                            <div class="tab-pane fade show active" id="bordered-justified-create" role="tabpanel"
+                                aria-labelledby="create-tab">
+                                <form [formGroup]="formExporter" class="row g-3 needs-validation">
+
+                                    <div class="form-group col-12">
+                                        <label for="routeName" class="form-label"></label>
+                                        <input formControlName="routeName" type="text" name="routeName"
+                                            class="form-control" id="routeName"
+                                            placeholder="Set the Path where you what to save the file" />
+                                    </div>
+
+                                    <div class="col-12">
+                                        <button class="btn btn-secondary w-100 dropdown-toggle" type="button"
+                                            id="formatDropDown" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Formats
+                                        </button>
+                                        <ul class="dropdown-menu col-12" aria-labelledby="formatDropDown">
+                                            <li class="col-12 form-check form-switch" *ngFor='let format of formats;'>
+                                                <input formControlName="format" id={{format}} class="form-check-input"
+                                                    type="radio" name="format" value="{{format}}">
+                                                <label class="form-check-label" for="flexRadioDisabled">
+                                                    {{format | uppercase}}
+                                                </label>
+                                            </li>
+                                            <div *ngIf="formExporter.controls['format'].invalid &&
+                                                        (formExporter.controls['format'].dirty ||
+                                                        formExporter.controls['format'].touched)"
+                                                class="alert alert-danger">
+                                                <div *ngIf="formExporter.controls['format'].errors?.['required']">
+                                                    format is required.
+                                                </div>
+                                            </div>
+                                        </ul>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <button (click)="exportMedicines()" class="btn btn-primary w-100" type="submit">
+                                            Export
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
