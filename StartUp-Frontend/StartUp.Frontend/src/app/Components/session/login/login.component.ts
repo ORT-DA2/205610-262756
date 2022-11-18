@@ -33,6 +33,7 @@ export class LoginComponent implements OnInit {
           localStorage.setItem('userLogged', session.user);
           this.sessionService.userLogged.next(session.user);
           this.sessionService.token = session.token;
+          window.location.reload();
         },
         error => {
           this.errorResponseMessage = error.error;

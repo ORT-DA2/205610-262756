@@ -165,7 +165,6 @@ export class InvitationComponent implements OnInit {
     }
     this.invitationService.updateInvitation(this.selectedToEdit.id, this.selectedToEdit).subscribe(
       data => {
-        this.Invitations[0].push(data);
         this.successfulResponse = true;
         this.successfulResponseMessage = `the invitation for ${this.selectedToEdit.userName} was edited successfully`
         this.errorResponse = false;

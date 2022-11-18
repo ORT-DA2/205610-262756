@@ -17,7 +17,7 @@ export class SaleEmployeeComponent implements OnInit {
   errorResponseMessage: string;
 
   constructor(private saleService: SaleService, private invoiceLineService: InvoiceLineService) {
-    this.loadSales()
+    this.loadSales();
   }
 
   ngOnInit(): void {
