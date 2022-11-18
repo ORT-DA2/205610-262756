@@ -1,34 +1,36 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <InfoWarnings>
   <Info>Begin full analysis with NDepend v2022.2.1</Info>
-  <Info>Visual Studio solution file resolved to absolute file path: from    {.\StartUp.sln}    to    {D:\Escritorio\ORT\5to\DA2\Obligatorio 2\205610-262756\StartUp\StartUp.sln}</Info>
-  <Info>Output directory resolved to absolute directory path: D:\Escritorio\ORT\5to\DA2\Obligatorio 2\205610-262756\StartUp\NDependOut</Info>
-  <Info>Compare with analysis result obtained on 2022 November - 13 Sunday 22:00:10  (which is the analysis result with date closest to 30 days ago)</Info>
-  <Info>.NET Assemblies resolved from the Visual Studio solution file {D:\Escritorio\ORT\5to\DA2\Obligatorio 2\205610-262756\StartUp\StartUp.sln}
-   D:\Escritorio\ORT\5to\DA2\Obligatorio 2\205610-262756\StartUp\WebApi\bin\Debug\net6.0\WebApi.dll
-   D:\Escritorio\ORT\5to\DA2\Obligatorio 2\205610-262756\StartUp\Domain\bin\Debug\net6.0\Domain.dll
-   D:\Escritorio\ORT\5to\DA2\Obligatorio 2\205610-262756\StartUp\StartUp.Models\bin\Debug\net6.0\StartUp.Models.dll
-   D:\Escritorio\ORT\5to\DA2\Obligatorio 2\205610-262756\StartUp\IBusinessLogic\bin\Debug\net6.0\StartUp.IBusinessLogic.dll
-   D:\Escritorio\ORT\5to\DA2\Obligatorio 2\205610-262756\StartUp\BusinessLogic\bin\Debug\net6.0\StartUp.BusinessLogic.dll
-   D:\Escritorio\ORT\5to\DA2\Obligatorio 2\205610-262756\StartUp\StartUp.Exceptions\bin\Debug\net6.0\StartUp.Exceptions.dll
-   D:\Escritorio\ORT\5to\DA2\Obligatorio 2\205610-262756\StartUp\StartUp.Factory\bin\Debug\net6.0\StartUp.Factory.dll
-   D:\Escritorio\ORT\5to\DA2\Obligatorio 2\205610-262756\StartUp\StartUp.IDataAccess\bin\Debug\net6.0\StartUp.IDataAccess.dll
-   D:\Escritorio\ORT\5to\DA2\Obligatorio 2\205610-262756\StartUp\StartUp.DataAccess\bin\Debug\net6.0\StartUp.DataAccess.dll
-   D:\Escritorio\ORT\5to\DA2\Obligatorio 2\205610-262756\StartUp\StartUp.Migrations\bin\Debug\net6.0\StartUp.Migrations.dll
-   D:\Escritorio\ORT\5to\DA2\Obligatorio 2\205610-262756\StartUp\XMLExporter\bin\Debug\net6.0\XMLExporter.dll
-   D:\Escritorio\ORT\5to\DA2\Obligatorio 2\205610-262756\StartUp\IExporter\bin\Debug\net6.0\StartUp.IExporterInterface.dll
-   D:\Escritorio\ORT\5to\DA2\Obligatorio 2\205610-262756\StartUp\StartUp.ModelsExporter\bin\Debug\net6.0\StartUp.ModelsExporter.dll
-   D:\Escritorio\ORT\5to\DA2\Obligatorio 2\205610-262756\StartUp\JSONExporter\bin\Debug\net6.0\JSONExporter.dll</Info>
-  <Info>.NET Assemblies filtered out from the Visual Studio solution file {D:\Escritorio\ORT\5to\DA2\Obligatorio 2\205610-262756\StartUp\StartUp.sln}
+  <Info>Visual Studio solution file resolved to absolute file path: from    {.\StartUp.sln}    to    {D:\Escritorio\ORT\5to\DA2\Obligatorio 2\Aplicacion\205610-262756\StartUp\StartUp.sln}</Info>
+  <Info>Output directory resolved to absolute directory path: D:\Escritorio\ORT\5to\DA2\Obligatorio 2\Aplicacion\205610-262756\StartUp\NDependOut</Info>
+  <Info>.NET Assemblies resolved from the Visual Studio solution file {D:\Escritorio\ORT\5to\DA2\Obligatorio 2\Aplicacion\205610-262756\StartUp\StartUp.sln}
+   D:\Escritorio\ORT\5to\DA2\Obligatorio 2\Aplicacion\205610-262756\StartUp\WebApi\bin\Debug\net6.0\WebApi.dll
+   D:\Escritorio\ORT\5to\DA2\Obligatorio 2\Aplicacion\205610-262756\StartUp\Domain\bin\Debug\net6.0\Domain.dll
+   D:\Escritorio\ORT\5to\DA2\Obligatorio 2\Aplicacion\205610-262756\StartUp\StartUp.Models\bin\Debug\net6.0\StartUp.Models.dll
+   D:\Escritorio\ORT\5to\DA2\Obligatorio 2\Aplicacion\205610-262756\StartUp\IBusinessLogic\bin\Debug\net6.0\StartUp.IBusinessLogic.dll
+   D:\Escritorio\ORT\5to\DA2\Obligatorio 2\Aplicacion\205610-262756\StartUp\BusinessLogic\bin\Debug\net6.0\StartUp.BusinessLogic.dll
+   D:\Escritorio\ORT\5to\DA2\Obligatorio 2\Aplicacion\205610-262756\StartUp\StartUp.Exceptions\bin\Debug\net6.0\StartUp.Exceptions.dll
+   D:\Escritorio\ORT\5to\DA2\Obligatorio 2\Aplicacion\205610-262756\StartUp\StartUp.Factory\bin\Debug\net6.0\StartUp.Factory.dll
+   D:\Escritorio\ORT\5to\DA2\Obligatorio 2\Aplicacion\205610-262756\StartUp\StartUp.IDataAccess\bin\Debug\net6.0\StartUp.IDataAccess.dll
+   D:\Escritorio\ORT\5to\DA2\Obligatorio 2\Aplicacion\205610-262756\StartUp\StartUp.DataAccess\bin\Debug\net6.0\StartUp.DataAccess.dll
+   D:\Escritorio\ORT\5to\DA2\Obligatorio 2\Aplicacion\205610-262756\StartUp\IExporter\bin\Debug\net6.0\StartUp.IExporterInterface.dll
+   D:\Escritorio\ORT\5to\DA2\Obligatorio 2\Aplicacion\205610-262756\StartUp\StartUp.ModelsExporter\bin\Debug\net6.0\StartUp.ModelsExporter.dll</Info>
+  <Info>.NET Assemblies filtered out from the Visual Studio solution file {D:\Escritorio\ORT\5to\DA2\Obligatorio 2\Aplicacion\205610-262756\StartUp\StartUp.sln}
    StartUp.DomainTest
    StartUp.BusinessLogicTest
    StartUp.WebApi.UnitTest
    StartUp.DataAccess.Test</Info>
+  <Warning>Can't load the assembly {StartUp.Migrations}:
+The file {D:\Escritorio\ORT\5to\DA2\Obligatorio 2\Aplicacion\205610-262756\StartUp\StartUp.Migrations\bin\Debug\StartUp.Migrations.dll} doesn't exist.
+Failed attempt to resolve this assembly from the Visual Studio solution file {D:\Escritorio\ORT\5to\DA2\Obligatorio 2\Aplicacion\205610-262756\StartUp\StartUp.sln}.</Warning>
+  <Warning>Can't load the assembly {XMLExporter}:
+The file {D:\Escritorio\ORT\5to\DA2\Obligatorio 2\Aplicacion\205610-262756\StartUp\XMLExporter\bin\Debug\XMLExporter.dll} doesn't exist.
+Failed attempt to resolve this assembly from the Visual Studio solution file {D:\Escritorio\ORT\5to\DA2\Obligatorio 2\Aplicacion\205610-262756\StartUp\StartUp.sln}.</Warning>
+  <Warning>Can't load the assembly {JSONExporter}:
+The file {D:\Escritorio\ORT\5to\DA2\Obligatorio 2\Aplicacion\205610-262756\StartUp\JSONExporter\bin\Debug\JSONExporter.dll} doesn't exist.
+Failed attempt to resolve this assembly from the Visual Studio solution file {D:\Escritorio\ORT\5to\DA2\Obligatorio 2\Aplicacion\205610-262756\StartUp\StartUp.sln}.</Warning>
   <Info>Concurrent mode</Info>
   <Info>.NET Assemblies loaded from {C:\Program Files\dotnet\shared\Microsoft.NETCore.App\6.0.8} 
-   System.Text.Json.dll   v6.0.0.0
-   System.Xml.ReaderWriter.dll   v6.0.0.0
-   System.Console.dll   v6.0.0.0
    System.Linq.Queryable.dll   v6.0.0.0
    System.Linq.Expressions.dll   v6.0.0.0
    System.Net.Mail.dll   v6.0.0.0
@@ -37,6 +39,10 @@
    System.Collections.dll   v6.0.0.0
    System.Runtime.dll   v6.0.0.0</Info>
   <Info>.NET Assemblies loaded from {C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\6.0.8} 
+   Microsoft.Extensions.Configuration.Json.dll   v6.0.0.0
+   Microsoft.Extensions.Configuration.FileExtensions.dll   v6.0.0.0
+   Microsoft.Extensions.Configuration.dll   v6.0.0.0
+   Microsoft.Extensions.Configuration.Abstractions.dll   v6.0.0.0
    Microsoft.AspNetCore.Http.Features.dll   v6.0.0.0
    Microsoft.AspNetCore.Routing.dll   v6.0.0.0
    Microsoft.AspNetCore.Authorization.Policy.dll   v6.0.0.0
@@ -47,18 +53,16 @@
    Microsoft.AspNetCore.Authentication.dll   v6.0.0.0
    Microsoft.AspNetCore.Mvc.ApiExplorer.dll   v6.0.0.0
    Microsoft.AspNetCore.Mvc.dll   v6.0.0.0
+   Microsoft.Extensions.Primitives.dll   v6.0.0.0
    Microsoft.AspNetCore.Mvc.Abstractions.dll   v6.0.0.0
    Microsoft.AspNetCore.Cors.dll   v6.0.0.0
    Microsoft.AspNetCore.dll   v6.0.0.0
    Microsoft.AspNetCore.Mvc.Core.dll   v6.0.0.0</Info>
-  <Warning>The source file {D:\Escritorio\ORT\5to\DA2\Obligatorio 2\205610-262756\StartUp\XMLExporter\XMLExporter.cs} (last modified 17 Nov 2022 16:32:08) and the PDB file of the assembly {XMLExporter} (last modified 13 Nov 2022 08:36:15) are not in-sync.</Warning>
-  <Warning>The source file {D:\Escritorio\ORT\5to\DA2\Obligatorio 2\205610-262756\StartUp\JSONExporter\JSONExporter.cs} (last modified 17 Nov 2022 16:32:07) and the PDB file of the assembly {JSONExporter} (last modified 13 Nov 2022 08:36:14) are not in-sync.</Warning>
-  <Info>121 source files parsed ; all source files found ; 2 source files not in-sync with PDB</Info>
+  <Info>118 source files parsed ; all source files found ; all source files in-sync with PDB</Info>
   <Info>0 code rule has been extracted from code.</Info>
   <Info>No dependency cycle detected in assemblies referencement graph.</Info>
   <Info>Do merge code generated by compiler into application code.</Info>
   <Info>No SuppressMessageAttribute found in the analyzed code base. Since NDepend v2018.2 SuppressMessageAttribute can be used to suppress NDepend issues. Don't forget to set in your projects the compilation symbol CODE_ANALYSIS to use this attribute to suppress NDepend issues.</Info>
-  <Info>Persisting code model snapshot in {D:\Escritorio\ORT\5to\DA2\Obligatorio 2\205610-262756\StartUp\NDependOut\NDependAnalysisResult_StartUp_2022Nov17_20h03m24.ndar}</Info>
-  <Info>Start log trend metrics values out-of-process.</Info>
-  <Info>NDepend analysis done. Duration: 00:17.256</Info>
+  <Info>Persisting code model snapshot in {D:\Escritorio\ORT\5to\DA2\Obligatorio 2\Aplicacion\205610-262756\StartUp\NDependOut\NDependAnalysisResult_StartUp_2022Nov17_21h13m13.ndar}</Info>
+  <Info>NDepend analysis done. Duration: 00:18.770</Info>
 </InfoWarnings>

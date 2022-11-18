@@ -145,7 +145,7 @@ namespace StartUp.BusinessLogic
                 {
                     InvoiceLine lineSaleInBD = _invoiceLineRepository.GetOneByExpression(i => i.Id == line.Id);
 
-                    if (lineSaleInBD.PharmacyId == pharmacy.Id && lineSaleInBD.State == "Pending")
+                    if (lineSaleInBD.PharmacyId == pharmacy.Id && lineSaleInBD.State == "pending")
                     {
                         foreach (InvoiceLine inv in updatedSale.InvoiceLines)
                         {
